@@ -29,7 +29,6 @@ public class PaymentController {
 
     @GetMapping("/payment/show")
     List<Payment> showAllPayment(@RequestBody Value<String> value, @RequestParam int page){
-        int x;
         return paymentService.listAll(value.getValue(), PageRequest.of(page,10));
     }
     @GetMapping("/payment/information")
