@@ -14,9 +14,7 @@ public interface PaymentRepo extends JpaRepository<Payment,Long> {
     @Query("select p from Payment p where " +
             ":value is null " +
             "or " +
-            "p.code like concat('%',:value,'%')" +
-            "or " +
-            "p.payer like concat('%',:value,'%') ")
+            "p.code like concat('%',:value,'%')")
     List<Payment> listAll(@Param("value") String value, Pageable pageable);
 
     Payment findByCode(String code);
