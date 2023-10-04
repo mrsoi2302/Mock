@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface HistoryRepo extends JpaRepository<History,Long> {
     @Query("select h from History h where " +
-            ":value is null or h.time=:value"
-    )
+            ":value is null or h.time=:value " +
+            "order by h.id desc ")
     List<History> listAll(@Param("value") Timestamp t, Pageable pageable);
 }

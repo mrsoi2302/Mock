@@ -3,7 +3,6 @@ package com.example.demo.Service;
 import com.example.demo.Entities.History;
 import com.example.demo.Repositories.HistoryRepo;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
@@ -21,5 +20,9 @@ public class HistoryService {
     @Query("")
     public List<History> listAll(Timestamp t, Pageable pageable) {
         return historyRepo.listAll(t,pageable);
+    }
+
+    public long count() {
+        return historyRepo.count();
     }
 }
