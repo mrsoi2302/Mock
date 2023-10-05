@@ -1,0 +1,67 @@
+.container{
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(81, 144, 202);
+    position: relative;
+}
+.login-box{
+    border: 1px white solid;
+    background-color: whitesmoke;
+    width: 30vw;
+    height: 50vh;
+    margin:auto;
+    text-align: center;
+}
+.logo{
+    margin-top: 20px;
+    margin-bottom: 25px;
+    width: 50%;
+}
+.input-form{
+    width: 80%;
+    border-color: rgb(157, 156, 156);
+    margin-bottom: 15px;
+    height: 45px;
+}
+.login-button{
+    width: 100px;
+    height: 40px;
+}
+.error{
+    color: red;
+    font-style: italic;
+}
+.menubar{
+    position: fixed;
+    top: 0;
+    background-color: rgb(0, 0, 32);
+    width: 15vw;
+    height: 100vh;
+    display:block;
+    color: aliceblue;
+    float: left;
+    text-align: center;
+    font-size: x-large;
+}
+.taskbar{
+    position: fixed;
+    right:0;
+    width: 85vw;
+    height: 10vh;
+    background-color: whitesmoke;
+    display: flex;
+    align-items: center;
+    float: right;
+    justify-content: space-between;
+    z-index: 1;
+}
+.content{
+    position:relative;
+    display:flex;
+    float: right;
+    right: 0;
+    width: 85vw;
+    height: fit-content;
+    flex-wrap: wrap;
+    box-sizing: inherit;
+}

@@ -25,6 +25,10 @@ public class ProviderController {
     HistoryService historyService;
     ProviderService providerService;
     TokenProvider tokenProvider;
+    @GetMapping("/provider/count")
+    public long count(){
+        return providerService.count();
+    }
     @GetMapping("/provider/show")
     @ResponseStatus(HttpStatus.OK)
     public List<Provider> showAll(@RequestBody @Valid Value<Provider> value, @RequestParam int page){
@@ -40,12 +44,12 @@ public class ProviderController {
     public void createProvider(@RequestBody @Valid Provider provider, HttpServletRequest request){
         if(providerService.findByCode(provider.getCode())!=null) throw new CustomException("Nguồn cung đã tồn tại",HttpStatus.BAD_REQUEST);
         if(provider.getContact().matches("\\D")) throw new CustomException("Số điện thoại không hợp lệ",HttpStatus.BAD_REQUEST);
-        provider.setCreated_date(new Date(System.currentTimeMillis()));
+        provider.setCreated_date(new Date(System.currentTimeMillis()+(1000*60*60*7)));
         providerService.save(provider);
         String token= request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);
         historyService.save(History.builder()
-                .time(new Timestamp(System.currentTimeMillis()))
+                .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .msg(username+ " đã tạo ra nguồn cung "+provider.getCode())
                 .build());
     }
@@ -55,13 +59,13 @@ public class ProviderController {
         Provider temp=providerService.findByCode(provider.getCode());
         if(temp==null) throw new CustomException("Nguồn cung không tồn tại",HttpStatus.NOT_FOUND);
         if(provider.getContact().matches("\\D")) throw new CustomException("Số điện thoại không hợp lệ",HttpStatus.BAD_REQUEST);
-        provider.setModified_date(new Date(System.currentTimeMillis()));
+        provider.setModified_date(new Date(System.currentTimeMillis()+(1000*60*60*7)));
         temp.setProvider(provider);
         providerService.save(temp);
         String token= request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);
         historyService.save(History.builder()
-                .time(new Timestamp(System.currentTimeMillis()))
+                .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .msg(username+ " đã cập nhật nguồn cung "+provider.getCode())
                 .build());
     }
@@ -75,7 +79,7 @@ public class ProviderController {
         String token= request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);
         historyService.save(History.builder()
-                .time(new Timestamp(System.currentTimeMillis()))
+                .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .msg(username+ " đã xóa nguồn cung "+value.getValue())
                 .build());
     }

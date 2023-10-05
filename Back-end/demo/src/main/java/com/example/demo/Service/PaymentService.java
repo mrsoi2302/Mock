@@ -28,4 +28,8 @@ public class PaymentService {
     public void deleteByCode(String code) {
         paymentRepo.deleteByCode(code);
     }
+
+    public long count() {
+        return paymentRepo.count();
+    }
 }

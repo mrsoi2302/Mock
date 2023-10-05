@@ -33,7 +33,7 @@ public class AccountController {
         History history=new History(
                 null,
                 name+" đã tạo tài khoản "+employee.getUsername(),
-                new Timestamp(System.currentTimeMillis())
+                new Timestamp(System.currentTimeMillis()+(1000*60*60*7))
         );
         historyService.save(history);
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -52,7 +52,7 @@ public class AccountController {
         employeeService.save(employee);
 
         historyService.save(History.builder()
-                .time(new Timestamp(System.currentTimeMillis()))
+                .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .msg(username + "đã thay đổi mật khẩu").build());
     }
 }

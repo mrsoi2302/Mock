@@ -29,7 +29,11 @@ public class CustomerController {
     HistoryService historyService;
     TokenProvider tokenProvider;
     // Show danh sách khách hàng
-    @GetMapping("customer/show")
+    @GetMapping("/count")
+    public long count(){
+        return customerService.count();
+    }
+    @PostMapping("customer/show")
     @ResponseStatus(HttpStatus.OK)
     public List<Customer> showAll(@RequestBody Value<Customer> value, @RequestParam int page){
        return customerService.findAll(value.getValue(),
@@ -40,10 +44,10 @@ public class CustomerController {
                PageRequest.of(page,10));
     }
     //show thông tin cá nhân khách hàng
-    @GetMapping("customer/information")
+    @GetMapping("customer/information/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Customer show(@RequestBody String code){
-        return customerService.findByCode(code);
+    public Customer show(@PathVariable long id){
+        return customerService.findById(id);
     }
     //tạo ra 1 khách hàng
     @PostMapping("/admin/customer")
@@ -52,13 +56,13 @@ public class CustomerController {
         //Tạo mới
         if(customerService.findByCode(customer.getCode())!=null) throw new CustomException("Khách hàng này đã được tạo",HttpStatus.BAD_REQUEST);
         if(customer.getContact().trim().matches("\\D")) throw new CustomException("Số điện thoại không hợp lệ",HttpStatus.BAD_REQUEST);
-        customer.setCreate_date(new Date(System.currentTimeMillis()));
+        customer.setCreate_date(new Date(System.currentTimeMillis()+(1000*60*60*7)));
         customerService.save(customer);
         //Save vào lịch sử
         String name=tokenProvider.extractUsername(token);
         historyService.save(History.builder()
                         .msg(name+" đã tạo ra khách hàng:" + customer.getCode())
-                        .time(new Timestamp(System.currentTimeMillis()))
+                        .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .build());
         CustomerType c=customerTypeService.findByName(customer.getCustomerType().getName());
         c.setMember(c.getMember()+1);
@@ -79,12 +83,12 @@ public class CustomerController {
             b.setMember(b.getMember()+1);
         }
         temp.setCustomer(customer);
-        temp.setModified_date(new Date(System.currentTimeMillis()));
+        temp.setModified_date(new Date(System.currentTimeMillis()+(1000*60*60*7)));
         customerService.save(temp);
         String name=tokenProvider.extractUsername(token);
         historyService.save(History.builder()
                 .msg(name+" đã cập nhật khách hàng:" + customer.getCode())
-                .time(new Timestamp(System.currentTimeMillis()))
+                .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .build());
     }
     //xóa khách hàng
@@ -98,18 +102,18 @@ public class CustomerController {
         String name=tokenProvider.extractUsername(token);
         historyService.save(History.builder()
                 .msg(name+" đã xóa khách hàng " + code)
-                .time(new Timestamp(System.currentTimeMillis()))
+                .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .build());
     }
     @PostMapping("/admin/create-type")
     @ResponseStatus(HttpStatus.CREATED)
     public void createType(@RequestBody @Valid CustomerType customerType, @RequestBody String token){
         if(customerTypeService.findByName(customerType.getName())!=null) throw new CustomException("Loại khách hàng này đã tồn tại",HttpStatus.BAD_REQUEST);
-        customerType.setCreated_date(new Timestamp(System.currentTimeMillis()));
+        customerType.setCreated_date(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)));
         customerTypeService.save(customerType);
         historyService.save(History.builder()
                 .msg(tokenProvider.extractUsername(token) + " đã tạo ra loại khách hàng:" + customerType.getName())
-                .time(new Timestamp(System.currentTimeMillis()))
+                .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .build());
     }
     @GetMapping("customer/show/type/{page}")
@@ -126,7 +130,7 @@ public class CustomerController {
         String guy=tokenProvider.extractUsername(token);
         historyService.save(History.builder()
                 .msg(guy+" đã xóa loại khách hàng:" + name)
-                .time(new Timestamp(System.currentTimeMillis()))
+                .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .build());
     }
 }

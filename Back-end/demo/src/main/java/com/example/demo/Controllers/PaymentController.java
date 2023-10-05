@@ -26,7 +26,10 @@ public class PaymentController {
     HistoryService historyService;
     PaymentTypeService paymentTypeService;
     TokenProvider tokenProvider;
-
+    @GetMapping("/payment/count")
+    public long count(){
+        return paymentService.count();
+    }
     @GetMapping("/payment/show")
     List<Payment> showAllPayment(@RequestBody Value<String> value, @RequestParam int page){
         return paymentService.listAll(value.getValue(), PageRequest.of(page,10));
@@ -38,7 +41,7 @@ public class PaymentController {
     @PostMapping("/admin/payment")
     void createPayment(@RequestBody @Valid Payment payment, HttpServletRequest request){
         if(paymentService.findByCode(payment.getCode())!=null) throw new CustomException("Phiếu chi này đã tồn tại", HttpStatus.BAD_REQUEST);
-        payment.setCreated_date(new Timestamp(System.currentTimeMillis()));
+        payment.setCreated_date(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)));
         paymentService.save(payment);
 
         String username=tokenProvider.extractUsername(request.getHeader("Authorization").substring(7));
@@ -66,7 +69,7 @@ public class PaymentController {
 
         String username=tokenProvider.extractUsername(request.getHeader("Authorization").substring(7));
         historyService.save(History.builder()
-                .time(new Timestamp(System.currentTimeMillis()))
+                .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .msg(username + "đã cập nhật phiếu chi " + value.getValue())
                 .build());
     }
@@ -80,7 +83,7 @@ public class PaymentController {
         paymentTypeService.save(paymentType);
         String username=tokenProvider.extractUsername(request.getHeader("Authorization").substring(7));
         historyService.save(History.builder()
-                .time(new Timestamp(System.currentTimeMillis()))
+                .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .msg(username + "đã tạo ra loại phiếu chi " + paymentType.getName())
                 .build());
     }
@@ -90,7 +93,7 @@ public class PaymentController {
         paymentTypeService.deleteByName(value.getValue());
         String username=tokenProvider.extractUsername(request.getHeader("Authorization").substring(7));
         historyService.save(History.builder()
-                .time(new Timestamp(System.currentTimeMillis()))
+                .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .msg(username + "đã xóa loại phiếu chi " + value.getValue())
                 .build());
     }

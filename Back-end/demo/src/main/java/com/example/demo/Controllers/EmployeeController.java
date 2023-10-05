@@ -24,12 +24,15 @@ import java.util.List;
 public class    EmployeeController {
     EmployeeService employeeService;
     HistoryService historyService;
-    EmployeeRepo employeeRepo;
     TokenProvider tokenProvider;
-    @GetMapping("/show")
+    @GetMapping("/count")
+    public long count(){
+        return employeeService.count();
+    }
+    @PostMapping("/show")
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> showAll(@RequestBody Value<String> value, @RequestParam int page){
-            return employeeRepo.listAll(value.getValue(),PageRequest.of(page,10));
+            return employeeService.listAll(value.getValue(),PageRequest.of(page,10));
     }
     @GetMapping("/information")
     @ResponseStatus(HttpStatus.OK)
@@ -47,19 +50,19 @@ public class    EmployeeController {
         String name = tokenProvider.extractUsername(auth.substring(7));
         historyService.save(History.builder()
                         .msg(name+ " đã cập nhật nhân viên:"+ employee.getCode())
-                        .time(new Timestamp(System.currentTimeMillis()))
+                        .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .build());
     }
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     @Transactional
     @ResponseStatus(HttpStatus.OK)
-    public void deleteEmployee(@RequestBody Value<String> value,HttpServletRequest request){
+    public void deleteEmployee(@PathVariable String code,HttpServletRequest request){
         String auth=request.getHeader("Authorization");
-        employeeRepo.deleteByCode(value.getValue());
+        employeeService.deleteByCode(code);
         String name = tokenProvider.extractUsername(auth.substring(7));
         historyService.save(History.builder()
-                .msg(name+ " đã xóa nhân viên:"+ value.getValue())
-                .time(new Timestamp(System.currentTimeMillis()))
+                .msg(name+ " đã xóa nhân viên:"+ code)
+                .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .build());
     }
 }

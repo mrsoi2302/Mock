@@ -28,4 +28,8 @@ public class ProviderService {
     public void deleteByCode(String code) {
         providerRepo.deleteByCode(code);
     }
+
+    public long count() {
+        return providerRepo.count();
+    }
 }

@@ -31,4 +31,5 @@ public interface CustomerRepo extends JpaRepository<Customer,Long> {
     Customer findByCode(String code);
 
     void deleteByCode(String code);
+    Customer findById(long id);
 }

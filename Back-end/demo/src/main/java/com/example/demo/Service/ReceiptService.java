@@ -28,4 +28,8 @@ public class ReceiptService {
     public void deleteByCode(String code) {
         receiptRepo.deleteByCode(code);
     }
+
+    public long count() {
+        return receiptRepo.count();
+    }
 }

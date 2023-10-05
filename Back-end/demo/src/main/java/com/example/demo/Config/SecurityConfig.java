@@ -8,8 +8,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+import java.util.Arrays;
 
 
 @Configuration
@@ -25,21 +28,24 @@ public class SecurityConfig {
                         .requestMatchers("admin/**").hasAnyAuthority("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(sess->sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(requestFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(requestFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
     @Bean
-    public WebMvcConfigurer corsConfigurer(){
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/admin/history")
-                        .allowedOrigins("*")
-                        .allowedMethods("GET","POST","PUT","PATCH","DELETE","OPTIONS")
-                        .allowCredentials(true)
-                        .exposedHeaders("Access-Control-Allow-Origin")
-                        ;
-            }
-        };
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+
+        // Cấu hình các tùy chọn CORS ở đây
+        config.setAllowCredentials(true); // Cho phép credentials (cookies, headers xác thực)
+        config.addAllowedOrigin("http://localhost:3000"); // Origin được phép truy cập
+        config.addAllowedHeader("*"); // Các headers được phép
+        config.addAllowedMethod("*"); // Các phương thức HTTP được phép
+
+        // Đăng ký cấu hình CORS cho tất cả các URL
+        source.registerCorsConfiguration("/**", config);
+
+        return new CorsFilter(source);
     }
 }

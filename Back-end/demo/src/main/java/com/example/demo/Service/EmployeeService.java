@@ -32,4 +32,12 @@ public class EmployeeService {
     public Employee findByUsernameAndPassword(String username, String password) {
         return employeeRepo.findByUsernameAndPassword(username,password);
     }
+
+    public long count() {
+        return employeeRepo.count();
+    }
+
+    public void deleteById(long id) {
+        employeeRepo.deleteById(id);
+    }
 }

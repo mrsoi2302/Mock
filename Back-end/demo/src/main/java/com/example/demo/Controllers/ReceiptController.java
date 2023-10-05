@@ -27,6 +27,10 @@ public class ReceiptController {
     private HistoryService historyService;
     private ReceiptTypeService receiptTypeService;
     private TokenProvider tokenProvider;
+    @GetMapping("/receipt/count")
+    public long count(){
+        return receiptService.count();
+    }
     @GetMapping("/receipt/show")
     public List<Receipt> showAll(@RequestBody @Valid Value<String> value, @RequestParam int page){
         return receiptService.listAll(value.getValue(), PageRequest.of(page,10));
@@ -38,12 +42,12 @@ public class ReceiptController {
     @PostMapping("/admin/receipt")
     public void createReceipt(@RequestBody @Valid Receipt receipt, HttpServletRequest request){
         if(receiptService.findByCode(receipt.getCode())!=null) throw new CustomException("Phiếu thu đã tồn tại",HttpStatus.BAD_REQUEST);
-        receipt.setCreated_date(new Timestamp(System.currentTimeMillis()));
+        receipt.setCreated_date(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)));
         receiptService.save(receipt);
 
         String username=tokenProvider.extractUsername(request.getHeader("Authorization").substring(7));
         historyService.save(History.builder()
-                .time(new Timestamp(System.currentTimeMillis()))
+                .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .msg(username + " đã tạo ra phiếu thu " + receipt.getCode())
                 .build());
     }
@@ -58,7 +62,7 @@ public class ReceiptController {
 
         String username=tokenProvider.extractUsername(request.getHeader("Authorization").substring(7));
         historyService.save(History.builder()
-                .time(new Timestamp(System.currentTimeMillis()))
+                .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .msg(username + " đã cập nhật phiếu thu " + receipt.getCode())
                 .build());
     }
@@ -71,7 +75,7 @@ public class ReceiptController {
 
         String username=tokenProvider.extractUsername(request.getHeader("Authorization").substring(7));
         historyService.save(History.builder()
-                .time(new Timestamp(System.currentTimeMillis()))
+                .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .msg(username + " đã xóa phiếu thu " + value.getValue())
                 .build());
     }
@@ -88,7 +92,7 @@ public class ReceiptController {
 
         String username=tokenProvider.extractUsername(request.getHeader("Authorization").substring(7));
         historyService.save(History.builder()
-                .time(new Timestamp(System.currentTimeMillis()))
+                .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .msg(username + " đã tạo loại phiếu thu " + receiptType.getName())
                 .build());
     }
@@ -100,7 +104,7 @@ public class ReceiptController {
         receiptTypeService.delete(resource);
         String username=tokenProvider.extractUsername(request.getHeader("Authorization").substring(7));
         historyService.save(History.builder()
-                .time(new Timestamp(System.currentTimeMillis()))
+                .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .msg(username + " đã xóa loại phiếu thu " + receiptType.getName())
                 .build());
     }

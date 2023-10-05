@@ -13,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.time.LocalTime;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 @RestController
 @AllArgsConstructor
@@ -31,9 +34,10 @@ public class LoginController {
         String token = tokenProvider.tokenGenerator(loginRequest.getUsername());
 
         String username=tokenProvider.extractUsername(token);
+        Calendar calendar=Calendar.getInstance(TimeZone.getTimeZone("GMT+7"));
         historyService.save(History.builder()
                 .msg(username+" đã đăng nhập")
-                .time(new Timestamp(System.currentTimeMillis()))
+                .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .build());
         return BaseResponse.builder()
                 .httpStatus(HttpStatus.ACCEPTED.value())
