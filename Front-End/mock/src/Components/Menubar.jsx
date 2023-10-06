@@ -11,18 +11,18 @@ function getItem(label, key, icon, children, type) {
   };
 }
 const items = [
-  getItem('Navigation One', 'provider', <MailOutlined />, [
+  getItem('K', 'provider',null , [
     getItem('Option 1', 'list'),
     getItem('Option 2', '2'),
     getItem('Option 3', '3'),
     getItem('Option 4', '4'),
   ]),
-  getItem('Navigation Two', 'sub2', <AppstoreOutlined />, [
+  getItem('Navigation Two', 'sub2', null, [
     getItem('Option 5', '5'),
     getItem('Option 6', '6'),
     getItem('Submenu', 'sub3', null, [getItem('Option 7', '7'), getItem('Option 8', '8')]),
   ]),
-  getItem('Navigation Three', 'sub4', <SettingOutlined />, [
+  getItem('Navigation Three', 'sub4',null, [
     getItem('Option 9', '9'),
     getItem('Option 10', '10'),
     getItem('Option 11', '11'),
@@ -41,7 +41,7 @@ export default function Menubar(props){
       setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
     }
   }; 
-        const open='provider';
+        const open=props.open;
         console.log(open===props.open);
         return(
         <nav className="menubar">
@@ -54,12 +54,12 @@ export default function Menubar(props){
                     style={
                         {
                             backgroundColor:"inherit",
-                            color:"white"
+                            color:"white",
                         }
                     }
                     mode="inline"
-                    openKeys={props.open}
-                    selectedKeys={props.selected}
+                    defaultOpenKeys={open}
+                    defaultSelectedKeys={"list"}
                     onOpenChange={onOpenChange}
                     items={items}
                 />
