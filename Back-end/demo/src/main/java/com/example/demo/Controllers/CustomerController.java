@@ -27,7 +27,7 @@ public class CustomerController {
     CustomerService customerService;
     CustomerTypeService customerTypeService;
     HistoryService historyService;
-    TokenProvider tokenProvider
+    TokenProvider tokenProvider;
     // Show danh sách khách hàng
     @GetMapping("/customer/count")
     public long count(){
