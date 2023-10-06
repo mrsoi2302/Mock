@@ -29,7 +29,7 @@ public class CustomerController {
     HistoryService historyService;
     TokenProvider tokenProvider;
     // Show danh sách khách hàng
-    @GetMapping("/count")
+    @GetMapping("/customer/count")
     public long count(){
         return customerService.count();
     }

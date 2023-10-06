@@ -1,48 +1,43 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import './style.css';
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Paginate from "./Pagination";
-import TableCom from "./HistoryTable";
+import Dashboard from "./Dashboard";
+import Account from "./Account";
 
 
-export default function Main(){
-  const [data,setData]=useState([]);
-  const [page,setPage]=useState(1);
+export default function Main(props){
   const navigate=useNavigate()
-  const handleDataFromChild = (data) => {
-    setPage(data);
-  }
-  useEffect(()=>{
     document.title="Trang chủ"
-    axios(
-      {
-        url:"http://localhost:8080/admin/history/show?page="+(page-1),
-        method:"post",
-        headers:{
-          "Authorization":"Bearer "+localStorage.getItem("jwt")
-        },
-        data:{
-          T:null,
-          value:null
-        }
-      }
-       )
-    .then(res=>{
-      setData(res.data);
-    }).catch(err=>{
-      localStorage.removeItem("jwt")
-      navigate('/')
-      console.log(err);
-      }) 
-    },[page])
+    useEffect(()=>{
+      props.setOpen('provider')
+      props.setSelected('list')
+    })
     return(
       <div className="content">
-
-        <TableCom
-          id={1}
-          data={data}
-        />
+        <div className="taskbar">
+          <h2>Tổng quan</h2>
+          <Account
+            name={localStorage.getItem("name")}
+          />
+        </div>
+        <div className="inside">
+          <Dashboard
+            type={"customer"}
+            title={"Khách hàng"}
+          />
+          <Dashboard
+            type={"provider"}
+            title={"Nhà cung cấp"}
+          />
+          <Dashboard
+            type={"receipt"}
+            title={"Phiếu thu"}
+          />
+          <Dashboard
+            type={"customer"}
+            title={"Phiếu chi"}
+          />
+        </div>
       </div>
       
     );

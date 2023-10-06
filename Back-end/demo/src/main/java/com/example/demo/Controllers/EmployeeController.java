@@ -25,7 +25,7 @@ public class    EmployeeController {
     EmployeeService employeeService;
     HistoryService historyService;
     TokenProvider tokenProvider;
-    @GetMapping("/count")
+    @GetMapping("/employee/count")
     public long count(){
         return employeeService.count();
     }
@@ -53,7 +53,7 @@ public class    EmployeeController {
                         .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .build());
     }
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{code}")
     @Transactional
     @ResponseStatus(HttpStatus.OK)
     public void deleteEmployee(@PathVariable String code,HttpServletRequest request){
