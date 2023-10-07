@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 const ExceptionBox = () => {
     const navigate=useNavigate();
     const handleOk=()=>{
-        localStorage.removeItem("jwt")
+        localStorage.clear()
         navigate('/')
     }
   return (

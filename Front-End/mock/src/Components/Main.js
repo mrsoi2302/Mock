@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import './style.css';
-import { useNavigate } from "react-router-dom";
 import Dashboard from "./Dashboard";
 import Account from "./Account";
 
 
 export default function Main(props){
-  const navigate=useNavigate()
     document.title="Trang chủ"
     useEffect(()=>{
-      props.setOpen('provider')
-      props.setSelected('list')
-    })
+      localStorage.removeItem("open")
+      localStorage.removeItem("selected")
+    },[])
     return(
       <div className="content">
         <div className="taskbar">

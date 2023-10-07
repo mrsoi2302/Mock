@@ -29,9 +29,10 @@ public class ProviderController {
     public long count(){
         return providerService.count();
     }
-    @GetMapping("/provider/show")
+    @PostMapping("/provider/show")      
     @ResponseStatus(HttpStatus.OK)
-    public List<Provider> showAll(@RequestBody @Valid Value<Provider> value, @RequestParam int page){
+    public List<Provider> showAll(@RequestBody Value<Provider> value, @RequestParam int page){
+        System.out.println(value.getT());
         return providerService.listAll(value, PageRequest.of(page,10));
     }
     @GetMapping("/provider/inform")

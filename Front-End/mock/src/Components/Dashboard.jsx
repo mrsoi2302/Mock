@@ -6,7 +6,7 @@ import ExceptionBox from './ExceptionBox';
 function Dashboard (props){
     const[number,setNumber]=useState(0);
     const[error,setError]=useState(true)
-    const link='http://localhost:3000/'+props.type
+    const link='http://localhost:3000/'+props.type+"-list"
     useEffect(()=>{
         axios(
             {
@@ -36,8 +36,8 @@ function Dashboard (props){
                     display:"block",
                     borderColor:"gray",
                     margin:"10px",
-                    boxShadow:"1px 1px"
-                    
+                    boxShadow:"1px 1px",
+                    backgroundColor:"whitesmoke",
                 }}
                 >
                 <p>{number}</p>

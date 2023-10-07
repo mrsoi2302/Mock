@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Menu } from 'antd';
 function getItem(label, key, icon, children, type) {
   return {
@@ -11,28 +10,33 @@ function getItem(label, key, icon, children, type) {
   };
 }
 const items = [
-  getItem('K', 'provider',null , [
-    getItem('Option 1', 'list'),
-    getItem('Option 2', '2'),
-    getItem('Option 3', '3'),
-    getItem('Option 4', '4'),
+  getItem('Nhà cung cấp', 'provider',null , [
+    getItem(<a href='/provider-list'>Danh sách</a>, 'provider-list'),
   ]),
-  getItem('Navigation Two', 'sub2', null, [
-    getItem('Option 5', '5'),
-    getItem('Option 6', '6'),
-    getItem('Submenu', 'sub3', null, [getItem('Option 7', '7'), getItem('Option 8', '8')]),
+  getItem('Khách hàng', 'customer', null, [
+    getItem(<a href='/customer-list'>Danh sách</a>, 'customer-list'),
+    getItem(<a href='/customer-type'>Nhóm khách hàng</a>, 'customer-type'),
   ]),
-  getItem('Navigation Three', 'sub4',null, [
-    getItem('Option 9', '9'),
-    getItem('Option 10', '10'),
-    getItem('Option 11', '11'),
-    getItem('Option 12', '12'),
+  getItem('Sổ quỹ', 'cash',null, [
+    getItem(<a href='/cash-payment'>Danh sách</a>, 'cash-payment'),
+    getItem(<a href='/cash-receipt'>Danh sách</a>, 'cash-receipt'),
+    getItem(<a href='/cash-cashbook'>Danh sách</a>, 'cash-cashbook'),
+  ]),
+  getItem('Quản lý nhân viên', 'employee',null, [
+    getItem(<a href='/employee-list'>Danh sách</a>, 'employee-list'),
+    getItem(<a href='/employee-create'>Tạo nhân viên mới</a>, 'employee-create'),
+    getItem(<a href='/employee-information'>Thông tin nhân viên</a>, 'employee-information'),
   ]),
 ];
-const rootSubmenuKeys = ['sub1', 'sub2', 'sub4'];
+const rootSubmenuKeys = ['provider', 'customer', 'cash','employee'];
   
+
 export default function Menubar(props){
-  const [openKeys, setOpenKeys] = useState(['sub1']);
+  const [openKeys, setOpenKeys] = useState([]);
+  useEffect(()=>{
+
+    setOpenKeys([localStorage.getItem("open")])
+  },[] )
   const onOpenChange = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
     if (latestOpenKey && rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
@@ -40,9 +44,8 @@ export default function Menubar(props){
     } else {
       setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
     }
-  }; 
-        const open=props.open;
-        console.log(open===props.open);
+  };
+
         return(
         <nav className="menubar">
                 <a href="/main">
@@ -51,18 +54,16 @@ export default function Menubar(props){
                 />
                 </a>
                 <Menu
-                    style={
-                        {
-                            backgroundColor:"inherit",
-                            color:"white",
-                        }
-                    }
-                    mode="inline"
-                    defaultOpenKeys={open}
-                    defaultSelectedKeys={"list"}
-                    onOpenChange={onOpenChange}
-                    items={items}
+                  mode="inline"
+                  openKeys={openKeys}
+                  onOpenChange={onOpenChange}
+                  selectedKeys={localStorage.getItem("selected")}
+                  style={{
+                    background:"inherit",
+                    color:"white",
+                  }}
+                  items={items}
                 />
             </nav>
-    );
+    );  
 }
