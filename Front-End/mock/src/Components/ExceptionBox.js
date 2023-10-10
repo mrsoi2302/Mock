@@ -7,9 +7,13 @@ const ExceptionBox = () => {
         localStorage.clear()
         navigate('/')
     }
+    const handleCancel=()=>{
+      localStorage.clear()
+        navigate('/')
+    }
   return (
     <>
-      <Modal title="Cảnh báo" open={true} onOk={handleOk} >
+      <Modal title="Cảnh báo" open={true} onOk={handleOk} onCancel={handleCancel}>
         <p>Thời gian đăng nhập của bạn đã hết hạn</p>
         <p>Vui lòng đăng nhập lại để tiếp tục sử dụng dịch vụ</p>
       </Modal>

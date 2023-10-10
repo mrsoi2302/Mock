@@ -34,8 +34,10 @@ const rootSubmenuKeys = ['provider', 'customer', 'cash','employee'];
 export default function Menubar(props){
   const [openKeys, setOpenKeys] = useState([]);
   useEffect(()=>{
+    if(localStorage.getItem("open")!=null){
 
-    setOpenKeys([localStorage.getItem("open")])
+      setOpenKeys([localStorage.getItem("open")])
+    }
   },[] )
   const onOpenChange = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);

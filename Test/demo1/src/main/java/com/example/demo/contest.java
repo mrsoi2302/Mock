@@ -87,24 +87,8 @@ class Employee{
 }
 public class contest {
     public static void main(String[] args) {
-        List<Department> list=new ArrayList<>();
         Scanner sc=new Scanner(System.in);
-        int n= sc.nextInt();
-        for(int i=0;i<n;i++){
-            list.add(new Department(sc));
-        }
-        List<Employee> employees=new ArrayList<>();
-        int m=sc.nextInt();
-        for (int i=0;i<m;i++){
-            String code=sc.next();
-            String temp=sc.nextLine();
-            String name= sc.nextLine();
-            long wage=sc.nextLong();
-            int time=sc.nextInt();
-            employees.add(new Employee(code,name,wage,time,list));
-        }
-        for(Employee i:employees){
-            System.out.println(i);
-        }
+        String st=sc.nextLine();
+        System.out.println(st.matches("^\\d+$"));
     }
 }

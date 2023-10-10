@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface ProviderRepo extends JpaRepository<Provider,Long> {
     @Query("select  p from Provider p where " +
-            "(:value is not null " +
+            "(:value is null " +
             "or " +
             "p.code like concat('%',:value,'%') " +
             "or " +

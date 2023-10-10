@@ -1,8 +1,6 @@
 package com.example.demo.Entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,8 +23,6 @@ public class Provider {
     @NotNull
     private String name;
     @NotNull
-    @Min(10)
-    @Max(10)
     private String contact;
     private Date created_date;
     private Date modified_date;

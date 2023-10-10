@@ -4,6 +4,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Main from './Components/Main';
 import Menubar from './Components/Menubar';
 import ProviderList from './Components/ProviderList';
+import CreateProvider from './Components/CreateProvider';
 function App(){
   return(
     <div>
@@ -14,7 +15,7 @@ function App(){
           <Route path='/' element={<Login/>}/>
           <Route path='/main' element={<Main />}/>
           <Route path='/provider-list' element={<ProviderList />}/>
-          <Route path='/main' element={<Main />}/>
+          <Route path='/create-provider' element={<CreateProvider/>}/>
           <Route path='/main' element={<Main />}/>
           <Route path='/main' element={<Main />}/>
           <Route path='/main' element={<Main />}/>

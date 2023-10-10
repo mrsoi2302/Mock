@@ -14,7 +14,8 @@ import java.util.List;
 public class ProviderService {
     private ProviderRepo providerRepo;
     public List<Provider> listAll(Value<Provider> value, Pageable pageable) {
-        return providerRepo.listAll(value.getValue(), value.getT().getCreated_date(), value.getT().getStatus(), pageable);
+        return providerRepo.listAll(value.getValue(),
+                value.getT().getCreated_date(), value.getT().getStatus(), pageable);
     }
 
     public Provider findByCode(String value) {

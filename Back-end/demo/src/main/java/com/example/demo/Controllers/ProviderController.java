@@ -1,10 +1,12 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.DataType.Value;
+import com.example.demo.Entities.Employee;
 import com.example.demo.Entities.History;
 import com.example.demo.Entities.Provider;
 import com.example.demo.Exceptions.CustomException;
 import com.example.demo.Security.TokenProvider;
+import com.example.demo.Service.EmployeeService;
 import com.example.demo.Service.HistoryService;
 import com.example.demo.Service.ProviderService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,7 +19,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @AllArgsConstructor
@@ -25,6 +29,7 @@ public class ProviderController {
     HistoryService historyService;
     ProviderService providerService;
     TokenProvider tokenProvider;
+    EmployeeService employeeService;
     @GetMapping("/provider/count")
     public long count(){
         return providerService.count();
@@ -41,14 +46,20 @@ public class ProviderController {
         return providerService.findByCode(value.getValue());
     }
     @PostMapping("/admin/provider")
+    @Transactional
     @ResponseStatus(HttpStatus.CREATED)
-    public void createProvider(@RequestBody @Valid Provider provider, HttpServletRequest request){
+    public void createProvider(@RequestBody Provider provider, HttpServletRequest request){
         if(providerService.findByCode(provider.getCode())!=null) throw new CustomException("Nguồn cung đã tồn tại",HttpStatus.BAD_REQUEST);
-        if(provider.getContact().matches("\\D")) throw new CustomException("Số điện thoại không hợp lệ",HttpStatus.BAD_REQUEST);
-        provider.setCreated_date(new Date(System.currentTimeMillis()+(1000*60*60*7)));
-        providerService.save(provider);
+        if(!provider.getContact().matches("^\\d+$")) throw new CustomException("Số điện thoại không hợp lệ",HttpStatus.BAD_REQUEST);
         String token= request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);
+        Employee employee= employeeService.findByUsername(username);
+        provider.setCreated_date(new Date(System.currentTimeMillis()+(1000*60*60*7)));
+        Set<Employee> set=new HashSet<>();
+        set.add(employee);
+        System.out.println(set);
+        provider.setEmployees(set);
+        providerService.save(provider);
         historyService.save(History.builder()
                 .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .msg(username+ " đã tạo ra nguồn cung "+provider.getCode())
@@ -74,14 +85,14 @@ public class ProviderController {
     @DeleteMapping("admin/provider")
     @Transactional
     @ResponseStatus(HttpStatus.OK)
-    public void deleteProvider(@RequestBody @Valid Value<String> value,HttpServletRequest request){
-        if(providerService.findByCode(value.getValue())==null) throw new CustomException("Nguồn cung không tồn tại",HttpStatus.NOT_FOUND);
-        providerService.deleteByCode(value.getValue());
+    public void deleteProvider(@RequestParam String code,HttpServletRequest request){
+        if(providerService.findByCode(code)==null) throw new CustomException("Nguồn cung không tồn tại",HttpStatus.NOT_FOUND);
+        providerService.deleteByCode(code);
         String token= request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);
         historyService.save(History.builder()
                 .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
-                .msg(username+ " đã xóa nguồn cung "+value.getValue())
+                .msg(username+ " đã xóa nguồn cung "+code)
                 .build());
     }
 }
