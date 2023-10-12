@@ -12,6 +12,7 @@ function getItem(label, key, icon, children, type) {
 const items = [
   getItem('Nhà cung cấp', 'provider',null , [
     getItem(<a href='/provider-list'>Danh sách</a>, 'provider-list'),
+    getItem(<a href='/create-provider'>Tạo mới</a>, 'create-provider'),
   ]),
   getItem('Khách hàng', 'customer', null, [
     getItem(<a href='/customer-list'>Danh sách</a>, 'customer-list'),
@@ -33,12 +34,11 @@ const rootSubmenuKeys = ['provider', 'customer', 'cash','employee'];
 
 export default function Menubar(props){
   const [openKeys, setOpenKeys] = useState([]);
+  const [selectedKeys, setSelectedKeys] = useState();
   useEffect(()=>{
-    if(localStorage.getItem("open")!=null){
-
       setOpenKeys([localStorage.getItem("open")])
-    }
-  },[] )
+      setSelectedKeys(localStorage.getItem("selected"))
+  },[localStorage.getItem("selected")])
   const onOpenChange = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
     if (latestOpenKey && rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
@@ -59,7 +59,7 @@ export default function Menubar(props){
                   mode="inline"
                   openKeys={openKeys}
                   onOpenChange={onOpenChange}
-                  selectedKeys={localStorage.getItem("selected")}
+                  selectedKeys={[localStorage.getItem('selected')]}
                   style={{
                     background:"inherit",
                     color:"white",

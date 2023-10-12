@@ -22,7 +22,7 @@ public interface ProviderRepo extends JpaRepository<Provider,Long> {
             "or " +
             "p.contact like concat('%',:value,'%'))" +
             "and " +
-            "(:created is null or p.created_date=:created)" +
+            "(:created is null or cast(p.created_date as date) =:created)" +
             "and" +
             "(:status is null or p.status=:status)")
     List<Provider> listAll(@Param("value") String value,

@@ -40,10 +40,10 @@ public class ProviderController {
         System.out.println(value.getT());
         return providerService.listAll(value, PageRequest.of(page,10));
     }
-    @GetMapping("/provider/inform")
+    @GetMapping("/provider/information")
     @ResponseStatus(HttpStatus.OK)
-    public Provider showInformation(@RequestBody @Valid Value<String> value){
-        return providerService.findByCode(value.getValue());
+    public Provider showInformation(@RequestParam String code){
+        return providerService.findByCode(code);
     }
     @PostMapping("/admin/provider")
     @Transactional
@@ -57,7 +57,6 @@ public class ProviderController {
         provider.setCreated_date(new Date(System.currentTimeMillis()+(1000*60*60*7)));
         Set<Employee> set=new HashSet<>();
         set.add(employee);
-        System.out.println(set);
         provider.setEmployees(set);
         providerService.save(provider);
         historyService.save(History.builder()
@@ -77,8 +76,6 @@ public class ProviderController {
         String token= request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);
         historyService.save(History.builder()
-                .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
-                .msg(username+ " đã cập nhật nguồn cung "+provider.getCode())
                 .build());
     }
     

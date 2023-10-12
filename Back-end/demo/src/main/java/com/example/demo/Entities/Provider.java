@@ -50,9 +50,7 @@ public class Provider {
         this.created_date = provider.created_date;
         this.modified_date = provider.modified_date;
         this.debt = provider.debt;
-        this.total = provider.total;
         this.status = provider.status;
         this.employees = provider.employees;
-        this.receipts = provider.receipts;
     }
 }

@@ -22,7 +22,7 @@ public class TokenProvider {
 
     @Value("${secret.key}")
     private String SECRET;
-    private long EXPIRATED = 1000 * 60 * 30;
+    private long EXPIRATED = 1000 * 60 * 60*24;
 
     private Key getSigninKey() {
         byte[] key = Decoders.BASE64.decode(SECRET);

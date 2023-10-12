@@ -29,7 +29,7 @@ export default function Login(){
         ).then(res=>{
             setToken(res.data.data.token);
             localStorage.setItem("jwt",res.data.data.token);
-            localStorage.setItem("name",username)
+            localStorage.setItem("name",username);
             console.clear()
             navigate("/main");  
             })
