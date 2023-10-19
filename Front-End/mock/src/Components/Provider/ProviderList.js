@@ -94,6 +94,7 @@ export default function ProviderList(props){
                     data={data}
                 />}
                 <Paginate
+                    page={page}
                     onData={handlePaginate}
                     number={count}
                 />

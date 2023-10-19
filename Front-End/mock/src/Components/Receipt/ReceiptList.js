@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import ExceptionBox from "../ExceptionBox";
 import Account from "../Account";
 import SearchInput from "../SearchInput";
-import { Button } from "antd";
+import { Button, Table } from "antd";
 import Paginate from "../Paginate";
 import ReceiptType from "./ReceiptType";
 import ReceiptTable from "./ReceiptTable";
@@ -76,8 +76,9 @@ export default function ReceiptList(){
                 <ReceiptType
                 />
                 <Button type="primary" className="add" href="/create-receipt">Thêm phiếu thu mới</Button>
-                {data.length>0 && <ReceiptTable data={data}/>}
+                {data.length>0 ? <ReceiptTable data={data}/>:<Table/>}
                 <Paginate
+                    page={page}
                     onData={handlePaginate}
                     number={count}
                 />

@@ -72,15 +72,7 @@ function CustomerTypeTable(props) {
           dataIndex: 'member',
           key: 'member',
         },
-        {
-            title: 'Hành động',
-            key: 'action',
-            render: (_, record) => (
-              <Space size="middle">
-                <a onClick={(e) => handleDelete(record)}>Delete</a>
-              </Space>
-            ),
-          },
+        
       ];
     return(
       <>

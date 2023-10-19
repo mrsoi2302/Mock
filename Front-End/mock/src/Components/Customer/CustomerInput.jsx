@@ -170,8 +170,8 @@ const CustomerInput = () => {
             setGender(e)
           }}
         >
-          <Option value="male">Nam</Option>
-          <Option value="female">Nữ</Option>
+          <Option value="Nam">Nam</Option>
+          <Option value="Nữ">Nữ</Option>
           <Option value="LGBT">LGBT</Option>
         </Select>
       </Form.Item>
@@ -200,6 +200,11 @@ const CustomerInput = () => {
       <Form.Item
         name="customerType"
         label="Nhóm khách hàng"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
       >
         <Select
           allowClear

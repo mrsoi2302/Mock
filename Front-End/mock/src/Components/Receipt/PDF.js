@@ -60,7 +60,7 @@ import MyFont from '../font-times-new-roman.ttf'
         <Page>
             <Text style={styles.title}>Hóa đơn</Text>
             <Text style={styles.text}>
-                Ma hoa don:{props.data.code}
+                Mã hóa đơn:{props.data.code}
             </Text>
             <Text style={styles.text}>
                 Giá trị:{props.data.revenue}

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import ExceptionBox from "../ExceptionBox";
 import Account from "../Account";
 import SearchInput from "../SearchInput";
-import { Button } from "antd";
+import { Button, Table } from "antd";
 import Paginate from "../Paginate";
 import PaymentTable from "./PaymentTable";
 import PaymentType from "./PaymentType";
@@ -76,8 +76,9 @@ export default function PaymentList(){
                 <PaymentType
                 />
                 <Button type="primary" className="add" href="/create-payment">Thêm phiếu chi mới</Button>
-                {data.length>0 && <PaymentTable data={data}/>}
+                {data.length>0 ? <PaymentTable data={data}/>:<Table/>}
                 <Paginate
+                page={page} 
                     onData={handlePaginate}
                     number={count}
                 />
