@@ -62,6 +62,7 @@ public class ProviderController {
         String token= request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);
         Employee employee= employeeService.findByUsername(username);
+        provider.setCreated_date1(new Date(System.currentTimeMillis()));
         provider.setCreated_date(new Date(System.currentTimeMillis()+(1000*60*60*7)));
         Set<Employee> set=new HashSet<>();
         Employee employee1=employee;

@@ -25,6 +25,7 @@ public class Provider {
     @NotNull
     private String contact;
     private Date created_date;
+    private Date created_date1;
     private Date modified_date;
     @Column(columnDefinition = "bigint default 0")
     private long debt;

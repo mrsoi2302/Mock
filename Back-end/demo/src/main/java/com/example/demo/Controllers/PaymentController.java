@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -54,6 +55,7 @@ public class PaymentController {
     public void createPayment(@RequestBody Payment payment, HttpServletRequest request){
         if(paymentService.findByCode(payment.getCode())!=null) throw new CustomException("Phiếu chi này đã tồn tại", HttpStatus.BAD_REQUEST);
         payment.setCreated_date(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)));
+        payment.setCreated_date1(new Timestamp(System.currentTimeMillis()));
         Customer customer=customerService.findById(payment.getCustomer().getId());
         Set<Payment> payments=new HashSet<>();
         payments.add(payment);

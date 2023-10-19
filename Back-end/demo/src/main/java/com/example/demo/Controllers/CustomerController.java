@@ -78,6 +78,7 @@ public class CustomerController {
         if(customerService.findByCode(customer.getCode())!=null) throw new CustomException("Khách hàng này đã được tạo",HttpStatus.BAD_REQUEST);
         if(!customer.getContact().matches("^\\d+$")) throw new CustomException("Số điện thoại không hợp lệ",HttpStatus.BAD_REQUEST);
         customer.setCreated_date(new Date(System.currentTimeMillis()+(1000*60*60*7)));
+        customer.setCreated_date1(new Date(System.currentTimeMillis()));
         String username=tokenProvider.extractUsername(request.getHeader("Authorization").substring(7));
         Set<Employee> set=new HashSet<>();
         Employee employee= employeeService.findByUsername(username);
@@ -87,7 +88,7 @@ public class CustomerController {
         //Save vào lịch sử
         historyService.save(History.builder()
                         .msg(username+" đã tạo ra khách hàng:" + customer.getCode())
-                        .time(new Timestamp(System.currentTimeMillis()))
+                        .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .build());
         CustomerType c=customerTypeService.findById((long)customer.getCustomerType().getId());
         c.setMember(c.getMember()+1);
@@ -112,12 +113,12 @@ public class CustomerController {
             b.setMember(b.getMember()+1);
         }
         temp.setCustomer(customer);
-        temp.setModified_date(new Date(System.currentTimeMillis()));
+        temp.setModified_date(new Date(System.currentTimeMillis()+(1000*60*60*7)));
         customerService.save(temp);
         String name=tokenProvider.extractUsername(request.getHeader("Authorization").substring(7));
         historyService.save(History.builder()
                 .msg(name+" đã cập nhật khách hàng:" + customer.getCode())
-                .time(new Timestamp(System.currentTimeMillis()))
+                .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .build());
     }
     @DeleteMapping("/admin/customer")
@@ -146,11 +147,11 @@ public class CustomerController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createType(@RequestBody @Valid CustomerType customerType, HttpServletRequest request){
         if(customerTypeService.findByName(customerType.getName())!=null) throw new CustomException("Loại khách hàng này đã tồn tại",HttpStatus.BAD_REQUEST);
-        customerType.setCreated_date(new Timestamp(System.currentTimeMillis()));
+        customerType.setCreated_date(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)));
         customerTypeService.save(customerType);
         historyService.save(History.builder()
                 .msg(tokenProvider.extractUsername(request.getHeader("Authorization").substring(7)) + " đã tạo ra loại khách hàng:" + customerType.getName())
-                .time(new Timestamp(System.currentTimeMillis()))
+                .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .build());
     }
     @GetMapping("customer-type/count")
@@ -176,7 +177,7 @@ public class CustomerController {
         String guy=tokenProvider.extractUsername(request.getHeader("Authorization").substring(7));
         historyService.save(History.builder()
                 .msg(guy+" đã xóa loại khách hàng:" + name)
-                .time(new Timestamp(System.currentTimeMillis()))
+                .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .build());
     }
 }

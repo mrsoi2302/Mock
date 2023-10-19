@@ -36,6 +36,7 @@ public class Customer{
     @Column(columnDefinition = "bigint default 0")
     private long total;
     private Date created_date;
+    private Date created_date1;
     private Date modified_date;
     private int birthday_day;
     private int birthday_month;

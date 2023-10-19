@@ -81,6 +81,7 @@ export default function EmployeeList(props){
                     data={data}
                 />}
                 <Paginate
+                page={page}
                     onData={handlePaginate}
                     number={count}
                 />

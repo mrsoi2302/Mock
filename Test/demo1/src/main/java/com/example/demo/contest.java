@@ -1,94 +1,54 @@
 package com.example.demo;
 
-
 import java.util.*;
-class Department{
-    String code;
+
+class Racer{
+    String code="";
     String name;
+    String location;
+    int hour,minute;
+    long speed;
 
-    public Department(String code, String name) {
-        this.code = code;
-        this.name = name;
-    }
+    public Racer(Scanner sc) {
+        String t=sc.nextLine();
 
-    public Department(Scanner sc) {
-        this.code=sc.next();
         this.name=sc.nextLine();
-    }
-}
-class Employee{
-    String code;
-    String name;
-    long wage;
-    int workday;
-    long monthwage;
-    String department;
-    public Employee(String code, String name, long wage, int workday,List<Department> list) {
-        this.code = code;
-        this.name = name;
-        this.wage = wage;
-        this.workday = workday;
-        String type=code.substring(0,1);
-        int time=Integer.parseInt(code.substring(1,3));
-        String temp=code.substring(3);
-        for(Department i:list){
-            if(i.code.equals(temp)){
-                this.department=i.name;
-                break;
-            }
+        this.location=sc.nextLine();
+
+        String time=sc.next();
+        this.hour= Integer.parseInt(time.substring(0,1));
+        this.minute= Integer.parseInt(time.substring(2));
+        this.speed= Math.round( ((double)120/(((hour-6)*60)+minute))*60);
+        StringTokenizer token1=new StringTokenizer(location);
+        StringTokenizer token2=new StringTokenizer(name);
+        while(token1.hasMoreTokens()){
+            code=code+token1.nextToken().charAt(0);
         }
-        if(type.equals("A")){
-            if(time<=3){
-                this.monthwage=wage*workday*10000*1;
-            }else if(time<=8){
-                this.monthwage= (long) (wage*workday*10000*1.2);
-            }else if(time<=15){
-                this.monthwage= (long) (wage*workday*10000*1.4);
-            }else if(time>=16){
-                this.monthwage= (long) (wage*workday*10000*20);
-            }
-        } else if (type.equals("B")) {
-            if(time<=3){
-                this.monthwage=wage*workday*10000*1;
-            }else if(time<=8){
-                this.monthwage= (long) (wage*workday*10000*1.1);
-            }else if(time<=15){
-                this.monthwage= (long) (wage*workday*10000*1.3);
-            }else if(time>=16){
-                this.monthwage= (long) (wage*workday*10000*1.6);
-            }
-        }else if (type.equals("C")) {
-            if(time<=3){
-                this.monthwage= (long) (wage*workday*10000*0.9);
-            }else if(time<=8){
-                this.monthwage= (long) (wage*workday*10000*1);
-            }else if(time<=15){
-                this.monthwage= (long) (wage*workday*10000*1.2);
-            }else if(time>=16){
-                this.monthwage= (long) (wage*workday*10000*1.4);
-            }
-        }else if (type.equals("D")) {
-            if(time<=3){
-                this.monthwage= (long) (wage*workday*10000*0.8);
-            }else if(time<=8){
-                this.monthwage= (long) (wage*workday*10000*0.9);
-            }else if(time<=15){
-                this.monthwage= (long) (wage*workday*10000*1.1);
-            }else if(time>=16){
-                this.monthwage= (long) (wage*workday*10000*1.3);
-            }
+        while(token2.hasMoreTokens()){
+            code =code + token2.nextToken().charAt(0);
         }
+        code=code.toUpperCase();
     }
 
     @Override
     public String toString() {
-        return code+" "+name+" "+department+" "+monthwage;
+        return code+" "+name+" "+speed+" Km/h";
     }
 }
 public class contest {
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
-        String st=sc.nextLine();
-        System.out.println(st.matches("^\\d+$"));
+        int tc= sc.nextInt();
+        List<Racer> list=new ArrayList<>();
+        while(tc-->0){
+            Racer racer=new Racer(sc);
+            list.add(racer);
+        }
+        Collections.sort(list,(r1,r2)->{
+            return (int) (r2.speed-r1.speed);
+        });
+        for(Racer i:list){
+            System.out.println(i);
+        }
     }
 }

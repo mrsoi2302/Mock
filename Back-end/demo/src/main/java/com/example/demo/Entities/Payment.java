@@ -1,7 +1,6 @@
 package com.example.demo.Entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +18,7 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Timestamp created_date;
+    private Timestamp created_date1;
     @Column(nullable = false,unique = true)
     private String code;
     @NotNull

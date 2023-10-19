@@ -51,7 +51,7 @@ public interface CustomerRepo extends JpaRepository<Customer,Long> {
             "and " +
             "(:gender IS null or c.gender=:gender) " +
             "and " +
-            "(:created is null or cast(c.created_date as date) =:created)  " +
+            "(:created is null or cast(c.created_date1 as date) =:created)  " +
             "and " +
             "(:status is null or c.status=:status)" +
             "and" +
