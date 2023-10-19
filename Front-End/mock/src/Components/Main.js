@@ -32,7 +32,7 @@ export default function Main(props){
             title={"Phiếu thu"}
           />
           <Dashboard
-            type={"customer"}
+            type={"payment"}
             title={"Phiếu chi"}
           />
         </div>

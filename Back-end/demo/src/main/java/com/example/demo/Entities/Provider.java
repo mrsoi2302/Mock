@@ -44,13 +44,10 @@ public class Provider {
     private Set<Receipt> receipts;
 
     public void setProvider(Provider provider) {
-        this.code = provider.code;
         this.name = provider.name;
         this.contact = provider.contact;
-        this.created_date = provider.created_date;
         this.modified_date = provider.modified_date;
         this.debt = provider.debt;
         this.status = provider.status;
-        this.employees = provider.employees;
     }
 }

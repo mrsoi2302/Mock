@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -25,8 +26,6 @@ public class Customer{
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
-    @Min(10)
-    @Max(10)
     private String contact;
     @NotNull
     private String gender;
@@ -36,7 +35,7 @@ public class Customer{
     private long target;
     @Column(columnDefinition = "bigint default 0")
     private long total;
-    private Date create_date;
+    private Date created_date;
     private Date modified_date;
     private int birthday_day;
     private int birthday_month;
@@ -56,23 +55,18 @@ public class Customer{
     private Set<Employee> employees;
     @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<Payment> payments;
-
+    public void setPayments(Set<Payment> payments){
+        payments.addAll(payments);
+    }
     public void setCustomer(Customer customer) {
-        this.code =customer.code;
         this.name =customer.name;
         this.contact =customer.contact;
         this.gender =customer.gender;
-        this.debt =customer.debt;
         this.target =customer.target;
-        this.total =customer.total;
-        this.create_date =customer.create_date;
-        this.modified_date =customer.modified_date;
         this.birthday_day =customer.birthday_day;
         this.birthday_month =customer.birthday_month;
         this.birthday_year =customer.birthday_year;
         this.customerType =customer.customerType;
         this.status =customer.status;
-        this.employees =customer.employees;
-        this.payments =customer.payments;
     }
 }

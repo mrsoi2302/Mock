@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProviderRepo extends JpaRepository<Provider,Long> {
@@ -24,13 +25,14 @@ public interface ProviderRepo extends JpaRepository<Provider,Long> {
             "and " +
             "(:created is null or cast(p.created_date as date) =:created)" +
             "and" +
-            "(:status is null or p.status=:status)")
+            "(:status is null or p.status=:status) " +
+            "order by p.created_date desc   ")
     List<Provider> listAll(@Param("value") String value,
                            @Param("created") Date created,
                            @Param("status") Status status,
                            Pageable pageable);
-
+    Provider findById(long id);
     Provider findByCode(String code);
-
     void deleteByCode(String code);
+
 }

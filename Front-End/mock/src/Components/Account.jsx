@@ -27,6 +27,14 @@ function Account(props){
     {
       key: '3',
       label: (
+        <a target="_blank" rel="noopener noreferrer" href="/change-password">
+          Đổi mật khẩu
+        </a>
+      ),
+    },
+    {
+      key: '4',
+      label: (
         <a target="_blank" rel="noopener noreferrer" onClick={handleLogOut}>
           Đăng xuất
         </a>

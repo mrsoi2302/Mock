@@ -21,8 +21,24 @@ public interface EmployeeRepo extends JpaRepository<Employee, Long> {
             "or " +
             "e.code like concat('%',:value,'%') " +
             "or " +
-            "e.role like concat('%',:value,'%') ")
+            "e.role like concat('%',:value,'%') " +
+            "order by e.id desc ")
     List<Employee> listAll(String value,Pageable pageable);
     void deleteByCode(String code);
     Employee findByUsernameAndPassword(String username, String password);
+    @Query("select count(e) from Employee e where " +
+            ":value is null or " +
+            "e.username like concat('%',:value,'%') " +
+            "or " +
+            "e.name like concat('%',:value,'%') " +
+            "or " +
+            "e.code like concat('%',:value,'%') " +
+            "or " +
+            "e.role like concat('%',:value,'%') " +
+            "order by e.id desc ")
+    long countIf(@Param("value") String value);
+    @Query("select count(e) from Employee e where e.role='ADMIN'")
+    int countAdmin();
+
+    Employee findByCode(String code);
 }

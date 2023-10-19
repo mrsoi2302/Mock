@@ -20,7 +20,6 @@ public class Status {
     String name;
     @OneToMany(mappedBy = "status",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<Customer> customers;
-
     public void setStatus(Status status) {
         this.name = status.name;
         this.customers = status.customers;

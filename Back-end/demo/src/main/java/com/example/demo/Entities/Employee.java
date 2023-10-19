@@ -19,7 +19,6 @@ import java.util.Set;
 @Entity
 @AllArgsConstructor
 @Table(name="employees")
-@ToString
 @NoArgsConstructor
 public class Employee implements UserDetails {
     @Id
@@ -29,6 +28,19 @@ public class Employee implements UserDetails {
     private String username;
     @Column(nullable=false)
     private String password;
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", code='" + code + '\'' +
+                ", role='" + role + '\'' +
+                ", customers=" + customers +
+                ", providers=" + providers +
+                '}';
+    }
+
     @NotNull
     private String name;
     @Column(unique = true,nullable = false)
@@ -74,12 +86,6 @@ public class Employee implements UserDetails {
     }
 
     public void setEmployee(Employee employee) {
-        this.username = employee.username;
-        this.password = employee.password;
         this.name = employee.name;
-        this.code = employee.code;
-        this.role = employee.role;
-        this.customers = employee.customers;
-        this.providers = employee.providers;
     }
 }

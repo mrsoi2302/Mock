@@ -1,5 +1,6 @@
 package com.example.demo.Service;
 
+import com.example.demo.Entities.Customer;
 import com.example.demo.Entities.Payment;
 import com.example.demo.Repositories.PaymentRepo;
 import lombok.AllArgsConstructor;
@@ -31,5 +32,13 @@ public class PaymentService {
 
     public long count() {
         return paymentRepo.count();
+    }
+
+    public long countfilter(String value) {
+        return paymentRepo.countFilter(value);
+    }
+
+    public void deleteByCustomer(Customer customer) {
+        paymentRepo.deleteByCustomer(customer);
     }
 }

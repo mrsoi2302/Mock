@@ -3,8 +3,6 @@ package com.example.demo.Service;
 import com.example.demo.Entities.CustomerType;
 import com.example.demo.Repositories.CustomerTypeRepo;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +16,8 @@ public class CustomerTypeService {
         customerTypeRepo.save(customerType);
     }
 
-    public Page<CustomerType> findAll(Pageable p) {
-        return customerTypeRepo.findAll(p);
+    public List<CustomerType> findAll(Pageable p) {
+        return customerTypeRepo.findAll(1,p);
     }
 
     public CustomerType findByName(String name) {
@@ -32,5 +30,17 @@ public class CustomerTypeService {
 
     public void deleteByName(String name) {
         customerTypeRepo.deleteByName(name);
+    }
+
+    public long count() {
+        return customerTypeRepo.count();
+    }
+
+    public List<CustomerType> findAll() {
+        return customerTypeRepo.findAll();
+    }
+
+    public CustomerType findById(long id) {
+        return customerTypeRepo.findById(id);
     }
 }

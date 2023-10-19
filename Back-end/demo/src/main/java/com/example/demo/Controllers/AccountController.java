@@ -47,10 +47,8 @@ public class AccountController {
     public void changePassword(@RequestBody Value<String> value, HttpServletRequest httpServletRequest){
         String username =tokenProvider.extractUsername(httpServletRequest.getHeader("Authorization").substring(7));
         Employee employee=employeeService.findByUsername(username);
-        if(value.getT().equals(employee.getPassword())) throw new CustomException("Sai mật khẩu",HttpStatus.BAD_REQUEST);
+        if(!value.getT().equals(employee.getPassword())) throw new CustomException("Sai mật khẩu",HttpStatus.BAD_REQUEST);
         employee.setPassword(value.getValue());
-        employeeService.save(employee);
-
         historyService.save(History.builder()
                 .time(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)))
                 .msg(username + "đã thay đổi mật khẩu").build());

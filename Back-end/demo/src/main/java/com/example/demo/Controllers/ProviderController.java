@@ -1,6 +1,7 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.DataType.Value;
+import com.example.demo.Entities.Customer;
 import com.example.demo.Entities.Employee;
 import com.example.demo.Entities.History;
 import com.example.demo.Entities.Provider;
@@ -9,6 +10,7 @@ import com.example.demo.Security.TokenProvider;
 import com.example.demo.Service.EmployeeService;
 import com.example.demo.Service.HistoryService;
 import com.example.demo.Service.ProviderService;
+import com.example.demo.Service.ReceiptService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -26,13 +28,19 @@ import java.util.Set;
 @RestController
 @AllArgsConstructor
 public class ProviderController {
+    ReceiptController receiptController;
     HistoryService historyService;
     ProviderService providerService;
     TokenProvider tokenProvider;
     EmployeeService employeeService;
+    ReceiptService receiptService;
     @GetMapping("/provider/count")
     public long count(){
         return providerService.count();
+    }
+    @GetMapping("/provider/findall")
+    List<Provider> providerList(){
+        return providerService.findAll();
     }
     @PostMapping("/provider/show")      
     @ResponseStatus(HttpStatus.OK)
@@ -56,7 +64,9 @@ public class ProviderController {
         Employee employee= employeeService.findByUsername(username);
         provider.setCreated_date(new Date(System.currentTimeMillis()+(1000*60*60*7)));
         Set<Employee> set=new HashSet<>();
-        set.add(employee);
+        Employee employee1=employee;
+        employee1.setPassword("");
+        set.add(employee1);
         provider.setEmployees(set);
         providerService.save(provider);
         historyService.save(History.builder()
@@ -65,8 +75,10 @@ public class ProviderController {
                 .build());
     }
     @PutMapping("/admin/provider")
+    @Transactional
     @ResponseStatus(HttpStatus.OK)
-    public void updateProvider(@RequestBody @Valid Provider provider, HttpServletRequest request){
+    public void updateProvider(@RequestBody Provider provider, HttpServletRequest request){
+        System.out.println(provider);
         Provider temp=providerService.findByCode(provider.getCode());
         if(temp==null) throw new CustomException("Nguồn cung không tồn tại",HttpStatus.NOT_FOUND);
         if(provider.getContact().matches("\\D")) throw new CustomException("Số điện thoại không hợp lệ",HttpStatus.BAD_REQUEST);
@@ -84,6 +96,8 @@ public class ProviderController {
     @ResponseStatus(HttpStatus.OK)
     public void deleteProvider(@RequestParam String code,HttpServletRequest request){
         if(providerService.findByCode(code)==null) throw new CustomException("Nguồn cung không tồn tại",HttpStatus.NOT_FOUND);
+        Provider provider=providerService.findByCode(code);
+        receiptController.deleteReceipt(provider);
         providerService.deleteByCode(code);
         String token= request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);

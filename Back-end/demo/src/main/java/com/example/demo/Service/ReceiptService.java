@@ -1,5 +1,6 @@
 package com.example.demo.Service;
 
+import com.example.demo.Entities.Provider;
 import com.example.demo.Entities.Receipt;
 import com.example.demo.Repositories.ReceiptRepo;
 import lombok.AllArgsConstructor;
@@ -31,5 +32,13 @@ public class ReceiptService {
 
     public long count() {
         return receiptRepo.count();
+    }
+
+    public long countfilter(String value) {
+         return receiptRepo.countFilter(value);
+    }
+
+    public void deleteByProvder(Provider provider) {
+            receiptRepo.deleteByProvider(provider);
     }
 }

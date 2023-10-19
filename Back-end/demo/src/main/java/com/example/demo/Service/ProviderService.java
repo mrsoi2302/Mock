@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -33,4 +34,14 @@ public class ProviderService {
     public long count() {
         return providerRepo.count();
     }
+
+    public List<Provider> findAll() {
+        return providerRepo.findAll();
+    }
+
+    public Provider findById(long id) {
+        return providerRepo.findById(id);
+    }
+
+
 }

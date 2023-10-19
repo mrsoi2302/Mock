@@ -40,4 +40,16 @@ public class EmployeeService {
     public void deleteById(long id) {
         employeeRepo.deleteById(id);
     }
+
+    public long countIf(String value) {
+        return employeeRepo.countIf(value);
+    }
+
+    public int countAdmin() {
+        return employeeRepo.countAdmin();
+    }
+
+    public Employee findByCode(String code) {
+        return employeeRepo.findByCode(code);
+    }
 }

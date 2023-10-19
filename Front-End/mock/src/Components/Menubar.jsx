@@ -19,14 +19,14 @@ const items = [
     getItem(<a href='/customer-type'>Nhóm khách hàng</a>, 'customer-type'),
   ]),
   getItem('Sổ quỹ', 'cash',null, [
-    getItem(<a href='/cash-payment'>Danh sách</a>, 'cash-payment'),
-    getItem(<a href='/cash-receipt'>Danh sách</a>, 'cash-receipt'),
-    getItem(<a href='/cash-cashbook'>Danh sách</a>, 'cash-cashbook'),
+    getItem(<a href='/payment-list'>Danh sách phiếu chi</a>, 'payment-list'),
+    getItem(<a href='/create-payment'>Tạo phiếu chi</a>, 'create-payment'),
+    getItem(<a href='/receipt-list'>Danh sách phiếu thu</a>, 'receipt-list'),
+    getItem(<a href='/create-receipt'>Tạo phiếu thu</a>, 'create-receipt'),
   ]),
   getItem('Quản lý nhân viên', 'employee',null, [
-    getItem(<a href='/employee-list'>Danh sách</a>, 'employee-list'),
-    getItem(<a href='/employee-create'>Tạo nhân viên mới</a>, 'employee-create'),
-    getItem(<a href='/employee-information'>Thông tin nhân viên</a>, 'employee-information'),
+    getItem(<a href='/employee-list'>Danh sách nhân viên</a>, 'employee-list'),
+    getItem(<a href='/create-employee'>Tạo nhân viên mới</a>, 'employee-create'),
   ]),
 ];
 const rootSubmenuKeys = ['provider', 'customer', 'cash','employee'];

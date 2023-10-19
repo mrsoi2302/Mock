@@ -30,8 +30,5 @@ public class CustomerType {
     public void setCustomerType(CustomerType customerType) {
         this.name = customerType.name;
         this.code = customerType.code;
-        this.member = customerType.member;
-        this.created_date = customerType.created_date;
-        this.customers = customerType.customers;
     }
 }

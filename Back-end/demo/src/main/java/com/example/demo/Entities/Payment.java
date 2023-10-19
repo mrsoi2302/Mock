@@ -20,7 +20,6 @@ public class Payment {
     private Long id;
     private Timestamp created_date;
     @Column(nullable = false,unique = true)
-    @Max(10)
     private String code;
     @NotNull
     private long paid;
@@ -32,7 +31,6 @@ public class Payment {
     private PaymentType paymentType;
 
     public void setPayment(Payment payment) {
-        this.created_date = payment.created_date;
         this.code = payment.code;
         this.paid = payment.paid;
         this.customer = payment.customer;

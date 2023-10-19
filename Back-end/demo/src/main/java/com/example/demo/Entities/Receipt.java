@@ -23,7 +23,7 @@ public class Receipt {
     @NotNull
     private long revenue;
     @NotNull
-    private String submitter;
+    private String submitter="s";
     @ManyToOne
     @JoinColumn(name = "providers_id")
     private Provider provider;
@@ -32,7 +32,6 @@ public class Receipt {
     private ReceiptType receiptType;
 
     public void setReceipt(Receipt receipt) {
-        this.created_date = receipt.created_date;
         this.code = receipt.code;
         this.revenue = receipt.revenue;
         this.submitter = receipt.submitter;
