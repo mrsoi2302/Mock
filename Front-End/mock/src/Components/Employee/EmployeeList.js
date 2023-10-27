@@ -6,7 +6,7 @@ import SearchInput from "../SearchInput";
 import ExceptionBox from "../ExceptionBox";
 import Paginate from "../Paginate";
 import EmployeeTable from "./EmployeeTable";
-import { Button } from "antd";
+import { Button, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
 export default function EmployeeList(props){
     document.title="Danh sách nhân viên"
@@ -65,14 +65,16 @@ export default function EmployeeList(props){
     },[searchInput])
     return(
         <div className="content">
-        {!error&&<ExceptionBox/>}
             <div className="taskbar">
                 <h2>Danh sách nhân viên</h2>
                 <Account
                     name={localStorage.getItem("name")}
                 />
             </div>
-            <div className="inside">
+            {!error && <Modal title="Cảnh báo" open={true} onCancel={e=>{navigate("/main")}} onOk={e=>{navigate("/main")}}>
+                <p>Bạn không đủ thẩm quyền</p>
+            </Modal>}
+           {error && <div className="inside">
                 <SearchInput
                     setSearchInput={handleSearch}
                 />
@@ -85,7 +87,7 @@ export default function EmployeeList(props){
                     onData={handlePaginate}
                     number={count}
                 />
-            </div>
+            </div>}
         </div>
     );
 }

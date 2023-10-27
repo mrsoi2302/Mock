@@ -33,7 +33,6 @@ public class    EmployeeController {
     }
     @PostMapping("admin/employee/count")
     public long countIf(@RequestBody Value<String> value){
-        System.out.println(value);
         return employeeService.countIf(value.getValue());
     }
     @GetMapping("/information")

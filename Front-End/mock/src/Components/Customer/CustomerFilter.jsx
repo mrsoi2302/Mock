@@ -59,9 +59,8 @@ const CustomerFilter = (props) => {
             }else setGender(e)
         }}
       > 
-        <Option value='null'>Null</Option>
-        <Option value="male">Nam</Option>
-        <Option value="female">Nữ</Option>
+        <Option value="Nam">Nam</Option>
+        <Option value="Nữ">Nữ</Option>
         <Option value="LGBT">Giới tính thứ 3</Option>
       </Select>
     </Space>,

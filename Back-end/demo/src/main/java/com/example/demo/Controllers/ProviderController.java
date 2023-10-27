@@ -45,7 +45,6 @@ public class ProviderController {
     @PostMapping("/provider/show")      
     @ResponseStatus(HttpStatus.OK)
     public List<Provider> showAll(@RequestBody Value<Provider> value, @RequestParam int page){
-        System.out.println(value.getT());
         return providerService.listAll(value, PageRequest.of(page,10));
     }
     @GetMapping("/provider/information")
@@ -54,7 +53,6 @@ public class ProviderController {
         return providerService.findByCode(code);
     }
     @PostMapping("/admin/provider")
-    @Transactional
     @ResponseStatus(HttpStatus.CREATED)
     public void createProvider(@RequestBody Provider provider, HttpServletRequest request){
         if(providerService.findByCode(provider.getCode())!=null) throw new CustomException("Nguồn cung đã tồn tại",HttpStatus.BAD_REQUEST);
@@ -65,8 +63,9 @@ public class ProviderController {
         provider.setCreated_date1(new Date(System.currentTimeMillis()));
         provider.setCreated_date(new Date(System.currentTimeMillis()+(1000*60*60*7)));
         Set<Employee> set=new HashSet<>();
-        Employee employee1=employee;
-        employee1.setPassword("");
+        Employee employee1=new Employee();
+        employee1.setId(employee.getId());
+        employee1.setName(employee.getName());
         set.add(employee1);
         provider.setEmployees(set);
         providerService.save(provider);

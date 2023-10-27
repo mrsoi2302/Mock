@@ -82,7 +82,10 @@ public class CustomerController {
         String username=tokenProvider.extractUsername(request.getHeader("Authorization").substring(7));
         Set<Employee> set=new HashSet<>();
         Employee employee= employeeService.findByUsername(username);
-        set.add(employee);
+        Employee employee1=new Employee();
+        employee1.setId(employee.getId());
+        employee1.setName(employee.getName());
+        set.add(employee1);
         customer.setEmployees(set);
         customerService.save(customer);
         //Save vào lịch sử

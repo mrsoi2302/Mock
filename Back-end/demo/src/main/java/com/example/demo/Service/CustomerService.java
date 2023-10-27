@@ -21,6 +21,7 @@ public class CustomerService {
                                   int year,
                                   String gender,
                                   Pageable pageable, CustomerType customerType){
+        System.out.println(gender);
         return customerRepo.findAll(value,createdDate,status,day,month,year,gender,customerType,pageable);
     }
 
