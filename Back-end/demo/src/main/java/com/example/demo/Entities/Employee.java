@@ -2,10 +2,7 @@ package com.example.demo.Entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +16,7 @@ import java.util.Set;
 @Entity
 @AllArgsConstructor
 @Table(name="employees")
+@Builder
 @NoArgsConstructor
 public class Employee implements UserDetails {
     @Id
@@ -28,28 +26,10 @@ public class Employee implements UserDetails {
     private String username;
     @Column(nullable=false)
     private String password;
-
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", code='" + code + '\'' +
-                ", role='" + role + '\'' +
-                ", customers=" + customers +
-                ", providers=" + providers +
-                '}';
-    }
-
     @NotNull
     private String name;
-    @Column(unique = true,nullable = false)
     private String code;
-    String role;
-    @ManyToMany(mappedBy = "employees")
-    private Set<Customer> customers;
-    @ManyToMany(mappedBy = "employees")
-    private Set<Provider> providers;
+    private String role;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role));
@@ -86,6 +66,9 @@ public class Employee implements UserDetails {
     }
 
     public void setEmployee(Employee employee) {
-        this.name = employee.name;
+        this.name=employee.name;
+        this.role=employee.role;
+        this.username=employee.username;
+        this.password=employee.password;
     }
 }

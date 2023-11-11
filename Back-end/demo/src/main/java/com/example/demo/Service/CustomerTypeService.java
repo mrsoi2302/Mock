@@ -1,46 +1,38 @@
 package com.example.demo.Service;
 
+import com.example.demo.Entities.Customer;
 import com.example.demo.Entities.CustomerType;
 import com.example.demo.Repositories.CustomerTypeRepo;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class CustomerTypeService {
-    CustomerTypeRepo customerTypeRepo;
-    public void save(CustomerType customerType) {
-        customerTypeRepo.save(customerType);
+    private final CustomerTypeRepo customerTypeRepo;
+    private final CustomerService customerService;
+    public List<CustomerType> list(String value) {
+        return customerTypeRepo.list(value);
     }
 
-    public List<CustomerType> findAll(Pageable p) {
-        return customerTypeRepo.findAll(1,p);
+    public CustomerType findByContentOrCode(String content, String code) {
+        return customerTypeRepo.findByContentOrCode(content,code);
     }
 
-    public CustomerType findByName(String name) {
-        return customerTypeRepo.findByName(name);
+    public void save(CustomerType providerType) {
+        customerTypeRepo.save(providerType);
     }
 
-    public void deleteById(Long id) {
-        customerTypeRepo.deleteById(id);
-    }
-
-    public void deleteByName(String name) {
-        customerTypeRepo.deleteByName(name);
-    }
-
-    public long count() {
-        return customerTypeRepo.count();
-    }
-
-    public List<CustomerType> findAll() {
-        return customerTypeRepo.findAll();
-    }
-
-    public CustomerType findById(long id) {
-        return customerTypeRepo.findById(id);
+    public void deleteByCode(String code) {
+        List<Customer> list=customerService.findByType(code);
+        List<String> codeList=new ArrayList<>();
+        for(Customer i:list){
+            codeList.add(i.getCode());
+        }
+        customerService.deleteAllByCode(codeList);
+        customerTypeRepo.deleteByCode(code);
     }
 }

@@ -4,7 +4,7 @@ import { Button, DatePicker, Dropdown, Form, Select, Space } from 'antd';
 import { Option } from 'antd/es/mentions';
 const ProviderFilter = (props) => {
   const[status,setStatus]=useState(null);
-    const[createdDate,setCreatedDate]=useState(null)
+  const[createdDate,setCreatedDate]=useState(null)
   const [open, setOpen] = useState(false);
   const handleMenuClick = (e) => {
     setOpen(!open)

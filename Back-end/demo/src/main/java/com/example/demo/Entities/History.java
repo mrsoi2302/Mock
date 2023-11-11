@@ -18,6 +18,9 @@ public class History {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String name;
+    private String employee_code;
     private String msg;
     private Timestamp time;
+    private Timestamp time2;
 }

@@ -19,27 +19,27 @@ public class Receipt {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Timestamp created_date1;
-
+    private String status;
+    private String manager;
+    private String manager_code;
     private Timestamp created_date;
     @Column(nullable = false,unique = true)
     private String code;
     @NotNull
     private long revenue;
-    @NotNull
-    private String submitter="s";
     @ManyToOne
     @JoinColumn(name = "providers_id")
     private Provider provider;
     @ManyToOne
-    @JoinColumn(name="receipt_types_id")
-    private ReceiptType receiptType;
+    @JoinColumn(name="payment_types_id")
+    private PaymentType payment_type;
+
 
     public void setReceipt(Receipt receipt) {
-        this.code = receipt.code;
+        this.payment_type=receipt.payment_type;
         this.revenue = receipt.revenue;
-        this.submitter = receipt.submitter;
         this.provider = receipt.provider;
-        this.receiptType = receipt.receiptType;
-
+        this.manager=receipt.manager;
+        this.manager_code=receipt.manager_code;
     }
 }

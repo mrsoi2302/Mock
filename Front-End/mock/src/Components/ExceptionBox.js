@@ -1,21 +1,23 @@
-import React, { useState } from 'react';
-import { Button, Modal } from 'antd';
-import { useNavigate } from 'react-router-dom';
-const ExceptionBox = () => {
-    const navigate=useNavigate();
-    const handleOk=()=>{
-        localStorage.clear()
-        navigate('/')
-    }
-    const handleCancel=()=>{
-      localStorage.clear()
-        navigate('/')
-    }
+import React from "react";
+import { Modal } from "antd";
+import { useNavigate } from "react-router-dom";
+const ExceptionBox = (props) => {
+  const navigate = useNavigate();
+  const handleOk = () => {
+    if (props.url === "/") localStorage.clear();
+    localStorage.removeItem("open")
+    localStorage.removeItem("selected")
+    navigate(props.url);
+  };
   return (
     <>
-      <Modal title="Cảnh báo" open={true} onOk={handleOk} onCancel={handleCancel}>
-        <p>Thời gian đăng nhập của bạn đã hết hạn</p>
-        <p>Vui lòng đăng nhập lại để tiếp tục sử dụng dịch vụ</p>
+      <Modal
+        title="Cảnh báo"
+        open={true}
+        onOk={handleOk}
+        onCancel={handleOk}
+      >
+        <p style={{ textAlign: "center" }}>{props.msg}</p>
       </Modal>
     </>
   );

@@ -19,6 +19,9 @@ public class Payment {
     private Long id;
     private Timestamp created_date;
     private Timestamp created_date1;
+    private String manager;
+    private String manager_code;
+    private String status;
     @Column(nullable = false,unique = true)
     private String code;
     @NotNull
@@ -31,9 +34,10 @@ public class Payment {
     private PaymentType paymentType;
 
     public void setPayment(Payment payment) {
-        this.code = payment.code;
         this.paid = payment.paid;
         this.customer = payment.customer;
         this.paymentType = payment.paymentType;
+        this.manager=payment.manager;
+        this.manager_code=payment.manager_code;
     }
 }

@@ -50,6 +50,7 @@ public class TokenProvider {
     public String extractUsername(String token) {
         return extractClaims(token, Claims::getSubject);
     }
-
-
+    public boolean exctractExpired(String token){
+        return  extractClaims(token,Claims::getExpiration).before(new Date());
+    }
 }

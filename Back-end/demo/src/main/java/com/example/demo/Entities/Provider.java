@@ -1,6 +1,7 @@
 package com.example.demo.Entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,18 +32,16 @@ public class Provider {
     private long debt;
     @Column(columnDefinition = "bigint default 0")
     private long total;
-    @ManyToOne
-    @JoinColumn(name = "status_id")
-    private Status status;
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "employees_has_providers",
-            joinColumns = @JoinColumn(name = "providers_id"),
-            inverseJoinColumns = @JoinColumn(name = "employees_id")
-    )
-    private Set<Employee> employees;
+    private String status;
+    private String manager;
+    private String manager_code;
+    @Email
+    private String email;
     @OneToMany(mappedBy = "provider",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<Receipt> receipts;
+    @ManyToOne
+    @JoinColumn(name = "provider_type_id")
+    private ProviderType provider_type;
 
     public void setProvider(Provider provider) {
         this.name = provider.name;
@@ -50,5 +49,8 @@ public class Provider {
         this.modified_date = provider.modified_date;
         this.debt = provider.debt;
         this.status = provider.status;
+        this.email=provider.email;
+        this.manager=provider.manager;
+        this.manager_code=provider  .manager_code;
     }
 }

@@ -18,17 +18,10 @@ public class CustomerType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false,unique = true)
-    private String name;
+    private String content;
     @Column(nullable = false,unique = true)
     private String code;
-    @Column(columnDefinition = "bigint default 0")
-    private long member;
-    private Date created_date;
-    @OneToMany(mappedBy ="customerType",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy ="customer_type",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<Customer> customers;
 
-    public void setCustomerType(CustomerType customerType) {
-        this.name = customerType.name;
-        this.code = customerType.code;
-    }
 }

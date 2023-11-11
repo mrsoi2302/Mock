@@ -1,47 +1,58 @@
 package com.example.demo.Service;
 
-import com.example.demo.DataType.Value;
 import com.example.demo.Entities.Provider;
 import com.example.demo.Repositories.ProviderRepo;
+import com.example.demo.Repositories.ReceiptRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class ProviderService {
     private ProviderRepo providerRepo;
-    public List<Provider> listAll(Value<Provider> value, Pageable pageable) {
-        return providerRepo.listAll(value.getValue(),
-                value.getT().getCreated_date(), value.getT().getStatus(), pageable);
+    private ReceiptRepo receiptRepo;
+    public List<Provider> list(String value, String manager, Date createdDate,String type, String status, Pageable pageable) {
+        return providerRepo.list(value,manager,createdDate,type,status,pageable);
     }
-
-    public Provider findByCode(String value) {
-        return providerRepo.findByCode(value);
-    }
-
     public void save(Provider provider) {
         providerRepo.save(provider);
     }
-
-    public void deleteByCode(String code) {
-        providerRepo.deleteByCode(code);
+    public void saveAll(List<Provider> list) {
+        providerRepo.saveAll(list);
     }
 
-    public long count() {
-        return providerRepo.count();
+    public Provider findByCode(String code) {
+        return providerRepo.findByCode(code);
     }
 
-    public List<Provider> findAll() {
-        return providerRepo.findAll();
+    public void update(Provider provider) {
+        Provider t=providerRepo.findByCode(provider.getCode());
+        t.setProvider(provider);
     }
 
-    public Provider findById(long id) {
-        return providerRepo.findById(id);
+    public void deleteAllByCode(List<String> list) {
+        for(String i:list){
+            receiptRepo.deleteAllByProviderCode(i);
+        }
+        providerRepo.deleteAllByCode(list);
     }
 
+    public List<Provider> findByProviderType(String code) {
+        return providerRepo.findAllByProviderType(code);
+    }
 
+    public Long countList(String value, String manager, Date createdDate,String type, String status) {
+        return providerRepo.countList(value,manager,createdDate,type,status);
+    }
+    public List<Provider> findForReceipt(String manager){
+        return providerRepo.findForReceipt(manager);
+    }
+
+    public Provider findByCodeAndManager(String code, String manager) {
+        return providerRepo.findByCodeAndManager(code,manager);
+    }
 }

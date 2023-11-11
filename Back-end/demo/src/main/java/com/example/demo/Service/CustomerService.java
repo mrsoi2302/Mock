@@ -1,28 +1,24 @@
 package com.example.demo.Service;
 
 import com.example.demo.Entities.Customer;
-import com.example.demo.Entities.CustomerType;
-import com.example.demo.Entities.Status;
 import com.example.demo.Repositories.CustomerRepo;
+import com.example.demo.Repositories.PaymentRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class CustomerService {
-    CustomerRepo customerRepo;
-    public List<Customer> findAll(String value,
-                                  Status status, Date createdDate, int day,
-                                  int month,
-                                  int year,
-                                  String gender,
-                                  Pageable pageable, CustomerType customerType){
-        System.out.println(gender);
-        return customerRepo.findAll(value,createdDate,status,day,month,year,gender,customerType,pageable);
+    private CustomerRepo customerRepo;
+    private PaymentRepo paymentRepo;
+    public List<Customer> list(String value,String manager, int birthdayDay, int birthdayMonth, int birthdayYear, String status, String gender, Pageable pageable) {
+        return customerRepo.list(value,manager,birthdayDay,birthdayMonth,birthdayYear,status,gender,pageable);
+    }
+    public Long countList(String value, String manager, int birthdayDay, int birthdayMonth, int birthdayYear, String status, String gender) {
+        return customerRepo.countList(value,manager,birthdayDay,birthdayMonth,birthdayYear,status,gender);
     }
 
     public Customer findByCode(String code) {
@@ -33,27 +29,28 @@ public class CustomerService {
         customerRepo.save(customer);
     }
 
-    public void deleteById(Long id) {
-        customerRepo.deleteById(id);
+    public void saveAll(List<Customer> list) {
+        customerRepo.saveAll(list);
     }
 
-    public void deleteByCode(String code) {
-        customerRepo.deleteByCode(code);
+    public void update(Customer customer) {
+        Customer t=findByCode(customer.getCode());
+        t.setCustomer(customer);
     }
 
-    public Customer findById(long id) {
-        return customerRepo.findById(id);
+    public void deleteAllByCode(List<String> list) {
+        paymentRepo.deleteByCustomerCode(list);
+        customerRepo.deleteAllByCode(list);
+
+    }
+    public List<Customer> findByType(String code) {
+        return customerRepo.findByType(code);
+    }
+    public List<Customer> findForPayment(String manager){
+        return customerRepo.findForPayment(manager);
     }
 
-    public long count() {
-        return customerRepo.count();
-    }
-
-    public long countAll(String value, Status status, Date createdDate, int day, int month, int year, String gender, CustomerType customerType) {
-        return customerRepo.countAll(value,createdDate,status,day,month,year,gender,customerType);
-    }
-
-    public List<Customer> findAll() {
-        return customerRepo.findAll();
+    public List<Customer> findByCodeAndManager(String code, String manager) {
+        return customerRepo.findByCodeAndManager(code,manager);
     }
 }

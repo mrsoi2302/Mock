@@ -1,22 +1,26 @@
 package com.example.demo.Config;
 
 import com.example.demo.Entities.Employee;
+import com.example.demo.Exceptions.CustomException;
 import com.example.demo.Security.TokenProvider;
 import com.example.demo.Security.UserService;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Service
+@Component
 @AllArgsConstructor
 public class RequestFilter extends OncePerRequestFilter {
     private UserService userService;

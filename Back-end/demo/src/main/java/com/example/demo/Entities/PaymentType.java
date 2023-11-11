@@ -20,6 +20,8 @@ public class PaymentType {
     private String name;
     @OneToMany(mappedBy = "paymentType",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<Payment> payments;
+    @OneToMany(mappedBy = "payment_type",cascade = CascadeType.ALL,orphanRemoval = true)
+    private Set<Receipt> receipts;
 
     public void setPaymentType(PaymentType paymentType) {
         this.name = paymentType.getName();

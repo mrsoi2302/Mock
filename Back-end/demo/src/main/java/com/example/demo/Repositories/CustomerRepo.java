@@ -1,72 +1,76 @@
 package com.example.demo.Repositories;
 
 import com.example.demo.Entities.Customer;
-import com.example.demo.Entities.CustomerType;
-import com.example.demo.Entities.Status;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
 import java.util.List;
 
 @Repository
 public interface CustomerRepo extends JpaRepository<Customer,Long> {
     @Query("select c from Customer c where " +
-            "(:value is null or (c.code like concat('%',:value,'%') or c.name like concat('%',:value,'%') or c.contact like concat('%',:value,'%'))) " +
+            "(:value is null " +
+            "or c.code like concat('%',:value,'%') " +
+            "or c.name like concat('%',:value,'%') " +
+            "or c.contact like concat('%',:value,'%') " +
+            "or c.email like concat('%',:value,'%'))" +
             "and " +
-            "(:day=0 or c.birthday_day=:day) " +
-            "and    " +
-            "(:month =0 or c.birthday_month=:month) " +
-            "and " +
-            "(:year=0 or c.birthday_year=:year) " +
-            "and " +
-            "(:gender IS null or c.gender=:gender) " +
-            "and " +
-            "(:created is null or cast(c.created_date as date) =:created)  " +
-            "and " +
-            "(:status is null or c.status=:status)" +
+            "(:day is null or c.birthday_day=:day)" +
             "and" +
-            " (:type is null or c.customerType=:type)" +
-            "order by c.created_date desc ")
-    List<Customer> findAll(@Param("value") String value,
-                           @Param("created")Date createdDate,
-                           @Param("status") Status status,
-                           @Param("day") int day,
-                           @Param("month") int month,
-                           @Param("year") int year,
-                           @Param("gender") String gender,
-                           @Param("type")CustomerType customerType,
-                           Pageable pageable);
-    @Query("select count(c) from Customer c where " +
-            "(:value is null or (c.code like concat('%',:value,'%') or c.name like concat('%',:value,'%') or c.contact like concat('%',:value,'%'))) " +
-            "and " +
-            "(:day IS null or c.birthday_day=:day) " +
-            "and " +
-            "(:month IS null or c.birthday_month=:month) " +
-            "and " +
-            "(:year IS null or c.birthday_year=:year) " +
-            "and " +
-            "(:gender IS null or c.gender=:gender) " +
-            "and " +
-            "(:created is null or cast(c.created_date1 as date) =:created)  " +
-            "and " +
-            "(:status is null or c.status=:status)" +
+            "(:month is null or c.birthday_month=:month)" +
             "and" +
-            " (:type is null or c.customerType=:type)" +
-            "order by c.created_date desc ")
-    long countAll(@Param("value") String value,
-                  @Param("created")Date createdDate,
-                  @Param("status") Status status,
-                  @Param("day") int day,
-                  @Param("month") int month,
-                  @Param("year") int year,
-                  @Param("gender") String gender,
-                  @Param("type") CustomerType customerType);
-    Customer findByCode(String code);
+            "(:year is null or c.birthday_year=:year)" +
+            "and" +
+            "(:status is null or c.status=c.status)" +
+            "and" +
+            "(:gender is null or c.gender=:gender)" +
+            "and" +
+            "(:manager is null or c.manager=:manager)")
+    List<Customer> list(@Param("value") String value,
+                        @Param("manager") String manager,
+                        @Param("day") int birthdayDay,
+                        @Param("month") int birthdayMonth,
+                        @Param("year") int birthdayYear,
+                        @Param("status") String status,
+                        @Param("gender") String gender,
+                        Pageable pageable);
 
-    void deleteByCode(String code);
-    Customer findById(long id);
+    @Query("select count(c) from Customer c where " +
+            "(:value is null " +
+            "or c.code like concat('%',:value,'%') " +
+            "or c.name like concat('%',:value,'%') " +
+            "or c.contact like concat('%',:value,'%') " +
+            "or c.email like concat('%',:value,'%'))" +
+            "and " +
+            "(:day is null or c.birthday_day=:day)" +
+            "and" +
+            "(:month is null or c.birthday_month=:month)" +
+            "and" +
+            "(:year is null or c.birthday_year=:year)" +
+            "and" +
+            "(:status is null or c.status=c.status)" +
+            "and" +
+            "(:gender is null or c.gender=:gender)" +
+            "and" +
+            "(:manager is null or c.manager=:manager)")
+    Long countList(@Param("value") String value,
+                   @Param("manager") String manager,
+                   @Param("day") int birthdayDay,
+                   @Param("month") int birthdayMonth,
+                   @Param("year") int birthdayYear,
+                   @Param("status") String status,
+                   @Param("gender") String gender);
+    Customer findByCode(String code);
+    @Query("delete from Customer c where c.code in :list")
+    void deleteAllByCode(List<String> list);
+
+    @Query("select c from Customer c where c.customer_type.code=:code")
+    List<Customer> findByType(String code);
+    @Query("select c from Customer c where (:manager is null or c.manager=:manager) and c.status='active'")
+    List<Customer> findForPayment(String manager);
+    @Query("select c from Customer c where (:manager is null or c.manager=:manager) and c.code=:code")
+    List<Customer> findByCodeAndManager(@Param("code") String code, @Param("manager") String manager);
 }

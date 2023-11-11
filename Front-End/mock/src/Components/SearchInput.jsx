@@ -1,21 +1,34 @@
-import { AudioOutlined } from '@ant-design/icons';
-import React from 'react';
-import { Input, Space } from 'antd';
+import React from "react";
+import { Input, Space } from "antd";
+import Filter from "./Filter";
 const { Search } = Input;
-const onSearch = (value, _e, info) => console.log(info?.source, value);
-function SearchInput (props){
-  const handleChange=(e)=>{
-    props.setSearchInput(e.target.value)
-  }
-  return(
-    <Space direction="vertical">
-    <Search placeholder="Tìm kiếm" onSearch={onSearch} enterButton onChange={handleChange}
-      style={
-        {
-          width:"50vw",
-        }
-      } />
-    </Space>
-  )
-};
+function SearchInput(props) {
+  const handleChange = (e) => {
+    props.setValue(e.target.value);
+  };
+  return (
+    <div
+      style={{
+        position: "fixed",
+        marginTop: "12vh",
+        left: "30vw",
+        display: "grid",
+        width: "50vw",
+        gridTemplateColumns: "20% 80%",
+      }}
+    >
+      <Filter
+        items={props.filter}
+        open={props.openFilter}
+        setOpen={props.setOpenFilter}
+      />
+      <Search
+        placeholder="Tìm kiếm"
+        enterButton
+        onChange={handleChange}
+        style={{ width: "100%", display: props.displaySearch }}
+      />
+    </div>
+  );
+}
 export default SearchInput;
