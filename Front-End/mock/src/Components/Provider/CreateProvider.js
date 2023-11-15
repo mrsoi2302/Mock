@@ -9,7 +9,7 @@ import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 
 export default function CreateProvider(props) {
-  document.title = "Danh sách nhà cung cấp";
+  document.title = "Tạo nhà cung cấp";
   const [data,setData]=useState()
   const navigate = useNavigate();
   const [error, setError] = useState(false);
@@ -37,8 +37,7 @@ export default function CreateProvider(props) {
         console.log(err);
       });
   }, [value]);
-  const handleSubmit = (e) => {
-    console.log(e);
+  const handleSubmit = () => {
     axios({
       url: baseURL + "/provider/staff/create-one",
       method: "post",
@@ -245,9 +244,8 @@ export default function CreateProvider(props) {
           <Form.Item>
             <Button
               type="primary"
-              htmlType="submit"
               style={{ margin: "10px" }}
-              onClick={handleSubmit}
+              htmlType="submit"
             >
               Tạo mới
             </Button>

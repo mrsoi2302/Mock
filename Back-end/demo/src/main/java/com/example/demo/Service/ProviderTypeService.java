@@ -33,4 +33,8 @@ public class ProviderTypeService {
         }
         providerTypeRepo.deleteByCode(code);
     }
+
+    public ProviderType findByContent(String content) {
+        return providerTypeRepo.findByContent(content);
+    }
 }

@@ -10,6 +10,11 @@ import EmployeeInformation from './Components/Employee/EmployeeInformation';
 import ModifyEmployee from './Components/Employee/ModifyEmployee';
 import ProviderTable from './Components/Provider/ProviderTable';
 import CreateProvider from './Components/Provider/CreateProvider';
+import ProviderInformation from './Components/Provider/ProviderInformation';
+import ModifyProvider from './Components/Provider/ModifyProvider';
+import ProviderType from './Components/Provider/ProviderType';
+import CustomerTable from './Components/Customer/CustomerTable';
+import CreateCustomer from './Components/Customer/CreateCustomer';
 
 function App(){
   return(
@@ -28,11 +33,14 @@ function App(){
           <Route path='/employee/modify/:code' element={<ModifyEmployee/>}/>
           <Route path='/provider-table' element={<ProviderTable/>}/>
           <Route path='/create-provider' element={<CreateProvider/>}/>
+          <Route path='/provider/information/:code' element={<ProviderInformation />}/>
+          <Route path='/provider/modify/:code' element={<ModifyProvider/>}/>
+          <Route path='/provider-type' element={<ProviderType/>}/>
+          <Route path='/customer-table' element={<CustomerTable/>}/>
+          <Route path='/create-customer' element={<CreateCustomer />}/>
           {/*<Route path='/provider-list' element={<ProviderList />}/>
           
-          <Route path='/provider-information/*' element={<ProviderInformation />}/>
-          <Route path='/customer-list' element={<CustomerList />}/>
-          <Route path='/create-customer' element={<CreateCustomer />}/>
+         
           <Route path='/customer-information/*' element={<CustomerInformation />}/>
           <Route path='/customer-type' element={<CustomerTypeList />}/>
           <Route path='/create-customer-type' element={<CreateCustomerType />}/>
@@ -42,8 +50,6 @@ function App(){
           <Route path='/receipt-list' element={<ReceiptList/>}/>
           <Route path='/create-receipt' element={<CreateReceipt/>}/>
           <Route path='/receipt-information/*' element={<ReceiptInformation/>}/>
-          
-          
           <Route path='employee/information' element={<Information/>}/>
           <Route path='/change-password' element={<PasswordChange/>}/>
           */}
@@ -52,6 +58,5 @@ function App(){
       </BrowserRouter>
     </div>
   )
-
 }
 export default App;

@@ -46,6 +46,6 @@ public interface EmployeeRepo extends JpaRepository<Employee,Long> {
     @Modifying
     @Query("delete from Employee e where e.code in :list")
     void delete(@Param("list") List<String> list);
-    @Query("SELECT e from Employee e")
+    @Query("SELECT e from Employee e where e.role!='USER'")
     List<Employee> list();
 }

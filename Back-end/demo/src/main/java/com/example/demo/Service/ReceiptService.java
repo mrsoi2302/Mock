@@ -16,7 +16,7 @@ import java.util.List;
 public class ReceiptService {
     private ReceiptRepo receiptRepo;
     private ProviderRepo providerRepo;
-    public void deleteByProviderCode(String i) {
+    public void deleteByProviderCode(Provider i) {
         receiptRepo.deleteAllByProviderCode(i);
     }
     public List<Receipt> findAll(String manager){

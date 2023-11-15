@@ -1,11 +1,10 @@
 package com.example.demo.Repositories;
 
 import com.example.demo.Entities.Provider;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -34,8 +33,7 @@ public interface ProviderRepo extends JpaRepository<Provider,Long> {
                         @Param("manager") String manager,
                         @Param("createdDate")Date createdDate,
                         @Param("type") String type,
-                        @Param("status")String status,
-                        Pageable pageable);
+                        @Param("status")String status);
     @Query("SELECT count(p) from Provider p where " +
             "(:value is null or " +
             "(p.code like concat('%',:value,'%'))" +
@@ -58,7 +56,9 @@ public interface ProviderRepo extends JpaRepository<Provider,Long> {
                         @Param("date")Date createdDate,
                         @Param("type") String type,
                         @Param("status")String status);
+    @Query("select p from Provider p where p.code=:code")
     Provider findByCode(String code);
+    @Modifying
     @Query("delete from Provider p where p.code in :list")
     void deleteAllByCode(List<String> list);
     @Query("select p from Provider p where p.provider_type.code=:code")

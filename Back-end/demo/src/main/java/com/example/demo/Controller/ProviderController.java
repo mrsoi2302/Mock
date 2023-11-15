@@ -4,14 +4,17 @@ import com.example.demo.DataType.Value;
 import com.example.demo.Entities.Customer;
 import com.example.demo.Entities.Employee;
 import com.example.demo.Entities.Provider;
+import com.example.demo.Entities.ProviderType;
 import com.example.demo.Exceptions.CustomException;
 import com.example.demo.Repositories.HistoryRepository.HistoryRepository;
 import com.example.demo.Repositories.SequenceRepo.SequenceRepository;
 import com.example.demo.Security.TokenProvider;
 import com.example.demo.Service.EmployeeService;
 import com.example.demo.Service.ProviderService;
+import com.example.demo.Service.ProviderTypeService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -30,9 +33,9 @@ public class ProviderController {
     private HistoryRepository historyRepository;
     private EmployeeService employeeService;
     private SequenceRepository sequenceRepository;
-
+    private ProviderTypeService providerTypeService;
     @PostMapping("/list")
-    public List<Provider> list(@RequestBody(required = false) Value<Provider> value,
+    public List<Provider> list(@RequestBody Value<Provider> value,
                                @RequestParam(name = "page") int page,
                                @RequestParam(name = "limit")int limit,
                                @RequestParam(name="sort",required = false,defaultValue = "created_date-desc") String sort,
@@ -48,7 +51,8 @@ public class ProviderController {
         sortParams[1]=sortParams[1].equals("ascend")? "asc":"desc";
         Sort.Direction sortOrder=sortParams[1].equals("asc")? Sort.Direction.ASC: Sort.Direction.DESC;
         Sort sortObject=Sort.by(sortOrder,sortParams[0]);
-        return providerService.list(value.getValue(),value.getT().getManager(),value.getT().getCreated_date(),value.getT().getProvider_type().getContent(),value.getT().getStatus(), PageRequest.of(page,limit,sortObject));
+        System.out.println(value);
+        return providerService.list(value.getValue(),value.getT().getManager(),value.getT().getCreated_date(),value.getT().getProvider_type().getContent(),value.getT().getStatus());
     }
     @PostMapping("/count-list")
     public Long countList(@RequestBody Value<Provider> value,HttpServletRequest request){
@@ -65,7 +69,7 @@ public class ProviderController {
     public void create(@RequestBody Provider provider, HttpServletRequest request){
         if(!provider.getContact().matches("^\\d+$")) throw new CustomException("SĐT không hợp lệ",HttpStatus.BAD_REQUEST);
         if(!provider.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) throw new CustomException("Email không hợp lệ", HttpStatus.BAD_REQUEST);
-        if (provider.getCode()==null||provider.getCode().isEmpty()){
+        if (provider.getCode()==null||provider.getCode().trim().isEmpty()){
             provider.setCode("PRV"+sequenceRepository.generate());
         }else if(provider.getCode().matches("^PRV.*")) throw new CustomException("Tiền tố PRV không hợp lệ", HttpStatus.BAD_REQUEST);
         else if(providerService.findByCode(provider.getCode())!=null) throw new CustomException("NCC đã tồn tại",HttpStatus.BAD_REQUEST);
@@ -73,13 +77,14 @@ public class ProviderController {
         String username=tokenProvider.extractUsername(token);
         Employee t=employeeService.findByUsername(username);
         provider.setManager(t.getUsername());
+        provider.setManager_code(t.getCode());
         provider.setCreated_date(new Date(System.currentTimeMillis()+(1000*60*60*7)));
         provider.setCreated_date1(new Date(System.currentTimeMillis()));
         providerService.save(provider);
         historyRepository.save(t.getCode(),t.getName(),"đã tạo ra nhà cung cấp "+provider.getCode());
     }
     @PostMapping("/staff/create-many")
-    public void createAll(@RequestBody List<Provider> list,HttpServletRequest request){
+    public void createAll(@RequestBody List<Provider> list, HttpServletRequest request){
         String token = request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);
         Employee t=employeeService.findByUsername(username);
@@ -87,13 +92,15 @@ public class ProviderController {
             int index=list.indexOf(i);
             if(!i.getContact().matches("^\\d+$")) throw new CustomException("SĐT không hợp lệ",HttpStatus.BAD_REQUEST);
             if(!i.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) throw new CustomException("Email không hợp lệ", HttpStatus.BAD_REQUEST);
-            if (i.getCode()==null){
+            if (i.getCode()==null||i.getCode().trim().isEmpty()){
                 i.setCode("PRV"+sequenceRepository.generate());
             }else if(i.getCode().matches("^PRV.*")) throw new CustomException("Tiền tố PRV không hợp lệ", HttpStatus.BAD_REQUEST);
             else if(providerService.findByCode(i.getCode())!=null) throw new CustomException("NCC đã tồn tại",HttpStatus.BAD_REQUEST);
+            i.setProvider_type(providerTypeService.findByContent(i.getProvider_type().getContent()));
             i.setCreated_date(new Date(System.currentTimeMillis()+(1000*60*60*7)));
             i.setCreated_date1(new Date(System.currentTimeMillis()));
             i.setManager(t.getUsername());
+            i.setManager_code(t.getCode());
             list.set(index,i);
         }
         providerService.saveAll(list);
@@ -120,7 +127,7 @@ public class ProviderController {
         providerService.update(provider);
         String token = request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);
-        Employee t=employeeService.findByUsername(username);
+            Employee t=employeeService.findByUsername(username);
         historyRepository.save(t.getCode(),t.getName(),"đã cập nhật nhà cung cấp "+provider.getCode());
     }
     @DeleteMapping("/admin")

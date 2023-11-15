@@ -1,20 +1,23 @@
 package com.example.demo.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 import java.util.Set;
 
 @Entity
 @Table(name = "providers")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Provider {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,10 +40,10 @@ public class Provider {
     private String manager_code;
     @Email
     private String email;
-    @OneToMany(mappedBy = "provider",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "provider",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private Set<Receipt> receipts;
     @ManyToOne
-    @JoinColumn(name = "provider_type_id")
+    @JoinColumn(name = "provider_type_id",referencedColumnName = "id")
     private ProviderType provider_type;
 
     public void setProvider(Provider provider) {

@@ -2,14 +2,13 @@ package com.example.demo.Entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -23,9 +22,8 @@ public class Receipt {
     private String manager;
     private String manager_code;
     private Timestamp created_date;
-    @Column(nullable = false,unique = true)
     private String code;
-    @NotNull
+    @Column(columnDefinition = "0")
     private long revenue;
     @ManyToOne
     @JoinColumn(name = "providers_id")

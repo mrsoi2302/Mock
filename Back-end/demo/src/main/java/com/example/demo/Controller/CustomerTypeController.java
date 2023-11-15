@@ -1,5 +1,6 @@
 package com.example.demo.Controller;
 
+import com.example.demo.DataType.Value;
 import com.example.demo.Entities.Employee;
 import com.example.demo.Entities.CustomerType;
 import com.example.demo.Entities.ProviderType;
@@ -11,12 +12,14 @@ import com.example.demo.Service.CustomerTypeService;
 import com.example.demo.Service.EmployeeService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/customer-type")
 public class CustomerTypeController {
     private HistoryRepository historyRepository;
@@ -26,8 +29,8 @@ public class CustomerTypeController {
     private SequenceRepository sequenceRepository;
 
     @PostMapping("/list")
-    public List<CustomerType> list(@RequestBody String value){
-        return customerTypeService.list(value);
+    public List<CustomerType> list(@RequestBody Value<String> value){
+        return customerTypeService.list(value.getValue());
     }
     @PostMapping("/admin/create")
     public void create(@RequestBody CustomerType customerType,HttpServletRequest request){

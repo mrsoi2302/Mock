@@ -9,6 +9,7 @@ import {
   Spin,
   Table,
   Tag,
+  message,
 } from "antd";
 import * as XLSX from "xlsx";
 import axios from "axios";
@@ -26,8 +27,8 @@ import { Token } from "../../Token";
 import { Option } from "antd/es/mentions";
 function ProviderTable(props) {
   document.title = "Danh sách nhà cung cấp";
-  localStorage.setItem("open", "employee");
-  localStorage.setItem("selected", "employee-list");
+  localStorage.setItem("open", "provider");
+  localStorage.setItem("selected", "provider-list");
   const [file, setFile] = useState();
   const navigate = useNavigate();
   const [data, setData] = useState({
@@ -47,6 +48,8 @@ function ProviderTable(props) {
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
   const [sort, setSort] = useState("");
+  const [index, setIndex] = useState(false);
+
   const [dataOfType, setDataOfType] = useState([]);
   const [provider_type, setProvider_type] = useState();
 
@@ -160,9 +163,8 @@ function ProviderTable(props) {
       .catch((err) => {
         setErr(true);
       });
-  }, [created_date, status, value, loading, inputFile,provider_type]);
-  const handleButton = (e) => {
-    setLoading(true);
+  }, [status,created_date,value, loading, inputFile,provider_type,index,sort]);
+  const handleButton = () => {
     axios({
       url: baseURL + "/provider/admin",
       method: "delete",
@@ -171,12 +173,17 @@ function ProviderTable(props) {
       },
       data: selectedRowKeys,
     })
-      .then(setLoading(!loading))
+      .then((res)=>{setIndex(!index)})
       .catch((err) => setErr(true));
   };
   let edate, estatus;
+  const onChange = (date, dateString) => {
+    edate=dateString
+  };
   const handleSubmit = (e) => {
+    console.log(edate);
     setCreated_date(edate);
+    // console.log(created_date);
     setStatus(estatus);
     setOpen(false);
   };
@@ -191,56 +198,65 @@ function ProviderTable(props) {
           const sheet = workbook.Sheets[workbook.SheetNames[0]];
           const jsonData = XLSX.utils.sheet_to_json(sheet, {
             header: 2,
-            range: 1,
+            range:1
           });
-
+          console.log(jsonData);
           // Xử lý dữ liệu, ví dụ: log ra console
-          const newArray = [];
+          let check=[]
+          dataOfType.map(i=>{
+            check.push(i.content)
+          })
+          let newArray = [];
           jsonData.map((json) => {
-            if (!dataOfType.includes(json.provider_type)) throw new Error();
+            if (!check.includes(json.provider_type)) throw new Error();
             let { provider_type, ...newObj } = json;
             newObj = {
               ...newObj,
               provider_type: {
-                content: json,
+                content: json.provider_type,
               },
             };
+            console.log(newObj);
             newArray.push(newObj);
+            return newObj
           });
-          setList(newArray);
-          // ... rest of the code
-          if (list.length > 0) {
-            console.log(list);
-            axios({
-              method: "post",
-              url: baseURL + "/employee/admin/create-many",
-              headers: {
-                Authorization: Token,
-              },
-              data: list,
-            })
-              .then((res) => {
-                setInputFile(false);
+            setList(newArray);
+            // ... rest of the code
+            if (list.length > 0) {
+              console.log(list);
+              axios({
+                method: "post",
+                url: baseURL + "/provider/staff/create-many",
+                headers: {
+                  Authorization: Token,
+                },
+                data: list,
               })
-              .catch((err) => {
-                alert("File không hợp lệ");
-              });
-          }
+                .then((res) => {
+                  setInputFile(false);
+                })
+                .catch((err) => {
+                  message.error("File không hợp lệ");
+                });
+                console.log(inputFile);
+            }
         } catch (err) {
-          alert("File không hợp lệ");
+          message.error("File không hợp lệ");
         }
       };
       reader.readAsArrayBuffer(file.files[0]);
     }
   };
-  const onChange = (date, dateString) => {
-    setCreated_date(dateString);
+  const onChangeClick = (pagination, filters, sorter, extra) => {
+    setSort(sorter.columnKey + "-" + sorter.order);
+    console.log(sort);
   };
+  
   let items = [
     {
       label: (
         <Space direction="vertical">
-          <label>Thời gian</label>
+          <label>Thời gian tạo</label>
           <DatePicker onChange={onChange} />
         </Space>
       ),
@@ -325,6 +341,12 @@ function ProviderTable(props) {
         width: "25%",
       },
       {
+        title: "Tổng giao dịch",
+        dataIndex: "total",
+        key: "total",
+        sorter:true
+      },
+      {
         title: "Trang thái",
         dataIndex: "status",
         key: "status",
@@ -406,8 +428,8 @@ function ProviderTable(props) {
                 Tại đây
               </a>
             </p>
-            <p>Mã nhà cung cấp không được chứa tiền tố "EPL"</p>
-            <p>Chỉ được sử dụng 2 vai trò là "STAFF" và "USER"</p>
+            <p>Mã nhà cung cấp không được chứa tiền tố "PRV"</p>
+            <p>Nhóm khách hàng phải là nhóm khách hàng đã được tạo</p>
           </div>
         />
       )}
@@ -429,6 +451,7 @@ function ProviderTable(props) {
               data={data.data}
               setInputFile={setInputFile}
               setFile={setFile}
+              onChange={onChangeClick}
             />
           )}
           <Paginate

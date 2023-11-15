@@ -23,22 +23,28 @@ public class Customer{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String code;
+    @NotNull
     private String name;
+    @NotNull
     private String contact;
+    @NotNull
     private String gender;
     @Column(columnDefinition = "bigint default 0")
     private long total;
     private Date created_date;
     private Date created_date1;
     private Date modified_date;
-    private int birthday_day;
-    private int birthday_month;
+    private Date birthday;
     private String status;
     private String manager;
     private String manager_code;
-    @Email
-    private String email;
     private int birthday_year;
+    private int birthday_month;
+    private int birthday_day;
+    @Email
+    @NotNull
+    private String email;
+    @NotNull
     @ManyToOne
     @JoinColumn(name="customer_types_id")
     private CustomerType customer_type;
@@ -51,12 +57,11 @@ public class Customer{
         this.name =customer.name;
         this.contact =customer.contact;
         this.gender =customer.gender;
-        this.birthday_day =customer.birthday_day;
-        this.birthday_month =customer.birthday_month;
-        this.birthday_year =customer.birthday_year;
+        this.birthday=customer.birthday;
         this.customer_type =customer.customer_type;
         this.email=customer.email;
         this.manager=customer.manager;
         this.manager_code=customer.manager_code;
     }
+
 }

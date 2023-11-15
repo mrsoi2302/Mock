@@ -58,9 +58,9 @@ export default function EmployeeInformation() {
       <div className="taskbar">
         {err && (
           <Alert
-            message="Tạo thất bại"
+            message="Truy cập thất bại"
             showIcon
-            description="Chỉ quản trị viên mới có thể tạo được nhân viên mới"
+            description="Có vẻ bạn không có quyền truy cập"
             type="error"
             style={{
               position: "absolute",

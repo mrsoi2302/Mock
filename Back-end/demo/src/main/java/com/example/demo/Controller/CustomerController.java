@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
-
 @RestController
 @RequestMapping("/customer")
 @AllArgsConstructor
@@ -43,6 +42,7 @@ public class CustomerController {
             value.getT().setManager(t.getUsername());
             value.getT().setManager_code(t.getCode());
         }
+        System.out.println(value);
         String[] sortParams=sort.split("-");
         sortParams[1]=sortParams[1].equals("ascend")? "asc":"desc";
         Sort.Direction sortOrder=sortParams[1].equals("asc")? Sort.Direction.ASC: Sort.Direction.DESC;

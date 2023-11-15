@@ -16,15 +16,15 @@ public interface CustomerRepo extends JpaRepository<Customer,Long> {
             "or c.code like concat('%',:value,'%') " +
             "or c.name like concat('%',:value,'%') " +
             "or c.contact like concat('%',:value,'%') " +
-            "or c.email like concat('%',:value,'%'))" +
+            "or c.email like concat('%',:value,'%')) " +
             "and " +
-            "(:day is null or c.birthday_day=:day)" +
+            "(:day=0 or day(c.birthday)=:day)" +
             "and" +
-            "(:month is null or c.birthday_month=:month)" +
+            "(:month=0 or month (c.birthday)=:month)" +
             "and" +
-            "(:year is null or c.birthday_year=:year)" +
+            "(:year=0 or year(c.birthday)=:year)" +
             "and" +
-            "(:status is null or c.status=c.status)" +
+            "(:status is null or c.status=:status)" +
             "and" +
             "(:gender is null or c.gender=:gender)" +
             "and" +
@@ -45,13 +45,13 @@ public interface CustomerRepo extends JpaRepository<Customer,Long> {
             "or c.contact like concat('%',:value,'%') " +
             "or c.email like concat('%',:value,'%'))" +
             "and " +
-            "(:day is null or c.birthday_day=:day)" +
+            "(:day is null or day(c.birthday)=:day)" +
             "and" +
-            "(:month is null or c.birthday_month=:month)" +
+            "(:month is null or month(c.birthday)=:month)" +
             "and" +
-            "(:year is null or c.birthday_year=:year)" +
+            "(:year is null or year(c.birthday)=:year)" +
             "and" +
-            "(:status is null or c.status=c.status)" +
+            "(:status is null or c.status=:status)" +
             "and" +
             "(:gender is null or c.gender=:gender)" +
             "and" +

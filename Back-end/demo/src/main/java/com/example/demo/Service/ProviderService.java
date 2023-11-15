@@ -4,7 +4,6 @@ import com.example.demo.Entities.Provider;
 import com.example.demo.Repositories.ProviderRepo;
 import com.example.demo.Repositories.ReceiptRepo;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -15,8 +14,9 @@ import java.util.List;
 public class ProviderService {
     private ProviderRepo providerRepo;
     private ReceiptRepo receiptRepo;
-    public List<Provider> list(String value, String manager, Date createdDate,String type, String status, Pageable pageable) {
-        return providerRepo.list(value,manager,createdDate,type,status,pageable);
+    public List<Provider> list(String value, String manager, Date createdDate,String type, String status) {
+        System.out.println(type);
+        return providerRepo.list(value,manager,createdDate,type,status);
     }
     public void save(Provider provider) {
         providerRepo.save(provider);
@@ -32,11 +32,13 @@ public class ProviderService {
     public void update(Provider provider) {
         Provider t=providerRepo.findByCode(provider.getCode());
         t.setProvider(provider);
+        providerRepo.save(t);
     }
 
     public void deleteAllByCode(List<String> list) {
         for(String i:list){
-            receiptRepo.deleteAllByProviderCode(i);
+            Provider p=providerRepo.findByCode(i);
+            receiptRepo.deleteAllByProviderCode(p);
         }
         providerRepo.deleteAllByCode(list);
     }

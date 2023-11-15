@@ -9,7 +9,7 @@ import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 
 export default function CreateEmployee() {
-  document.title = "Danh sách nhân viên";
+  document.title = "Tạo mới nhân viên";
   const [code, setCode] = useState();
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
@@ -24,6 +24,8 @@ export default function CreateEmployee() {
   }, []);
   const handleSubmit = (e) => {
     console.log(e);
+    form
+    .validateFields()
     axios({
       url: baseURL + "/employee/admin/create-one",
       method: "post",
@@ -66,7 +68,6 @@ export default function CreateEmployee() {
         <hr style={{ borderTop: "1px solid whitesmoke" }} />
 
         <Form
-          onFinish={handleSubmit}
           form={form}
           layout="vertical"
           style={{

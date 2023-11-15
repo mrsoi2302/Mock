@@ -11,21 +11,23 @@ function getItem(label, key, icon, children, type) {
   };
 }
 const items = [
-  getItem("Nhà cung cấp", "provider", null, [
-    getItem(<a href="/provider-table">Danh sách</a>, "provider-list"),
-    getItem(<p href="/create-provider">Tạo mới</p>, "create-provider"),
+  getItem(<strong>Nhà cung cấp</strong>, "provider", null, [
+    getItem(<a href="/provider-table">Danh sách nhà cung cấp</a>, "provider-list"),
+    getItem(<a href="/create-provider">Tạo mới</a>, "create-provider"),
+    getItem(<a href="/provider-type">Nhóm nhà cung cấp</a>, "provider-type"),
   ]),
-  getItem("Khách hàng", "customer", null, [
+  getItem(<strong>Khách hàng</strong>, "customer", null, [
     getItem(<a href="/customer-table">Danh sách</a>, "customer-list"),
+    getItem(<a href="/create-customer">Tạo mới</a>, "create-customer"),
     getItem(<a href="/customer-type">Nhóm khách hàng</a>, "customer-type"),
   ]),
-  getItem("Sổ quỹ", "cash", null, [
+  getItem(<strong>Sổ quỹ</strong>, "cash", null, [
     getItem(<a href="/payment-list">Danh sách phiếu chi</a>, "payment-list"),
     getItem(<a href="/create-payment">Tạo phiếu chi</a>, "create-payment"),
     getItem(<a href="/receipt-list">Danh sách phiếu thu</a>, "receipt-list"),
     getItem(<a href="/create-receipt">Tạo phiếu thu</a>, "create-receipt"),
   ]),
-  getItem("Quản lý nhân viên", "employee", null, [
+  getItem(<strong>Quản lý nhân viên</strong>, "employee", null, [
     getItem(<a href="/employee-table">Danh sách nhân viên</a>, "employee-list"),
     getItem(
       <a href="/create-employee">Tạo nhân viên mới</a>,

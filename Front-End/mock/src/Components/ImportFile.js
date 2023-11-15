@@ -17,7 +17,6 @@ export default function ImportFile(props) {
         onChange={(e) => {
           setCheck(false);
           props.setFile(e.target);
-          console.log(e.target.result);
         }}
         type="file"
         accept=".xls, .xlsx"

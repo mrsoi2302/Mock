@@ -28,6 +28,7 @@ export default function Login() {
     })
       .then((res) => {
         localStorage.setItem("jwt", res.data);
+        localStorage.setItem("username",username)
         navigate("/main");
       })
       .catch((err) => {

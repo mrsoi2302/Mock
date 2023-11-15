@@ -19,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -91,6 +92,9 @@ public class ReceiptController {
         String token = request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);
         Employee t=employeeService.findByUsername(username);
+        receipt.setCreated_date(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)));
+        receipt.setCreated_date1(new Timestamp(System.currentTimeMillis()));
+        receipt.setManager_code(t.getCode());
         receipt.setManager(t.getUsername());
         receiptService.save(receipt);
         historyRepository.save(t.getCode(),t.getName(),"đã tạo ra phiếu chi "+receipt.getCode());

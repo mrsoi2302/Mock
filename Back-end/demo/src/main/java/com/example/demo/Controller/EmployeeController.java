@@ -29,7 +29,7 @@ public class EmployeeController {
     public List<Employee> list(@RequestBody Value<Employee> value,@RequestParam int page,@RequestParam int limit){
         return employeeService.list(value.getValue(),value.getT().getRole(), PageRequest.of(page,limit));
     }
-    @GetMapping("/list")
+    @GetMapping("admin/list")
     public List<Employee> list(){
         return employeeService.list();
     }

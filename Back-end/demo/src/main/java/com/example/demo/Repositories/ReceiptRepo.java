@@ -5,6 +5,7 @@ import com.example.demo.Entities.Provider;
 import com.example.demo.Entities.Receipt;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.parameters.P;
@@ -15,8 +16,9 @@ import java.util.List;
 
 @Repository
 public interface ReceiptRepo extends JpaRepository<Receipt,Long> {
-    @Query("delete from Receipt r where r.provider.code=:i")
-    void deleteAllByProviderCode(String i);
+    @Modifying
+    @Query("delete from Receipt r where r.provider=:code")
+    void deleteAllByProviderCode(@Param("code") Provider code);
     @Query("select r from Receipt r where " +
             "(:value is null or r.code like concat('%',:value,'%'))" +
             "and" +
@@ -43,6 +45,7 @@ public interface ReceiptRepo extends JpaRepository<Receipt,Long> {
                    @Param("type") PaymentType paymentType,
                    @Param("status") String status);
     Receipt findByCode(String code);
+    @Modifying
     @Query("delete from Receipt r where r.code in :list")
     void deleteAllByCode(List<String> list);
     @Query("select r from Receipt r where r.payment_type.name=:name")
