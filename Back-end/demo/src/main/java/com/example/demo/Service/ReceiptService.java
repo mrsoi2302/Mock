@@ -23,7 +23,7 @@ public class ReceiptService {
         return receiptRepo.findAllByMananger(manager);
     }
     public List<Receipt> list(String value, String manager, Date createdDate, PaymentType paymentType, String status, Pageable pageable) {
-        List<Receipt> list =receiptRepo.list(value,createdDate,paymentType,status,pageable);
+        List<Receipt> list =receiptRepo.list(value,manager,createdDate,paymentType,status,pageable);
         for(Receipt i:list){
             Provider provider=providerRepo.findByCode(i.getProvider().getCode());
             provider.setTotal(countBill(provider));
@@ -36,10 +36,7 @@ public class ReceiptService {
     }
 
     public Receipt findByCode(String code) {
-        Receipt receipt=receiptRepo.findByCode(code);
-        Provider provider=providerRepo.findByCode(receipt.getProvider().getCode());
-        provider.setTotal(countBill(provider));
-        return receipt;
+        return receiptRepo.findByCode(code);
     }
 
     public void save(Receipt receipt) {
@@ -49,6 +46,7 @@ public class ReceiptService {
     public void update(Receipt receipt) {
         Receipt p=findByCode(receipt.getCode());
         p.setReceipt(receipt);
+        receiptRepo.save(p);
     }
 
     private Long countBill(Provider provider) {

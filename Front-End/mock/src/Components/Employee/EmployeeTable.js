@@ -284,24 +284,6 @@ export default function EmployeeTable() {
         openFilter={open}
         setOpenFilter={setOpen}
       />
-      {inputFile && (
-        <ImportFile
-          setInputFile={setInputFile}
-          setFile={setFile}
-          submitList={submitList}
-          msg=<div>
-            <p>
-              Thực hiện theo bản mẫu{" "}
-              <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vTsZ_SPfjI3IUvqNr-3H-dZM_yhrSAuao6HG-Z1UaWYisYQk7Y47tQI9lGHA_GWd_xM9rtdUAWzo-yw/pub?output=xlsx">
-                {" "}
-                Tại đây
-              </a>
-            </p>
-            <p>Mã khách hàng không được chứa tiền tố "CTM"</p>
-            <p>Nhóm khách hàng phải được đặt đúng theo các nhóm khách hàng đã tạo</p>
-          </div>
-        />
-      )}
       {err ? (
         <ExceptionBox url="/main" msg=<h2>Có lỗi xảy ra</h2> />
       ) : (
@@ -318,8 +300,6 @@ export default function EmployeeTable() {
               handleSelection={handleSelection}
               columns={columns}
               data={data.data}
-              setInputFile={setInputFile}
-              setFile={setFile}
             />
           )}
           <Paginate

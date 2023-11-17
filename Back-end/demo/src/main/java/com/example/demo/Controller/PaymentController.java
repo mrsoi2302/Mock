@@ -104,6 +104,7 @@ public class PaymentController {
     }
     @PostMapping("/staff/create-one")
     public void create(@RequestBody Payment payment, HttpServletRequest request){
+        System.out.println(payment);
         if(paymentService.findByCode(payment.getCode())!=null) throw new CustomException("Phiếu chi đã tồn tại",HttpStatus.BAD_REQUEST);
         if (payment.getCode()==null||payment.getCode().trim().isEmpty()){
             payment.setCode("PMT"+sequenceRepository.generate());

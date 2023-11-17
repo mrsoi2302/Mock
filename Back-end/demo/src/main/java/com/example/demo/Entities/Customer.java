@@ -50,7 +50,6 @@ public class Customer{
     @ManyToOne
     @JoinColumn(name = "customer_type_id",referencedColumnName = "id")
     private CustomerType customer_type;
-    @JsonIgnore
     @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<Payment> payments;
     public void setPayments(Set<Payment> payments){

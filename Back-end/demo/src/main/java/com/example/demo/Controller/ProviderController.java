@@ -1,10 +1,7 @@
 package com.example.demo.Controller;
 
 import com.example.demo.DataType.Value;
-import com.example.demo.Entities.Customer;
-import com.example.demo.Entities.Employee;
-import com.example.demo.Entities.Provider;
-import com.example.demo.Entities.ProviderType;
+import com.example.demo.Entities.*;
 import com.example.demo.Exceptions.CustomException;
 import com.example.demo.Repositories.HistoryRepository.HistoryRepository;
 import com.example.demo.Repositories.SequenceRepo.SequenceRepository;
@@ -142,7 +139,7 @@ public class ProviderController {
         }
     }
     @PostMapping("/create-receipt")
-    public List<Provider> forCreateReceipt(HttpServletRequest request){
+    public List<Provider> forCreateReceipt(@RequestBody ProviderType providerType, HttpServletRequest request){
         String manager=null;
         String token = request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);
@@ -150,6 +147,6 @@ public class ProviderController {
         if(t.getRole().equals("STAFF")){
             manager=t.getUsername();
         }
-        return providerService.findForReceipt(manager);
+        return providerService.findForReceipt(manager,providerType);
     }
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { Page, Text, Image, Document, StyleSheet, Font } from "@react-pdf/renderer";
+import { Page, Text, Image, Document, StyleSheet, Font, View } from "@react-pdf/renderer";
 import MyFont from '../font-times-new-roman.ttf'
     Font.register({
         family: 'Times New Roman',
@@ -54,31 +54,42 @@ import MyFont from '../font-times-new-roman.ttf'
       {text: 'Second page content goes here...', image: 'https://www.si.com/.image/ar_4:3%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTcwMzExMzEwNTc0MTAxODM5/lebron-dunk.jpg' },
       {text: 'Third page content goes here...', image: 'https://s.yimg.com/ny/api/res/1.2/Aj5UoHHKnNOpdwE6Zz9GIQ--/YXBwaWQ9aGlnaGxhbmRlcjt3PTY0MA--/https://s.yimg.com/os/creatr-uploaded-images/2023-01/b02a71d0-a774-11ed-bf7f-08714e8ad300' },
     ]
-  
+    console.log(props.data);
     return (
       <Document>
-        <Page>
+        <Page size={"A4"} style={styles.body}>
             <Text style={styles.title}>Hóa đơn</Text>
             <Text style={styles.text}>
-                Mã hóa đơn:{props.data.code}
+                Mã hóa đơn: {props.data.code}
             </Text>
             <Text style={styles.text}>
-                Giá trị:{props.data.paid}
+                Giá trị: {props.data.paid}
             </Text>
             <Text style={styles.text}>
-                Người thanh toán:{props.data.customer.name}
+                Người nhận: {props.data.customer.name}
             </Text>
             <Text style={styles.text}>
-                Hình thức thanh toán:{props.data.paymentType.name}
+                Hình thức thanh toán: {props.data.paymentType.name}
             </Text>
-            <Text style={{...styles.text}}>
-                Người thanh toán                                         Người nhận
+            <Text style=
+            {{...styles.text,
+              position:"absolute",
+              top:"9cm",
+              left:"2cm"
+            }}>
+                Người thanh toán                                         
             </Text>
-            <Text style={{...styles.text, display:"flex",float:"right"}}>
-                
+            <Text style=
+            {{...styles.text,
+              position:"absolute",
+              top:"9cm",
+              right:"2cm"
+            }}>
+                Người nhận
+                <br></br>
             </Text>
           </Page>
-  
+
       </Document>
     );
   };

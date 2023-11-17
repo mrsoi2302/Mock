@@ -26,7 +26,7 @@ public class EmployeeController {
     private SequenceRepository sequenceRepository;
 
     @PostMapping("/admin/list")
-    public List<Employee> list(@RequestBody Value<Employee> value,@RequestParam int page,@RequestParam int limit){
+    public List<Employee> list(@RequestBody Value<Employee> value,@RequestParam(name = "page") int page,@RequestParam(name = "limit") int limit){
         return employeeService.list(value.getValue(),value.getT().getRole(), PageRequest.of(page,limit));
     }
     @GetMapping("admin/list")
@@ -39,10 +39,11 @@ public class EmployeeController {
     }
     @PostMapping("/admin/create-one")
     public void create(@RequestBody Employee employee, HttpServletRequest request){
+        if(employee.getCode().matches("^EPL.*")) throw new CustomException("Tiền tố EPL không hợp lệ", HttpStatus.BAD_REQUEST);
         if(employeeService.findByCode(employee.getCode())!=null&&employeeService.findByUsername(employee.getUsername())!=null) throw new CustomException("NV đã tồn tại",HttpStatus.BAD_REQUEST);
-        else    if (employee.getCode().isEmpty()||employee.getCode()==null){
+        else if (employee.getCode().trim().isEmpty()||employee.getCode()==null){
             employee.setCode("EPL"+sequenceRepository.generate());
-        }else if(employee.getCode().matches("^EPL.*")) throw new CustomException("Tiền tố EPL không hợp lệ", HttpStatus.BAD_REQUEST);
+        }
         employee.setPassword(String.valueOf(employee.getPassword().hashCode()));
         employeeService.save(employee);
         String token = request.getHeader("Authorization").substring(7);

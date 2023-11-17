@@ -1,6 +1,7 @@
 package com.example.demo.Service;
 
 import com.example.demo.Entities.Provider;
+import com.example.demo.Entities.ProviderType;
 import com.example.demo.Entities.Receipt;
 import com.example.demo.Repositories.ProviderRepo;
 import com.example.demo.Repositories.ReceiptRepo;
@@ -67,8 +68,8 @@ public class ProviderService {
     public Long countList(String value, String manager, Date createdDate,String type, String status) {
         return providerRepo.countList(value,manager,createdDate,type,status);
     }
-    public List<Provider> findForReceipt(String manager){
-        return providerRepo.findForReceipt(manager);
+    public List<Provider> findForReceipt(String manager, ProviderType providerType){
+        return providerRepo.findForReceipt(manager,providerType);
     }
 
     public Provider findByCodeAndManager(String code, String manager) {

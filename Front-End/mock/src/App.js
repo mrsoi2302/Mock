@@ -25,6 +25,7 @@ import ModifyPayment from './Components/Payment/ModifyPayment';
 import ReceiptTable from './Components/Receipt/ReceiptTable';
 import ReceiptInformation from './Components/Receipt/ReceiptInformation';
 import ModifyReceipt from './Components/Receipt/ModifyReceipt';
+import CreateReceipt from './Components/Receipt/CreateReceipt';
 
 function App(){
   return(
@@ -57,7 +58,7 @@ function App(){
           <Route path='/payment/modify/:code' element={<ModifyPayment/>}/>  
           <Route path='/receipt-table' element={<ReceiptTable/>}/>
           <Route path='/receipt/information/:code' element={<ReceiptInformation/>}/>
-          <Route path='/create-receipt' element={<CreatePayment/>}/>
+          <Route path='/create-receipt' element={<CreateReceipt/>}/>
           <Route path='/receipt/modify/:code' element={<ModifyReceipt/>}/>  
           {/*<Route path='/provider-list' element={<ProviderList />}/>
           

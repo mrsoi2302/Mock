@@ -4,6 +4,7 @@ import com.example.demo.Entities.Customer;
 import com.example.demo.Entities.CustomerType;
 import com.example.demo.Repositories.CustomerRepo;
 import com.example.demo.Repositories.CustomerTypeRepo;
+import com.example.demo.Repositories.PaymentRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public class CustomerTypeService {
     private final CustomerTypeRepo customerTypeRepo;
     private final CustomerRepo customerRepo;
+    private final PaymentRepo paymentRepo;
     public List<CustomerType> list(String value) {
         return customerTypeRepo.list(value);
     }
@@ -33,6 +35,7 @@ public class CustomerTypeService {
         for(Customer i:list){
             codeList.add(i.getCode());
         }
+        paymentRepo.deleteByCustomerList(list);
         customerRepo.deleteAllByCode(codeList);
         customerTypeRepo.deleteByCode(code);
     }

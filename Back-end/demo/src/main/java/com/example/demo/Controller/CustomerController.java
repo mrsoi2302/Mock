@@ -96,7 +96,7 @@ public class CustomerController {
         if(!customer.getContact().matches("^\\d+$")) throw new CustomException("SĐT không hợp lệ",HttpStatus.BAD_REQUEST);
         if(customerService.findByCode(customer.getCode())!=null) throw new CustomException("KH đã tồn tại",HttpStatus.BAD_REQUEST);
         if(!customer.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) throw new CustomException("Email không hợp lệ", HttpStatus.BAD_REQUEST);
-        if(customer.getCode()==null){
+        if(customer.getCode()==null||customer.getCode().trim().isEmpty()){
             customer.setCode("CTM"+sequenceRepository.generate());
         }else if(customer.getCode().matches("^CTM.*")) throw new CustomException("Tiền tố CTM không hợp lệ", HttpStatus.BAD_REQUEST);
         String token = request.getHeader("Authorization").substring(7);
@@ -118,7 +118,7 @@ public class CustomerController {
             if(!i.getContact().matches("^\\d+$")) throw new CustomException("SĐT không hợp lệ",HttpStatus.BAD_REQUEST);
             if(customerService.findByCode(i.getCode())!=null) throw new CustomException("KH đã tồn tại",HttpStatus.BAD_REQUEST);
             if(!i.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) throw new CustomException("Email không hợp lệ", HttpStatus.BAD_REQUEST);
-            if (i.getCode()==null){
+            if (i.getCode()==null||i.getCode().trim().isEmpty()){
                 i.setCode("CTM"+sequenceRepository.generate());
             }else if(i.getCode().matches("^CTM.*")) throw new CustomException("Tiền tố CTM không hợp lệ", HttpStatus.BAD_REQUEST);
             i.setManager(t.getUsername());

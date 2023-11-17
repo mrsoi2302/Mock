@@ -39,5 +39,6 @@ public class Receipt {
         this.provider = receipt.provider;
         this.manager=receipt.manager;
         this.manager_code=receipt.manager_code;
+        this.status=receipt.status;
     }
 }

@@ -15,7 +15,6 @@ export default function PaymentInformation() {
   const { code } = useParams();
   localStorage.setItem("open", "payment");
   localStorage.setItem("selected", "payment-list");
-  const[payments,setPayments]=useState([])
   const [data, setData] = useState({
     data: {},
     loading: true,
@@ -39,29 +38,6 @@ export default function PaymentInformation() {
       });
   };
   useEffect(() => {
-    axios({
-      url:
-        baseURL +
-        "/payment/list",
-      method: "post",
-      headers: {
-        Authorization: Token,
-      },
-      data: {
-        value:null,
-        t:{
-          payment:{
-            code:code
-          }
-        },
-      },
-    })
-      .then((res) => {
-        setPayments(res.data)
-      })
-      .catch((err) => {
-        setErr(true);
-      });
     axios({
       url: baseURL + "/payment/information?code=" + code,
       method: "get",

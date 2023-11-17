@@ -35,12 +35,11 @@ public class CustomerTypeController {
     }
     @PostMapping("/admin/create")
     public void create(@RequestBody CustomerType customerType,HttpServletRequest request){
-        if(customerType.getCode()==null){
+        if(customerTypeService.findByContentOrCode(customerType.getContent(),customerType.getCode())!=null) throw new CustomException("Nhóm KH đã tồn tại", HttpStatus.BAD_REQUEST);
+        if(customerType.getCode()==null||customerType.getCode().trim().isEmpty()){
             customerType.setCode("CTT"+sequenceRepository.generate());
         }
         else if(customerType.getCode().matches("^CTT.*")) throw new CustomException("Tiền tố CTT ko hợp lệ",HttpStatus.BAD_REQUEST);
-        else if(customerTypeService.findByContentOrCode(customerType.getContent(),customerType.getCode())!=null)
-            throw new CustomException("Nhóm KH đã tồn tại", HttpStatus.BAD_REQUEST);
         customerTypeService.save(customerType);
         String token = request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);

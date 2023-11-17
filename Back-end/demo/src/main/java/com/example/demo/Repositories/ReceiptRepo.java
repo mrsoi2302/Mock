@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -22,12 +21,15 @@ public interface ReceiptRepo extends JpaRepository<Receipt,Long> {
     @Query("select r from Receipt r where " +
             "(:value is null or r.code like concat('%',:value,'%'))" +
             "and" +
+            "(:manager is null or r.manager=:manager)" +
+            "and"+
             "(:date is null or cast(r.created_date1 as date )=:date )" +
             "and" +
             "(:type is null or r.payment_type=:type)" +
             "and " +
             "(:status is null or r.status=:status)")
     List<Receipt> list(@Param("value") String value,
+                       @Param("manager")String manager,
                        @Param("date") Date createdDate,
                        @Param("type") PaymentType paymentType,
                        @Param("status") String status,

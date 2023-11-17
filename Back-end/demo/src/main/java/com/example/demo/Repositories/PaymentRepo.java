@@ -61,4 +61,7 @@ public interface PaymentRepo extends JpaRepository<Payment,Long> {
     Payment findByCodeAndManager(@Param("code") String code, @Param("manager") String manager);
     @Query("select p from Payment p where p.customer=:i")
     List<Payment> findByCustomer(Customer i);
+    @Modifying
+    @Query("delete from Payment p where p.customer in :list")
+    void deleteByCustomerList(List<Customer> list);
 }
