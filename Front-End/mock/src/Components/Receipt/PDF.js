@@ -69,7 +69,7 @@ import MyFont from '../font-times-new-roman.ttf'
                 Người thanh toán:{props.data.provider.name}
             </Text>
             <Text style={styles.text}>
-                Hình thức thanh toán:{props.data.receiptType.name}
+                Hình thức thanh toán:{props.data.payment_type.name}
             </Text>
             <Text style={{...styles.text}}>
                 Người thanh toán                                         Người nhận

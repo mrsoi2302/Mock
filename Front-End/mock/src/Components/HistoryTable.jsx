@@ -47,7 +47,7 @@ function HistoryTable() {
   useEffect(() => {
     axios({
       method: "get",
-      url: baseURL + "/employee/list",
+      url: baseURL + "/employee/admin/list",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
@@ -92,7 +92,7 @@ function HistoryTable() {
       },
       data: {
         employee_code: employee_code,
-        name: name,
+        username: name,
         time: time,
       },
     })
@@ -137,13 +137,15 @@ function HistoryTable() {
             <label>Tên nhân viên</label>
             <Select
               style={{ maxWidth: "400px" }}
+              showSearch
               allowClear
               onSelect={(e) => {
-                ename = e;
+                const arr=e.split("-")
+                ename = arr[1];
               }}
             >
               {employee.map((item) => {
-                return <Option key={item.name}>{item.name}</Option>;
+                return <Option key={item.id+"-"+item.username}>{item.username}</Option>;
               })}
             </Select>
           </Form.Item>
