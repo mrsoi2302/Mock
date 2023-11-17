@@ -57,7 +57,7 @@ function Account(props){
       border:"none",
       fontSize:"large",
       boxShadow:"none"}}
-      >Welcome, {props.name}</Button>
+      >Welcome, {localStorage.getItem("username")}</Button>
     </Dropdown>
     </>
   )

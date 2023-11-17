@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface PaymentTypeRepo extends JpaRepository<PaymentType,Long> {
-    @Query("select p from PaymentType p where p.name like concat('%',:value,'%') ")
+    @Query("select p from PaymentType p where :value is null or p.name like concat('%',:value,'%') ")
     List<PaymentType> list(String value);
 
     PaymentType findByName(String name);

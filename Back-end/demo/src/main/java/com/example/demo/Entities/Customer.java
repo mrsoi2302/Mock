@@ -1,5 +1,8 @@
 package com.example.demo.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
@@ -11,6 +14,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -42,12 +46,11 @@ public class Customer{
     private int birthday_month;
     private int birthday_day;
     @Email
-    @NotNull
     private String email;
-    @NotNull
     @ManyToOne
-    @JoinColumn(name="customer_types_id")
+    @JoinColumn(name = "customer_type_id",referencedColumnName = "id")
     private CustomerType customer_type;
+    @JsonIgnore
     @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<Payment> payments;
     public void setPayments(Set<Payment> payments){
@@ -62,6 +65,7 @@ public class Customer{
         this.email=customer.email;
         this.manager=customer.manager;
         this.manager_code=customer.manager_code;
+        this.status=customer.status;
     }
 
 }

@@ -2,6 +2,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.Entities.History;
 import com.example.demo.Repositories.HistoryRepository.HistoryRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/history")
 @AllArgsConstructor
+@Transactional
 public class HistoryController {
     private final HistoryRepository historyRepository;
     @PostMapping("/list")

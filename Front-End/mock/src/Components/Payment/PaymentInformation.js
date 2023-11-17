@@ -1,258 +1,182 @@
-import React, { useEffect, useState } from 'react';
-import { Button, DatePicker, Form, Input, InputNumber, Select, Space } from 'antd';
-import dayjs from 'dayjs';
-import Account from '../Account';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import ConfirmBox from '../ConfirmBox';
-import * as XLSX from "xlsx"; // Thay đổi import này
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { Alert, Button, Card, Space, Spin, Tag } from "antd";
+import React, { useEffect, useState } from "react";
+import "../style.css";
+import Account from "../Account";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { baseURL } from "../../Config";
+import { Token } from "../../Token";
+import ExceptionBox from "../ExceptionBox";
+import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import PDF from './PDF';
-const { Option }= Select;
-const layout = {
-  labelCol: {
-    span: 8,
-  },
-  wrapperCol: {
-    span: 16,
-  },
-};
-const tailLayout = {
-  wrapperCol: {
-    offset: 8,
-    span: 16,
-  },
-};
-/* eslint-disable no-template-curly-in-string */
-const validateMessages = {
-  required: '${label} is required!',
-};
-/* eslint-enable no-template-curly-in-string */
-function PaymentInformation() {
-  document.title="Thông tin phiếu chi"
-  const navigate=useNavigate()
-  const [data,setData]=useState()
-  const [paid,setPaid]=useState(0)
-  const [customer,setCustomer]=useState()
-  const [paymentType,setPaymentType]=useState()
-  const [code,setCode]=useState(window.location.pathname.substring(21))
-  const [error,setError]=useState(true)
-  const [customerList,setCustomerList]=useState([])
-  const [customerTypeList,setCustomerTypeList]=useState([])
-  const [adjust,setAdjust]=useState(false)
-  const [form]=Form.useForm()
-  const handleSubmit=(e)=>{    
-    const obj={
-      code:code,
-      paid:paid,
-      paymentType:paymentType,
-      customer:customer,
-    }
-    e.preventDefault();
-    form
-      .validateFields()
-      .then(() => {
-        axios(
-          {
-            url:"http://localhost:8080/admin/payment",
-            method:"PUT",
-            headers:{
-              "Authorization":"Bearer " + localStorage.getItem("jwt")
-            },
-            data:obj
-          }
-        ).then(()=>{
-          alert("Thanh cong")
-          window.location.reload()
-        }).catch(
-          ()=>
-          {alert("Chỉnh sửa thất bại")}
-        ) 
+export default function PaymentInformation() {
+  document.title="Thông tin phiếu chi"
+  const navigate = useNavigate();
+  const { code } = useParams();
+  localStorage.setItem("open", "payment");
+  localStorage.setItem("selected", "payment-list");
+  const[payments,setPayments]=useState([])
+  const [data, setData] = useState({
+    data: {},
+    loading: true,
+  });
+  const [err, setErr] = useState(false);
+
+  const handleDelete = () => {
+    axios({
+      url: baseURL + "/payment/admin",
+      method: "delete",
+      headers: {
+        Authorization: Token,
+      },
+      data: [code],
+    })
+      .then((res) => {
+        navigate("/payment-table");
       })
-      .catch((errorInfo) => {
-        console.log("Validation Failed:", errorInfo);
+      .catch((err) => {
+        setErr(true);
       });
-  }
-    useEffect(()=>{
-      axios(
-        {
-          url:"http://localhost:8080/customer/findall",
-          method:"get",
-          headers:{
-              "Authorization":"Bearer "+localStorage.getItem("jwt"),
-          },
-        }
-      ).then(res=>{
-        setCustomerList(res.data)
-      }
-      ).catch(err=>{
-        console.log(err);
+  };
+  useEffect(() => {
+    axios({
+      url:
+        baseURL +
+        "/payment/list",
+      method: "post",
+      headers: {
+        Authorization: Token,
+      },
+      data: {
+        value:null,
+        t:{
+          payment:{
+            code:code
+          }
+        },
+      },
+    })
+      .then((res) => {
+        setPayments(res.data)
       })
-      axios(
-        {
-          url:"http://localhost:8080/admin/payment-type",
-          method:"get",
-          headers:{
-              "Authorization":"Bearer "+localStorage.getItem("jwt"),
-          },
-        }
-      ).then(res=>{
-        setCustomerTypeList(res.data)
-      }
-      ).catch(err=>{
-        console.log(err);
+      .catch((err) => {
+        setErr(true);
+      });
+    axios({
+      url: baseURL + "/payment/information?code=" + code,
+      method: "get",
+      headers: {
+        Authorization: Token,
+      },
+    })
+      .then((res) => {
+        setData({
+          data: res.data,
+          loading: false,
+        });
       })
-        axios(
-            {
-                url:"http://localhost:8080/payment/information?code="+code,
-                method:"get",
-                headers:{
-                    'Authorization':"Bearer "+localStorage.getItem("jwt")
-                }
-            }
-        ).then(
-            res=>{
-                setData(res.data)
-                setCode(res.data.code)
-                setCustomer(res.data.customer)
-                setPaid(res.data.paid)
-                setPaymentType(res.data.paymentType)
-            }
-        ).catch(err=>{alert(err);})
-  
-          
-    },[])
-    console.log(data);
-    return (
-      <div className='content'>
-        <div className="taskbar">
-                <h2>Thông tin phiếu chi</h2>
-                <Account
-                    name={localStorage.getItem("name")}
-                />
-            </div>
-            <div className='inside'>
-            {data !=null && <Form
-            {...layout}
-            form={form}
+      .catch((err) => {
+        setErr(true);
+      });
+  }, []);
+  const url = "/payment/modify/" + code;
+  return (
+    <div className="content">
+      <div className="taskbar">
+        {err && (
+          <Alert
+            message="Tạo thất bại"
+            showIcon
+            description="Chỉ quản trị viên mới có thể tạo được phiếu chi mới"
+            type="error"
             style={{
-              maxWidth: 600,
-              margin:"10px"
+              position: "absolute",
+              margin: "20%",
             }}
-            validateMessages={validateMessages}
-          >
-          {!error&& <ConfirmBox msg="Tạo không thành công" setConfirm={setError}/>}
-            <Form.Item
-              name="code"
-              label="Mã"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-              initialValue={data.code}
-            >
-              <Input 
-                disabled={true}
-                onChange={(e)=>{
-                  setCode(e.target.value);
-                }}
-              />
-            </Form.Item>
-            <Form.Item
-              name="paid"
-              label="Giá trị"
-              initialValue={data.paid}
-            >
-              <InputNumber
-              disabled={!adjust}
-              style={{width:"400px"}}
-                onChange={(e)=>{
-                  setPaid(e);
-                }}
-              />
-            </Form.Item>
-            <Form.Item
-            rules={[
-                {
-                  required: true,
-                },
-              ]}
-              name="customer"
-              label="Người trả"
-              initialValue={data.customer.name}
-            >
-              <Select
-                disabled={!adjust}
-                onSelect={(e)=>{
-                  setCustomer(e)
-                }}
-              >
-              {customerList.map(item=>{
-                return <Option key={item.code} >{item.name}</Option>
-              })}
-              </Select>
-            </Form.Item>
-            <Form.Item
-            rules={[
-                {
-                  required: true,
-                },
-              ]}
-              name="paymentType"
-              label="Hình thức thanh toán"
-              initialValue={data.paymentType.name}
-            >
-              <Select
-                disabled={!adjust}
-                onSelect={(e)=>{
-                  setPaymentType(e)
-                }}
-              >
-              {customerTypeList.map(item=>{
-                return <Option key={item.id} >{item.name}</Option>
-              })}
-              </Select>
-            </Form.Item>
-            <Form.Item
-            wrapperCol={{
-                ...layout.wrapperCol,
-                offset: 8,
-            }}
-            >
-            {!adjust && 
-            <>
-            <Button type="primary" onClick={()=>{setAdjust(!adjust)}}>
-                Chỉnh sửa
-            </Button>
-            {data!=null && <PDFDownloadLink document={<PDF data={data}/>} fileName='receipt'>
-                {({loading})=>(loading ? <p>loading...</p> : <Button type='primary' style={{ margin: "10px" }}>
-                      In
-                    </Button>)}
-            </PDFDownloadLink>}
-            </>
-            
-            }
-            {adjust && (
-              <>
-                <Button
-                type='primary'
-                  style={{ margin: "10px" }}
-                  onClick={handleSubmit}
-                  htmlType="submit"
-                >
-                  Xác nhận
-                </Button>
-                <Button onClick={() => window.location.reload()} type='primary' style={{ margin: "10px" }}>
-                  Hủy
-                </Button>
-              </>
-            )}
-            
-            </Form.Item>
-          </Form>}
-        </div>
+            closable
+          />
+        )}
+        <h2>Thông tin khách hàng</h2>
+        <Account name={localStorage.getItem("name")} />
       </div>
-    );
+      {err && <ExceptionBox url="/main" msg=<h2>Có lỗi xảy ra</h2> />}
+      {data.loading ? (
+        <Spin />
+      ) : (
+        <div className="inside" style={{ display: "block" }}>
+          <Space
+            direction="vertical"
+            style={{
+              width: "60vw",
+              backgroundColor: "white",
+              borderRadius: "10px",
+              padding: "15px",
+              display: "flex",
+            }}
+          >
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "80% 20%",
+              }}
+            >
+              <h2>Thông tin khách hàng</h2>
+              <div
+                style={{
+                  display: "grid",
+                    }}
+              >
+              <PDFDownloadLink document={<PDF data={data.data}/>} fileName='receipt'>
+                    <Button type="primary" style={{margin:"2px",width:"97%"}}>In</Button>
+            </PDFDownloadLink>
+                <Button type="primary" href={url} style={{margin:"2px"}}>
+                  Chỉnh sửa
+                </Button>
+                <Button type="primary" style={{backgroundColor:"red",margin:"2px"}} onClick={handleDelete}>
+                  Xóa
+                </Button>
+              </div>
+            </div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "20% 30% 20% 30%",
+              }}
+            >
+              <div >
+                <p>Mã phiếu chi</p>
+                <p>Ngày tạo</p>
+                <p>Giá trị</p>
+                <p>Hình thức thanh toán</p>
+                
+              </div>
+              <div style={{wordWrap:"break-word"}}>
+                <p>: {data.data.code}</p>
+                <p>: {Object.keys(data.data).length>0 ? data.data.created_date.substring(0,10)+" "+data.data.created_date.substring(11,19):undefined}</p>
+                <p>: {data.data.paid}</p>
+                <p>: {data.data.paymentType.name}</p>
+              </div>
+              <div style={{marginLeft:"10px"}}>
+                <p>Người quản lý</p>
+                <p>Người nhận</p>
+                <p>Trạng thái</p>
+              </div>
+              <div>
+                <p>
+                    : <a href={"/employee/information/  "+data.data.manager_code}>{data.data.manager}</a>
+
+                </p>
+                <p>: <a href={"/customer/information/"+data.data.customer.code}> {data.data.customer.name}</a> </p>
+                <p>:
+                <Tag color={data.data.status==="paid"? "green":"red"}>
+                {data.data.status === "paid" ? "Đã thanh toán" : "Chưa thanh toán"}
+                </Tag>
+                </p>
+              </div>
+            </div>
+          </Space>
+        </div>
+      )}
+    </div>
+  );
 }
-export default PaymentInformation;

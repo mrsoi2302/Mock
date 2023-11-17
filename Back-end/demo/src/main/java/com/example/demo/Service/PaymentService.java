@@ -21,29 +21,19 @@ public class PaymentService {
     public List<Payment> findAll(String manager){
         return paymentRepo.findAllByMananger(manager);
     }
-    public void deleteByCustomerCode(List<String> list) {
-        paymentRepo.deleteByCustomerCode(list);
-    }
-
     public List<Payment> list(String value, String manager, Date createdDate, PaymentType paymentType, String status, Pageable pageable) {
-        List<Payment> list=paymentRepo.list(value,createdDate,paymentType,status,pageable);
-        for(Payment i:list){
-            Customer customer=customerRepo.findByCode(i.getCustomer().getCode());
-            customer.setTotal(countBill(customer));
-        }
-        return list;
+        return paymentRepo.list(value,createdDate,paymentType,status,pageable);
     }
 
     public Payment findByCode(String code) {
         Payment payment=paymentRepo.findByCode(code);
-        Customer customer=customerRepo.findByCode(payment.getCustomer().getCode());
-        customer.setTotal(countBill(customer));
         return payment;
     }
 
     public void update(Payment payment) {
         Payment p=findByCode(payment.getCode());
         p.setPayment(payment);
+        paymentRepo.save(p);
     }
 
     public void deleteAllByCode(List<String> list) {
@@ -52,13 +42,7 @@ public class PaymentService {
 
     public void save(Payment payment) {
         paymentRepo.save(payment);
-        Customer customer=customerRepo.findByCode(payment.getCustomer().getCode());
-        customer.setTotal(countBill(customer));
     }
-    private Long countBill(Customer customer) {
-        return paymentRepo.countBill(customer);
-    }
-
     public List<Payment> findByType(String name) {
         return paymentRepo.findByType(name);
     }
@@ -77,5 +61,8 @@ public class PaymentService {
 
     public Payment findByCodeAndManager(String code, String manager) {
         return paymentRepo.findByCodeAndManager(code,manager);
+    }
+    public List<Payment> findByCustomer(Customer customer){
+        return paymentRepo.findByCustomer(customer);
     }
 }

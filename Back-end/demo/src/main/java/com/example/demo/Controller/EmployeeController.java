@@ -39,10 +39,11 @@ public class EmployeeController {
     }
     @PostMapping("/admin/create-one")
     public void create(@RequestBody Employee employee, HttpServletRequest request){
-        if (employee.getCode().isEmpty()||employee.getCode()==null){
+        if(employeeService.findByCode(employee.getCode())!=null&&employeeService.findByUsername(employee.getUsername())!=null) throw new CustomException("NV đã tồn tại",HttpStatus.BAD_REQUEST);
+        else    if (employee.getCode().isEmpty()||employee.getCode()==null){
             employee.setCode("EPL"+sequenceRepository.generate());
         }else if(employee.getCode().matches("^EPL.*")) throw new CustomException("Tiền tố EPL không hợp lệ", HttpStatus.BAD_REQUEST);
-        else if(employeeService.findByCode(employee.getCode())!=null) throw new CustomException("NV đã tồn tại",HttpStatus.BAD_REQUEST);
+        employee.setPassword(String.valueOf(employee.getPassword().hashCode()));
         employeeService.save(employee);
         String token = request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);
@@ -55,6 +56,7 @@ public class EmployeeController {
             if (i.getCode()==null||i.getCode().trim().isEmpty()){
                 int index=list.indexOf(i);
                 i.setCode("EPL"+sequenceRepository.generate());
+                i.setPassword(String.valueOf(i.getPassword().hashCode()));
                 list.set(index,i);
             }else if(i.getCode().matches("^EPL.*")) throw new CustomException("Tiền tố EPL không hợp lệ", HttpStatus.BAD_REQUEST);
             else if(employeeService.findByCode(i.getCode())!=null) throw new CustomException("NV đã tồn tại",HttpStatus.BAD_REQUEST);

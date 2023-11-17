@@ -2,6 +2,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.DataType.Value;
 import com.example.demo.Entities.Customer;
+import com.example.demo.Entities.CustomerType;
 import com.example.demo.Entities.Employee;
 import com.example.demo.Exceptions.CustomException;
 import com.example.demo.Repositories.HistoryRepository.HistoryRepository;
@@ -54,6 +55,7 @@ public class CustomerController {
                 value.getT().getBirthday_year(),
                 value.getT().getStatus(),
                 value.getT().getGender(),
+                value.getT().getCustomer_type(),
                 PageRequest.of(page,limit,sortObject));
     }
     @PostMapping("/count-list")
@@ -65,13 +67,16 @@ public class CustomerController {
             value.getT().setManager(t.getUsername());
             value.getT().setManager_code(t.getCode());
         }
-        return customerService.countList(value.getValue(),
+        return customerService.countList(
+                value.getValue(),
                 value.getT().getManager(),
                 value.getT().getBirthday_day(),
                 value.getT().getBirthday_month(),
                 value.getT().getBirthday_year(),
                 value.getT().getStatus(),
-                value.getT().getGender());
+                value.getT().getGender(),
+                value.getT().getCustomer_type()
+        );
     }
     @GetMapping("/information")
     public Customer information(@RequestParam String code,HttpServletRequest request){
@@ -81,18 +86,19 @@ public class CustomerController {
         Employee t=employeeService.findByUsername(username);
         if(t.getRole().equals("STAFF")){
             manager=t.getUsername();
+            if(customerService.findByCodeAndManager(code,manager)==null) throw new CustomException("Không tồn tại", HttpStatus.NOT_FOUND);
         }
-        if(customerService.findByCodeAndManager(code,manager)==null) throw new CustomException("Không tồn tại", HttpStatus.NOT_FOUND);
+            if(customerService.findByCode(code)==null) throw new CustomException("Không tồn tại", HttpStatus.NOT_FOUND);
         return customerService.findByCode(code);
     }
     @PostMapping("staff/create-one")
     public void create(@RequestBody Customer customer, HttpServletRequest request){
-        if(!customer.getContact().matches("^[0-9]+$\n")) throw new CustomException("SĐT không hợp lệ",HttpStatus.BAD_REQUEST);
+        if(!customer.getContact().matches("^\\d+$")) throw new CustomException("SĐT không hợp lệ",HttpStatus.BAD_REQUEST);
+        if(customerService.findByCode(customer.getCode())!=null) throw new CustomException("KH đã tồn tại",HttpStatus.BAD_REQUEST);
         if(!customer.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) throw new CustomException("Email không hợp lệ", HttpStatus.BAD_REQUEST);
         if(customer.getCode()==null){
             customer.setCode("CTM"+sequenceRepository.generate());
         }else if(customer.getCode().matches("^CTM.*")) throw new CustomException("Tiền tố CTM không hợp lệ", HttpStatus.BAD_REQUEST);
-        else if(customerService.findByCode(customer.getCode())!=null) throw new CustomException("KH đã tồn tại",HttpStatus.BAD_REQUEST);
         String token = request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);
         Employee t=employeeService.findByUsername(username);
@@ -109,12 +115,12 @@ public class CustomerController {
         Employee t=employeeService.findByUsername(username);
         for(Customer i:list){
             int index=list.indexOf(i);
-            if(!i.getContact().matches("^[0-9]+$\n")) throw new CustomException("SĐT không hợp lệ",HttpStatus.BAD_REQUEST);
+            if(!i.getContact().matches("^\\d+$")) throw new CustomException("SĐT không hợp lệ",HttpStatus.BAD_REQUEST);
+            if(customerService.findByCode(i.getCode())!=null) throw new CustomException("KH đã tồn tại",HttpStatus.BAD_REQUEST);
             if(!i.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) throw new CustomException("Email không hợp lệ", HttpStatus.BAD_REQUEST);
             if (i.getCode()==null){
                 i.setCode("CTM"+sequenceRepository.generate());
             }else if(i.getCode().matches("^CTM.*")) throw new CustomException("Tiền tố CTM không hợp lệ", HttpStatus.BAD_REQUEST);
-            else if(customerService.findByCode(i.getCode())!=null) throw new CustomException("KH đã tồn tại",HttpStatus.BAD_REQUEST);
             i.setManager(t.getUsername());
             i.setCreated_date(new Date(System.currentTimeMillis()+(1000*60*60*7)));
             i.setCreated_date1(new Date(System.currentTimeMillis()));
@@ -128,7 +134,7 @@ public class CustomerController {
     }
     @PutMapping("/admin")
     public void update(@RequestBody Customer customer,HttpServletRequest request){
-        if(!customer.getContact().matches("^[0-9]+$\n")) throw new CustomException("SĐT không hợp lệ",HttpStatus.BAD_REQUEST);
+        if(!customer.getContact().matches("^\\d+$")) throw new CustomException("SĐT không hợp lệ",HttpStatus.BAD_REQUEST);
         if(!customer.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) throw new CustomException("Email không hợp lệ", HttpStatus.BAD_REQUEST);
         customerService.update(customer);
         String token = request.getHeader("Authorization").substring(7);
@@ -137,7 +143,7 @@ public class CustomerController {
         historyRepository.save(t.getCode(),t.getName(),"đã cập nhật khách hàng "+customer.getCode());
     }
     @PostMapping("/create-payment")
-    public List<Customer> forCreatePayment(HttpServletRequest request){
+    public List<Customer> forCreatePayment(@RequestBody CustomerType customerType, HttpServletRequest request){
         String manager=null;
         String token = request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);
@@ -145,7 +151,7 @@ public class CustomerController {
         if(t.getRole().equals("STAFF")){
             manager=t.getUsername();
         }
-        return customerService.findForPayment(manager);
+        return customerService.findForPayment(customerType,manager);
     }
     @DeleteMapping("/admin")
     @Transactional

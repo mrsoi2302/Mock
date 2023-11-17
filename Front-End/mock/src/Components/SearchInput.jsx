@@ -9,7 +9,7 @@ function SearchInput(props) {
   return (
     <div
       style={{
-        position: "fixed",
+        position: "absolute",
         marginTop: "12vh",
         left: "30vw",
         display: "grid",

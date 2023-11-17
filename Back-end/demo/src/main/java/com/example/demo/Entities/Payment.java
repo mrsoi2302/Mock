@@ -39,5 +39,6 @@ public class Payment {
         this.paymentType = payment.paymentType;
         this.manager=payment.manager;
         this.manager_code=payment.manager_code;
+        this.status=payment.status;
     }
 }

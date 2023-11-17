@@ -22,9 +22,9 @@ const items = [
     getItem(<a href="/customer-type">Nhóm khách hàng</a>, "customer-type"),
   ]),
   getItem(<strong>Sổ quỹ</strong>, "cash", null, [
-    getItem(<a href="/payment-list">Danh sách phiếu chi</a>, "payment-list"),
+    getItem(<a href="/payment-table">Danh sách phiếu chi</a>, "payment-list"),
     getItem(<a href="/create-payment">Tạo phiếu chi</a>, "create-payment"),
-    getItem(<a href="/receipt-list">Danh sách phiếu thu</a>, "receipt-list"),
+    getItem(<a href="/receipt-table">Danh sách phiếu thu</a>, "receipt-list"),
     getItem(<a href="/create-receipt">Tạo phiếu thu</a>, "create-receipt"),
   ]),
   getItem(<strong>Quản lý nhân viên</strong>, "employee", null, [

@@ -23,7 +23,6 @@ export default function CreateEmployee() {
     localStorage.setItem("selected", "create-employee");
   }, []);
   const handleSubmit = (e) => {
-    console.log(e);
     form
     .validateFields()
     axios({
@@ -69,6 +68,7 @@ export default function CreateEmployee() {
 
         <Form
           form={form}
+          onFinish={handleSubmit}
           layout="vertical"
           style={{
             maxWidth: "100%",
@@ -172,7 +172,6 @@ export default function CreateEmployee() {
               type="primary"
               htmlType="submit"
               style={{ margin: "10px" }}
-              onClick={handleSubmit}
             >
               Tạo mới
             </Button>

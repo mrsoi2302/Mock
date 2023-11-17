@@ -71,19 +71,20 @@
     align-items: center;
     float: right;
     justify-content: space-between;
-    z-index: 1;
+    z-index: 1000000;
 }
 .content{
     position: absolute;
     background-color: gainsboro;
     border-style:unset;
-    width: 100vw;
+    width: 100%;
     min-height: 100vh;
     display:flex;
     flex-wrap: wrap;
     box-sizing: inherit;
     align-self: center;
     z-index: -1;
+    padding-bottom: 10vh;
 }
 .inside{
     position: relative;

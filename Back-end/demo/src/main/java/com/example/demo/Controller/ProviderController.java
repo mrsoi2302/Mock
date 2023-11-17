@@ -27,6 +27,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/provider")
 @AllArgsConstructor
+@Transactional
 public class ProviderController {
     private final ProviderService providerService;
     private TokenProvider tokenProvider;
@@ -51,8 +52,7 @@ public class ProviderController {
         sortParams[1]=sortParams[1].equals("ascend")? "asc":"desc";
         Sort.Direction sortOrder=sortParams[1].equals("asc")? Sort.Direction.ASC: Sort.Direction.DESC;
         Sort sortObject=Sort.by(sortOrder,sortParams[0]);
-        System.out.println(value);
-        return providerService.list(value.getValue(),value.getT().getManager(),value.getT().getCreated_date(),value.getT().getProvider_type().getContent(),value.getT().getStatus());
+        return providerService.list(value.getValue(),value.getT().getManager(),value.getT().getCreated_date(),value.getT().getProvider_type().getContent(),value.getT().getStatus(),PageRequest.of(page,limit,sortObject));
     }
     @PostMapping("/count-list")
     public Long countList(@RequestBody Value<Provider> value,HttpServletRequest request){

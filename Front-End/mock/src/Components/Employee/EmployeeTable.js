@@ -34,6 +34,7 @@ export default function EmployeeTable() {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
+  const[index,setIndex]=useState(true)
   let columns = [
     {
       title: "Mã nhân viên",
@@ -111,7 +112,7 @@ export default function EmployeeTable() {
       .catch((err) => {
         setErr(true);
       });
-  }, [role, value, loading, inputFile]);
+  }, [role, value, loading, inputFile,index]);
   const handleButton = (e) => {
     setLoading(true);
     axios({
@@ -122,7 +123,10 @@ export default function EmployeeTable() {
       },
       data: selectedRowKeys,
     })
-      .then(setLoading(!loading))
+      .then(res=>{
+        setIndex(!index)
+        setSelectedRowKeys([])
+      })
       .catch((err) => setErr(true));
   };
   let eRole;
@@ -288,13 +292,13 @@ export default function EmployeeTable() {
           msg=<div>
             <p>
               Thực hiện theo bản mẫu{" "}
-              <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vSU4DpL4BIBoTkI7VzYbgHJn8h47KssO4RxiMp0lHczRDXccOdKzAE-OnWpWLXaug2q_gU6ggrzxA-A/pub?output=xlsx">
+              <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vTsZ_SPfjI3IUvqNr-3H-dZM_yhrSAuao6HG-Z1UaWYisYQk7Y47tQI9lGHA_GWd_xM9rtdUAWzo-yw/pub?output=xlsx">
                 {" "}
                 Tại đây
               </a>
             </p>
-            <p>Mã nhân viên không được chứa tiền tố "EPL"</p>
-            <p>Chỉ được sử dụng 2 vai trò là "STAFF" và "USER"</p>
+            <p>Mã khách hàng không được chứa tiền tố "CTM"</p>
+            <p>Nhóm khách hàng phải được đặt đúng theo các nhóm khách hàng đã tạo</p>
           </div>
         />
       )}

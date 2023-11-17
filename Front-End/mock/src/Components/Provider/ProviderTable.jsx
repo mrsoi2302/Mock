@@ -163,7 +163,7 @@ function ProviderTable(props) {
       .catch((err) => {
         setErr(true);
       });
-  }, [status,created_date,value, loading, inputFile,provider_type,index,sort]);
+  }, [status,created_date,value, loading, inputFile,provider_type,index,sort,page,limit]);
   const handleButton = () => {
     axios({
       url: baseURL + "/provider/admin",
@@ -173,7 +173,9 @@ function ProviderTable(props) {
       },
       data: selectedRowKeys,
     })
-      .then((res)=>{setIndex(!index)})
+      .then((res)=>{
+        setIndex(!index)
+        setSelectedRowKeys([])})
       .catch((err) => setErr(true));
   };
   let edate, estatus;

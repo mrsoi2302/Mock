@@ -21,6 +21,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/customer-type")
+@Transactional
 public class CustomerTypeController {
     private HistoryRepository historyRepository;
     private EmployeeService employeeService;

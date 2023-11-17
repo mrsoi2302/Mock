@@ -1,310 +1,185 @@
-import React, { useEffect, useState } from 'react';
-import { Button, DatePicker, Form, Input, InputNumber, Select, Space } from 'antd';
-import dayjs from 'dayjs';
-import Account from '../Account';
-import axios from 'axios';
-import { Option } from 'antd/es/mentions';
-const layout = {
-  labelCol: {
-    span: 8,
-  },
-  wrapperCol: {
-    span: 16,
-  },
-};
-/* eslint-disable no-template-curly-in-string */
-const validateMessages = {
-  required: '${label} is required!',
-};
-/* eslint-enable no-template-curly-in-string */
+import { Alert, Button, Card, Space, Spin, Tag } from "antd";
+import React, { useEffect, useState } from "react";
+import "../style.css";
+import Account from "../Account";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { baseURL } from "../../Config";
+import { Token } from "../../Token";
+import ExceptionBox from "../ExceptionBox";
+import PaymentList from "./PaymentList";
+export default function CustomerInformation() {
+  document.title="Thông tin nhân viên"
+  const navigate = useNavigate();
+  const { code } = useParams();
+  localStorage.setItem("open", "customer");
+  localStorage.setItem("selected", "customer-list");
+  const[payments,setPayments]=useState([])
+  const [data, setData] = useState({
+    data: {},
+    loading: true,
+  });
+  const [err, setErr] = useState(false);
 
-const onFinish = (values) => {
-  console.log(values);
-};
-function CustomerInformation() {
-    document.title="Thông tin khách hàng"
-    const dateFormat = 'YYYY-MM-DD';
-    const [form] = Form.useForm();
-    const [data, setData] = useState();
-    const [adjust, setAdjust] = useState(false);
-    const [code, setCode] = useState(window.location.pathname.substring(22));
-    const [name, setName] = useState();
-    const [gender,setGender]=useState()
-    const [contact, setContact] = useState();
-    const [status, setStatus] = useState();
-    const [birthday,setBirthday]=useState();
-    const [customerType,setCustomerType]=useState();
-    const [dataType,setDataType]=useState();
-    const onChange = (date, dateString) => {
-      setBirthday(dateString)
-      console.log(birthday);
-  };
-  const handleSubmit=(e)=>{
-    console.log(birthday);
-    
-    if(birthday!=null){const obj={
-      code:code,
-      name:name,
-      contact:contact,
-      gender:gender,
-      customerType:customerType,
-      status:status,
-      birthday_year:birthday.substring(0,4),
-      birthday_month:birthday.substring(5,7),
-      birthday_day:birthday.substring(8,10)
-    }
-    e.preventDefault();
-    form
-      .validateFields()
-      .then(() => {
-        axios(
-          {
-            url:"http://localhost:8080/admin/customer",
-            method:"PUT",
-            headers:{
-              "Authorization":"Bearer " + localStorage.getItem("jwt")
-            },
-            data:obj
-          }
-        ).then(()=>{
-          alert("Thanh cong")
-          window.location.reload()
-        }).catch(
-          ()=>
-          {alert("Chỉnh sửa thất bại")}
-        ) 
+  const handleDelete = () => {
+    axios({
+      url: baseURL + "/customer/admin",
+      method: "delete",
+      headers: {
+        Authorization: Token,
+      },
+      data: [code],
+    })
+      .then((res) => {
+        navigate("/customer-table");
       })
-      .catch((errorInfo) => {
-        console.log("Validation Failed:", errorInfo);
+      .catch((err) => {
+        setErr(true);
       });
-  }
-  }
-    useEffect(()=>{
-      axios(
-        {
-          url:"http://localhost:8080/customer-type/show-all",
-          method:"get",
-          headers:{
-              "Authorization":"Bearer "+localStorage.getItem("jwt"),
-          },
-        }
-      ).then(res=>{
-        setDataType(res.data)
-      
-      }
-      ).catch(err=>{
-        console.log(err);
+  };
+  useEffect(() => {
+    axios({
+      url:
+        baseURL +
+        "/payment/list",
+      method: "post",
+      headers: {
+        Authorization: Token,
+      },
+      data: {
+        value:null,
+        t:{
+          customer:{
+            code:code
+          }
+        },
+      },
+    })
+      .then((res) => {
+        setPayments(res.data)
       })
-        axios(
-            {
-                url:"http://localhost:8080/customer/information?code="+code,
-                method:"get",
-                headers:{
-                    'Authorization':"Bearer "+localStorage.getItem("jwt")
-                }
-            }
-        ).then(
-            res=>{
-                setData(res.data)
-                setName(res.data.name)
-                setContact(res.data.contact)
-                setGender(res.data.gender)
-                setCustomerType(res.data.customerType)
-                setStatus(res.data.status) 
-                if(res.data.birthday_day<10 && res.data.birthday_month>=10){setBirthday(res.data.birthday_year+"-"+res.data.birthday_month+"-0"+res.data.birthday_day);}
-                else if(res.data.birthday_day>=10 && res.data.birthday_month<10){setBirthday(res.data.birthday_year+"-0"+res.data.birthday_month+"-"+res.data.birthday_day)}
-                else if(res.data.birthday_day<10 && res.data.birthday_month<10){setBirthday(res.data.birthday_year+"-0"+res.data.birthday_month+"-0"+res.data.birthday_day)}
-                else{setBirthday(res.data.birthday_year+"-"+res.data.birthday_month+"-"+res.data.birthday_day)}
-                
-            }
-        ).catch(err=>{console.log(err);})
-  
-          
-    },[])
-    console.log(data);
-    return(
+      .catch((err) => {
+        setErr(true);
+      });
+    axios({
+      url: baseURL + "/customer/information?code=" + code,
+      method: "get",
+      headers: {
+        Authorization: Token,
+      },
+    })
+      .then((res) => {
+        setData({
+          data: res.data,
+          loading: false,
+        });
+      })
+      .catch((err) => {
+        setErr(true);
+      });
+  }, []);
+  const url = "/customer/modify/" + code;
+  return (
     <div className="content">
       <div className="taskbar">
-        <h2>Thông tin khách hàng</h2>
+        {err && (
+          <Alert
+            message="Tạo thất bại"
+            showIcon
+            description="Chỉ quản trị viên mới có thể tạo được nhân viên mới"
+            type="error"
+            style={{
+              position: "absolute",
+              margin: "20%",
+            }}
+            closable
+          />
+        )}
+        <h2>Thông tin khách hàng</h2>
         <Account name={localStorage.getItem("name")} />
       </div>
-      <div className="inside">
-      {data!=null && <Form
-            {...layout}
-            form={form}
-            name="nest-messages"
-            onFinish={onFinish}
+      {err && <ExceptionBox url="/main" msg=<h2>Có lỗi xảy ra</h2> />}
+      {data.loading ? (
+        <Spin />
+      ) : (
+        <div className="inside" style={{ display: "block" }}>
+          <Space
+            direction="vertical"
             style={{
-            maxWidth: 600,
+              width: "60vw",
+              backgroundColor: "white",
+              borderRadius: "10px",
+              padding: "15px",
+              display: "flex",
             }}
-            validateMessages={validateMessages}
-        >
-            <Form.Item
-            name={['user', 'code']}
-            label="Mã khách hàng"
-            rules={[
-                {
-                required: true,
-                },
-            ]}
-            initialValue={data.code}
+          >
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "80% 20%",
+              }}
             >
-            <Input 
-                disabled={true}
-            />
-            </Form.Item>
-            <Form.Item
-            name={['user', 'name']}
-            label="Họ tên"
-            rules={[
-                {
-                required:true   
-                },
-            ]}
-            initialValue={data.name}
-            >
-
-            <Input
-                name="name"
-                disabled={!adjust}
-                onChange={e=>{setName(e.target.value)}}
-            />
-            </Form.Item>
-            <Form.Item
-        name="gender"
-        label="Giới tính"
-        rules={[
-          {
-            required: true,
-          },
-        ]}
-        initialValue={data.gender}
-        
-      >
-        <Select
-        disabled={!adjust}
-        
-        style={{width:"100px",float:'left'}}
-          allowClear
-          onSelect={(e)=>{
-            setGender(e)
-          }}
-        >
-          <Option value="male">Nam</Option>
-          <Option value="female">Nữ</Option>
-          <Option value="LGBT">LGBT</Option>
-        </Select>
-      </Form.Item>
-            <Form.Item
-              name="contact"
-              label="Số điện thoại"
-              rules={[
-                {
-                  pattern:"^\\d+$",
-                  required: true,
-                  message:"Số điện thoại không hợp lệ"
-                },
-              ]}
-              
-              initialValue={data.contact}
-            >
-              <Input
-              disabled={!adjust}  
-                onChange={(e)=>{
-                  setContact(e.target.value);
-                }}
-              />
-            </Form.Item>
-            <Form.Item
-              name="birthday"
-              label="Sinh nhật"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-              initialValue={dayjs(data.birthday_year+"-"+data.birthday_month+"-0"+data.birthday_day,dateFormat)}
-            >
-              {data.birthday_day<10 && data.birthday_month>=10 && <Space direction="vertical" style={{float:"left"}} >
-    
-                    <DatePicker disabled={!adjust} onChange={onChange} defaultValue={dayjs(data.birthday_year+"-"+data.birthday_month+"-0"+data.birthday_day,dateFormat)} />
-              </Space>}
-              {data.birthday_day<10 && data.birthday_month<10 && <Space direction="vertical" style={{float:"left"}}>
-                    <DatePicker disabled={!adjust} onChange={onChange} defaultValue={dayjs(data.birthday_year+"-0"+data.birthday_month+"-0"+data.birthday_day,dateFormat)} />
-              </Space>}
-              {data.birthday_month<10 && data.birthday_day>10 && <Space direction="vertical" style={{float:"left"}}>
-                    <DatePicker disabled={!adjust} onChange={onChange} defaultValue={dayjs(data.birthday_year+"-0"+data.birthday_month+"-"+data.birthday_day,dateFormat)} />
-              </Space>}
-              {data.birthday_day>=10 && data.birthday_month>=10 && <Space direction="vertical" style={{float:"left"}}>
-                    <DatePicker disabled={!adjust} onChange={onChange} defaultValue={dayjs(data.birthday_year+"-"+data.birthday_month+"-"+data.birthday_day,dateFormat)} />
-              </Space>}
-            </Form.Item>
-            <Form.Item name={['user', 'debt']} label="Công nợ" initialValue={data.debt}>
-            <InputNumber disabled={true} style={{width:"400px"}}/>
-            </Form.Item>
-            {dataType!=null && <Form.Item initialValue={data.customerType.name} name={['user', 'customerType']} label="Nhóm khách hàng">
-              <Select
-              disabled={!adjust}
-                onSelect={(e)=>{
-                  setCustomerType(e)
+              <h2>Thông tin khách hàng</h2>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateRows: "50% 50%",
                 }}
               >
-              {dataType.map(item=>{
-                return <Option key={item.id} >{item.name}</Option>
-              })}
-              </Select>
-            </Form.Item>}
-            <Form.Item label="Trạng thái">
-              <Select
-              defaultValue={data.status.name}
-              disabled={!adjust}
-              style={{width:"100px",float:"left"}}
-                allowClear
-                onSelect={(e)=>{
-                  if(e==='active') {setStatus({
-                    id:1,
-                    name:e
-                  })}else if(e==='non-active'){
-                    setStatus({
-                      id:2,
-                      name:e
-                    })
-                  }else setStatus(null)
-                }}
-              
-              > 
-                <Option value='null'>Null</Option>
-                <Option value="active">active</Option>
-                <Option value="non-active">non-active</Option>
-              </Select>
-            </Form.Item>
-            <Form.Item
-            wrapperCol={{
-                ...layout.wrapperCol,
-                offset: 8,
-            }}
+                <Button type="primary" href={url}>
+                  Chỉnh sửa
+                </Button>
+                <Button type="link" onClick={handleDelete}>
+                  Xóa
+                </Button>
+              </div>
+            </div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "20% 30% 20% 30%",
+              }}
             >
-            {!adjust && <Button type="primary" onClick={()=>{setAdjust(!adjust)}}>
-                Chỉnh sửa
-            </Button>}
-            {adjust && (
-              <>
-                <Button
-                  style={{ margin: "10px" }}
-                  onClick={handleSubmit}
-                  htmlType="submit"
-                >
-                  Xác nhận
-                </Button>
-                <Button onClick={() => window.location.reload()} style={{ margin: "10px" }}>
-                  Hủy
-                </Button>
-              </>
-            )}
-            </Form.Item>
-        </Form>}
-      </div>
+              <div >
+                <p>Tên khách hàng</p>
+                <p>Giới tính</p>
+                <p>Ngày sinh</p>
+                <p>Mã khách hàng</p>
+                <p>Số điện thoại</p>
+                <p>Email</p>
+                
+              </div>
+              <div style={{wordWrap:"break-word"}}>
+                <p>: {data.data.name}</p>
+                <p>: {data.data.gender}</p>
+                <p>: {Object.keys(data.data).length>0 ? data.data.birthday.substring(0,10):undefined}</p>
+                <p>: {data.data.code}</p>
+                <p>: {data.data.contact}</p>
+                <p>: {data.data.email}</p>
+              </div>
+              <div style={{marginLeft:"10px"}}>
+                <p>Ngày tạo</p>
+                <p>Tổng giao dịch</p>
+                <p>Người quản lý</p>
+                <p>Trạng thái</p>
+                <p>Nhóm khách hàng</p>
+                <p>: {data.data.customer_type.content}</p>
+              </div>
+              <div s>
+                <p>: {Object.keys(data.data).length>0 ? data.data.created_date.substring(0,10):undefined}</p>
+                <p>: {data.data.total}</p>
+                <a href={"/employee/information/"+data.data.manager_code}>: {data.data.manager}</a>
+                <p>: 
+                <Tag color={data.data.status==="active"? "green":"red"}>
+                {data.data.status === "active" ? "Đã kích hoạt" : "Chưa kích hoạt"}
+                </Tag>
+                </p>
+              </div>
+            </div>
+          </Space>
+          <PaymentList data={payments}/>
+        </div>
+      )}
     </div>
-    )
+  );
 }
-export default CustomerInformation;

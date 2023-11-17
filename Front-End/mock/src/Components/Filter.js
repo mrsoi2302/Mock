@@ -12,10 +12,6 @@ export default function Filter(props) {
   const handleMenuClick = (e) => {
     props.setOpen(!props.open);
   };
-  const onChange = (date, dateString) => {
-    setCreatedDate(dateString);
-  };
-
   const items = props.items;
 
   return (
@@ -30,7 +26,6 @@ export default function Filter(props) {
         }}
       >
         <Button
-          onClick={handleMenuClick}
           type="text"
           style={{
             width: "100%",
@@ -38,6 +33,7 @@ export default function Filter(props) {
             backgroundColor: "gainsboro",
             boxShadow: "none",
           }}
+          onClick={handleMenuClick}
         >
           Bộ lọc
           <DownOutlined />

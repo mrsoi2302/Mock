@@ -1,6 +1,8 @@
 package com.example.demo.Entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
@@ -20,6 +22,7 @@ public class ProviderType {
     private Long id;
     private String code;
     private String content;
+    @JsonIgnore
     @OneToMany(mappedBy ="provider_type",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     List<Provider> providers;
 }

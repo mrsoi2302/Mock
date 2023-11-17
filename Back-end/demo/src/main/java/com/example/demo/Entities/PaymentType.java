@@ -1,5 +1,6 @@
 package com.example.demo.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,8 +19,10 @@ public class PaymentType {
     private Long id;
     @Column(nullable = false,unique = true)
     private String name;
+    @JsonIgnore
     @OneToMany(mappedBy = "paymentType",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<Payment> payments;
+    @JsonIgnore
     @OneToMany(mappedBy = "payment_type",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<Receipt> receipts;
 

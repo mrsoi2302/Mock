@@ -5,6 +5,7 @@ import axios from "axios";
 import { baseURL } from "../Config";
 import ExceptionBox from "./ExceptionBox";
 import { Spin } from "antd";
+import { Token } from "../Token";
 
 export default function Main(props) {
   const [trading, setTrading] = useState({
@@ -25,37 +26,36 @@ export default function Main(props) {
   });
   const [err, setErr] = useState(false);
   document.title = "Trang chủ";
-  useEffect(() => {
+  useEffect( () => {
     localStorage.removeItem("open");
     localStorage.removeItem("selected");
+    let x=0,y=0
     axios({
       url: baseURL + "/receipt/count-trade",
       method: "get",
       headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
+        Authorization: Token,
       },
     })
-      .then((res) => {
-        setTrading({
-          trading: trading.data + res.data,
-          loading: true,
-        });
-      })
-      .catch((err) => {
-        setErr(true);
-      });
-    axios({
-      url: baseURL + "/payment/count-trade",
-      method: "get",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-    })
-      .then((res) => {
-        setTrading({
-          data: trading.data + res.data,
-          loading: false,
-        });
+      .then((ress) => {
+        axios({
+          url: baseURL + "/payment/count-trade",
+          method: "get",
+          headers: {
+            Authorization: Token,
+          },
+        })
+          .then((res) => {
+            setTrading({
+              data: ress.data + res.data,
+              loading: false,
+            });
+            console.log(trading)
+          })
+          
+          .catch((err) => {
+            setErr(true);
+          });
       })
       .catch((err) => {
         setErr(true);
@@ -64,120 +64,90 @@ export default function Main(props) {
       url: baseURL + "/receipt/count-list",
       method: "post",
       headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
+        Authorization: Token,
       },
       data: {
         value: null,
         t: {
-          status: "Chưa thanh toán",
+          status: "unpaid",
         },
       },
     })
-      .then((res) => {
-        setIncomplete({
-          data: incomplete.data + res.data,
-          loading: false,
-        });
+      .then((ress) => {
+        axios({
+          url: baseURL + "/payment/count-list",
+          method: "post",
+          headers: {
+            Authorization: Token,
+          },
+          data: {
+            value: null,
+            t: {
+              status: "unpaid",
+            },
+          },
+        })
+          .then((res) => {
+            setIncomplete({
+              data: ress.data + res.data,
+              loading: false,
+            });
+          })
+          .catch((err) => {
+            setErr(true);
+          });
       })
       .catch((err) => {
         setErr(true);
       });
-    axios({
-      url: baseURL + "/payment/count-list",
-      method: "post",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-      data: {
-        value: null,
-        t: {
-          status: "Chưa thanh toán",
-        },
-      },
-    })
-      .then((res) => {
-        setIncomplete({
-          data: incomplete.data + res.data,
-          loading: false,
-        });
-      })
-      .catch((err) => {
-        setErr(true);
-      });
-    axios({
-      url: baseURL + "/customer/count-list",
-      method: "post",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-      data: {
-        value: null,
-        t: {
-          status: "Chưa kích hoạt",
-        },
-      },
-    })
-      .then((res) => {
-        setUnactive({
-          data: unactive.data + res.data,
-          loading: false,
-        });
-      })
-      .catch((err) => {
-        setErr(true);
-      });
+    
     axios({
       url: baseURL + "/provider/count-list",
       method: "post",
       headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
+        Authorization: Token,
       },
       data: {
         value: null,
         t: {
-          status: "Chưa kích hoạt",
+          status: "non-active",
           provider_type:{
-            content:null
           }
         },
       },
     })
       .then((res) => {
-        setUnactive({
-          data: unactive.data + res.data,
-          loading: false,
-        });
-      })
-      .catch((err) => {
-        setErr(true);
-      });
-    axios({
-      url: baseURL + "/customer/count-list",
-      method: "post",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-      data: {
-        value: null,
-        t: {
-          status: "Chưa kích hoạt",
-        },
-      },
-    })
-      .then((res) => {
-        setUnactive({
-          data: incomplete.data + res.data,
-          loading: false,
-        });
+        axios({
+          url: baseURL + "/customer/count-list",
+          method: "post",
+          headers: {
+            Authorization: Token,
+          },
+          data: {
+            value: null,
+            t: {
+              status: "non-active",
+            }, 
+          },
+        })
+          .then((ress) => {
+            setUnactive({
+              data:ress.data+res.data,
+              loading:false
+            })
+            console.log(ress.data+res.data);
+          })
+          .catch((err) => {
+            setErr(true);
+          });
       })
       .catch((err) => {
         setErr(true);
       });
     var date = new Date(),
       month = "" + (date.getMonth() + 1),
-      day = "" + (date.getDate() + 1),
+      day = "" + (date.getDate()),
       year = date.getFullYear();
-
     if (month.length < 2) month = "0" + month;
     if (day.length < 2) day = "0" + day;
     var dateString = year + "-" + month + "-" + day;
@@ -185,7 +155,7 @@ export default function Main(props) {
       url: baseURL + "/payment/count-list",
       method: "post",
       headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
+        Authorization: Token,
       },
       data: {
         value: null,
@@ -195,32 +165,28 @@ export default function Main(props) {
       },
     })
       .then((res) => {
-        setBillToday({
-          data: billToday.data + res.data,
-          loading: false,
-        });
-      })
-      .catch((err) => {
-        setErr(true);
-      });
-    axios({
-      url: baseURL + "/payment/count-list",
-      method: "post",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-      data: {
-        value: null,
-        t: {
-          created_date: dateString,
-        },
-      },
-    })
-      .then((res) => {
-        setBillToday({
-          data: billToday.data + res.data,
-          loading: false,
-        });
+        axios({
+          url: baseURL + "/receipt/count-list",
+          method: "post",
+          headers: {
+            Authorization: Token,
+          },
+          data: {
+            value: null,
+            t: {
+              created_date: dateString,
+            },
+          },
+        })
+          .then((ress) => {
+            setBillToday({
+              data:ress.data + res.data,
+              loading: false,
+            });
+          })
+          .catch((err) => {
+            setErr(true);
+          });
       })
       .catch((err) => {
         setErr(true);
@@ -239,7 +205,7 @@ export default function Main(props) {
           <img src="https://i.pinimg.com/originals/af/87/58/af875899c939bc45c1e41827173a6444.png" />
           <div style={{ color: "rgba(255,184,228,255)" }}>
             <p>Tổng giao dịch</p>
-            {trading.loading ? <Spin /> : <h3>{trading.data}</h3>}
+            {trading.loading ? <Spin /> : <h3>{trading.data===''? 0:trading.data}</h3>}
           </div>
         </div>
         <div className="grid">

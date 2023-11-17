@@ -15,6 +15,16 @@ import ModifyProvider from './Components/Provider/ModifyProvider';
 import ProviderType from './Components/Provider/ProviderType';
 import CustomerTable from './Components/Customer/CustomerTable';
 import CreateCustomer from './Components/Customer/CreateCustomer';
+import CustomerInformation from './Components/Customer/CustomerInformation';
+import ModifyCustomer from './Components/Customer/ModifyCustomer';
+import CustomerType from './Components/Customer/CustomerType';
+import PaymentTable from './Components/Payment/PaymentTable';
+import PaymentInformation from './Components/Payment/PaymentInformation';
+import CreatePayment from './Components/Payment/CreatePayment';
+import ModifyPayment from './Components/Payment/ModifyPayment';
+import ReceiptTable from './Components/Receipt/ReceiptTable';
+import ReceiptInformation from './Components/Receipt/ReceiptInformation';
+import ModifyReceipt from './Components/Receipt/ModifyReceipt';
 
 function App(){
   return(
@@ -38,15 +48,26 @@ function App(){
           <Route path='/provider-type' element={<ProviderType/>}/>
           <Route path='/customer-table' element={<CustomerTable/>}/>
           <Route path='/create-customer' element={<CreateCustomer />}/>
+          <Route path='/customer/information/:code' element={<CustomerInformation/>}/>
+          <Route path='/customer/modify/:code' element={<ModifyCustomer/>}/>
+          <Route path='/customer-type' element={<CustomerType/>}/>
+          <Route path='/payment-table' element={<PaymentTable/>}/>
+          <Route path='/payment/information/:code' element={<PaymentInformation/>}/>
+          <Route path='/create-payment' element={<CreatePayment/>}/>
+          <Route path='/payment/modify/:code' element={<ModifyPayment/>}/>  
+          <Route path='/receipt-table' element={<ReceiptTable/>}/>
+          <Route path='/receipt/information/:code' element={<ReceiptInformation/>}/>
+          <Route path='/create-receipt' element={<CreatePayment/>}/>
+          <Route path='/receipt/modify/:code' element={<ModifyReceipt/>}/>  
           {/*<Route path='/provider-list' element={<ProviderList />}/>
           
          
-          <Route path='/customer-information/*' element={<CustomerInformation />}/>
+          
           <Route path='/customer-type' element={<CustomerTypeList />}/>
           <Route path='/create-customer-type' element={<CreateCustomerType />}/>
-          <Route path='/payment-list' element={<PaymentList/>}/>
-          <Route path='/create-payment' element={<CreatePayment/>}/>
-          <Route path='/payment-information/*' element={<PaymentInformation/>}/>
+          
+          
+          
           <Route path='/receipt-list' element={<ReceiptList/>}/>
           <Route path='/create-receipt' element={<CreateReceipt/>}/>
           <Route path='/receipt-information/*' element={<ReceiptInformation/>}/>

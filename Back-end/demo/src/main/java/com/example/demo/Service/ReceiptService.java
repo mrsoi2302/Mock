@@ -27,7 +27,7 @@ public class ReceiptService {
         for(Receipt i:list){
             Provider provider=providerRepo.findByCode(i.getProvider().getCode());
             provider.setTotal(countBill(provider));
-
+            providerRepo.save(provider);
         }
         return list;
     }

@@ -1,6 +1,7 @@
 package com.example.demo.Repositories;
 
 import com.example.demo.Entities.Provider;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -33,7 +34,8 @@ public interface ProviderRepo extends JpaRepository<Provider,Long> {
                         @Param("manager") String manager,
                         @Param("createdDate")Date createdDate,
                         @Param("type") String type,
-                        @Param("status")String status);
+                        @Param("status")String status,
+                        Pageable pageable);
     @Query("SELECT count(p) from Provider p where " +
             "(:value is null or " +
             "(p.code like concat('%',:value,'%'))" +

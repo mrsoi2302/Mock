@@ -15,6 +15,7 @@ export default function RowSelectionTable(props) {
           zIndex: 1000,
           marginTop: "-5vh",
           marginLeft: "8vw",
+          display:props.setInputFile!=undefined ? "block":"none"
         }}
       >
         Nhập danh sách
@@ -22,12 +23,13 @@ export default function RowSelectionTable(props) {
       <Button
         type="primary"
         onClick={props.handlePrint}
-        style={{ position: "absolute", zIndex: 1000, marginTop: "-5vh" }}
+        style={{ position: "absolute", zIndex: 1000, marginTop: "-5vh",display:props.handlePrint!=undefined ? "block":"none" }}
       >
         In danh sách
       </Button>
       {props.selectedRowKeys.length > 0 && (
         <Button
+
           type="primary"
           onClick={props.handleButton}
           style={{
@@ -35,6 +37,7 @@ export default function RowSelectionTable(props) {
             zIndex: 1000,
             marginTop: "-5vh",
             marginLeft: "17.3vw",
+            display:props.handleButton!=undefined ? "block":"none"
           }}
         >
           Xóa
@@ -44,10 +47,10 @@ export default function RowSelectionTable(props) {
         type="primary"
         href={url}
         style={{
-          position: "fixed",
+          position: "absolute",
           zIndex: 1000,
           marginTop: "-5vh",
-          right: "10vw",
+          right: "1vw",
         }}
       >
         Thêm {props.name} mới

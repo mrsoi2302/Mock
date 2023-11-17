@@ -1,6 +1,8 @@
 package com.example.demo.Service;
 
 import com.example.demo.Entities.Customer;
+import com.example.demo.Entities.CustomerType;
+import com.example.demo.Entities.Payment;
 import com.example.demo.Repositories.CustomerRepo;
 import com.example.demo.Repositories.PaymentRepo;
 import lombok.AllArgsConstructor;
@@ -14,14 +16,26 @@ import java.util.List;
 public class CustomerService {
     private CustomerRepo customerRepo;
     private PaymentRepo paymentRepo;
-    public List<Customer> list(String value,String manager, int birthdayDay, int birthdayMonth, int birthdayYear, String status, String gender, Pageable pageable) {
-        return customerRepo.list(value,manager,birthdayDay,birthdayMonth,birthdayYear,status,gender,pageable);
+    public List<Customer> list(String value, String manager, int birthdayDay, int birthdayMonth, int birthdayYear, String status, String gender, CustomerType customerType, Pageable pageable) {
+        List<Customer> customers=customerRepo.list(value,manager,birthdayDay,birthdayMonth,birthdayYear,status,gender,customerType,pageable);
+        for(Customer i:customers){
+            List<Payment> payments=paymentRepo.findByCustomer(i);
+            if(!payments.isEmpty())i.setTotal((long)paymentRepo.countBill(i));
+            customerRepo.save(i);
+        }
+        return customerRepo.list(value,manager,birthdayDay,birthdayMonth,birthdayYear,status,gender,customerType,pageable);
     }
-    public Long countList(String value, String manager, int birthdayDay, int birthdayMonth, int birthdayYear, String status, String gender) {
-        return customerRepo.countList(value,manager,birthdayDay,birthdayMonth,birthdayYear,status,gender);
+    public Long countList(String value, String manager, int birthdayDay, int birthdayMonth, int birthdayYear, String status, String gender,CustomerType customerType) {
+        return customerRepo.countList(value,manager,birthdayDay,birthdayMonth,birthdayYear,status,customerType,gender);
     }
 
     public Customer findByCode(String code) {
+        Customer i=customerRepo.findByCode(code);
+        List<Payment> payments=paymentRepo.findByCustomer(i);
+        if(!payments.isEmpty()) {
+            i.setTotal((long)paymentRepo.countBill(i));
+            customerRepo.save(i);
+        }
         return customerRepo.findByCode(code);
     }
 
@@ -36,18 +50,19 @@ public class CustomerService {
     public void update(Customer customer) {
         Customer t=findByCode(customer.getCode());
         t.setCustomer(customer);
+        customerRepo.save(t);
     }
 
     public void deleteAllByCode(List<String> list) {
-        paymentRepo.deleteByCustomerCode(list);
+        for(String i:list){
+            Customer customer=customerRepo.findByCode(i);
+            paymentRepo.deleteByCustomerCode(customer);
+        }
         customerRepo.deleteAllByCode(list);
 
     }
-    public List<Customer> findByType(String code) {
-        return customerRepo.findByType(code);
-    }
-    public List<Customer> findForPayment(String manager){
-        return customerRepo.findForPayment(manager);
+    public List<Customer> findForPayment(CustomerType customerType, String manager){
+        return customerRepo.findForPayment(manager,customerType);
     }
 
     public List<Customer> findByCodeAndManager(String code, String manager) {

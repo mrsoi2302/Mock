@@ -19,6 +19,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@Transactional
 @RequestMapping("/provider-type")
 public class ProviderTypeController {
     private HistoryRepository historyRepository;
