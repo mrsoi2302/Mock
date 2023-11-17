@@ -112,7 +112,7 @@ export default function EmployeeTable() {
       .catch((err) => {
         setErr(true);
       });
-  }, [role, value, loading, inputFile,index]);
+  }, [role, value,page,limit, loading, inputFile,index]);
   const handleButton = (e) => {
     setLoading(true);
     axios({
@@ -133,52 +133,6 @@ export default function EmployeeTable() {
   const handleSubmit = (e) => {
     setRole(eRole);
     setOpen(false);
-  };
-  const submitList = () => {
-    if (file && file.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const d = new Uint8Array(e.target.result);
-          const workbook = XLSX.read(d, { type: "array" });
-          // Lấy dữ liệu từ sheet đầu tiên
-          const sheet = workbook.Sheets[workbook.SheetNames[0]];
-          const jsonData = XLSX.utils.sheet_to_json(sheet, {
-            header: 2,
-            range: 1,
-          });
-
-          // Xử lý dữ liệu, ví dụ: log ra console
-          var check = true;
-          jsonData.map((json) => {
-            if (json.role != "STAFF" && json.role != "USER") throw new Error();
-          });
-          setList(jsonData);
-          console.log(list);
-          // ... rest of the code
-          if (list.length > 0) {
-            console.log(list);
-            axios({
-              method: "post",
-              url: baseURL + "/employee/admin/create-many",
-              headers: {
-                Authorization: Token,
-              },
-              data: list,
-            })
-              .then((res) => {
-                setInputFile(false);
-              })
-              .catch((err) => {
-                alert("File không hợp lệ");
-              });
-          }
-        } catch (err) {
-          alert("File không hợp lệ");
-        }
-      };
-      reader.readAsArrayBuffer(file.files[0]);
-    }
   };
   let items = [
     {

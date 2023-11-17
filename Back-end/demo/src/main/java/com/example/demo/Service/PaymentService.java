@@ -22,7 +22,7 @@ public class PaymentService {
         return paymentRepo.findAllByMananger(manager);
     }
     public List<Payment> list(String value, String manager, Date createdDate, PaymentType paymentType, String status, Pageable pageable) {
-        return paymentRepo.list(value,createdDate,paymentType,status,pageable);
+        return paymentRepo.list(value,manager,createdDate,paymentType,status,pageable);
     }
 
     public Payment findByCode(String code) {
@@ -56,7 +56,7 @@ public class PaymentService {
     }
 
     public Long countList(String value, String manager, Date createdDate, PaymentType paymentType, String status) {
-        return paymentRepo.countList(value,createdDate,paymentType,status);
+        return paymentRepo.countList(value,manager,createdDate,paymentType,status);
     }
 
     public Payment findByCodeAndManager(String code, String manager) {

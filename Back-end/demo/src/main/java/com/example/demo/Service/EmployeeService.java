@@ -31,14 +31,13 @@ public class EmployeeService {
     public Employee findByUsername(String username) {
         return employeeRepo.findByUsername(username);
     }
-
     public Employee findByCode(String code) {
         return employeeRepo.findByCode(code);
     }
-
     public void update(Employee employee) {
-        Employee t=employeeRepo.findByCode(employee.getCode());
-        t.setEmployee(employee);
+        Employee temp=employeeRepo.findByCode(employee.getCode());
+        temp.setEmployee(employee);
+        employeeRepo.save(temp);
     }
 
     public void deleteByCode(String code) {

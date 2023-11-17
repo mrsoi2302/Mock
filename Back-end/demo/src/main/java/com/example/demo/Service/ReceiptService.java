@@ -32,7 +32,7 @@ public class ReceiptService {
         return list;
     }
     public Long countList(String value, String manager, Date createdDate, PaymentType paymentType, String status){
-        return receiptRepo.countList(value,createdDate,paymentType,status);
+        return receiptRepo.countList(value,manager,createdDate,paymentType,status);
     }
 
     public Receipt findByCode(String code) {

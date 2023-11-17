@@ -5,6 +5,7 @@ import com.example.demo.Entities.Employee;
 import com.example.demo.Exceptions.CustomException;
 import com.example.demo.Security.TokenProvider;
 import com.example.demo.Service.EmployeeService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,9 +26,13 @@ public class Account {
         return tokenProvider.tokenGenerator(employee.getUsername());
     }
     @PostMapping("/change-password")
-    public void changePassword(@RequestBody Value<Employee> employee){
-        Employee temp=employeeService.findByCode(employee.getT().getCode());
-        if(!String.valueOf(temp.getPassword().hashCode()).equals(employee.getT().getPassword())) throw new CustomException("Sai mật khẩu cũ",HttpStatus.BAD_REQUEST);
-        temp.setPassword(String.valueOf(employee.getValue().hashCode()));
+    public void changePassword(@RequestBody Value<String> value, HttpServletRequest request){
+        System.out.println(value);
+        String token=request.getHeader("Authorization").substring(7);
+        String username=tokenProvider.extractUsername(token);
+        Employee employee=employeeService.findByUsername(username);
+        if(!employee.getPassword().equals(String.valueOf(value.getValue().hashCode()))) throw new CustomException("Sai mật khẩu hiện tại",HttpStatus.BAD_REQUEST);
+        employee.setPassword(String.valueOf(value.getT().hashCode()));
+        employeeService.update(employee);
     }
 }

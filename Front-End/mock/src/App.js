@@ -26,6 +26,7 @@ import ReceiptTable from './Components/Receipt/ReceiptTable';
 import ReceiptInformation from './Components/Receipt/ReceiptInformation';
 import ModifyReceipt from './Components/Receipt/ModifyReceipt';
 import CreateReceipt from './Components/Receipt/CreateReceipt';
+import PasswordChange from './Components/PasswordChange';
 
 function App(){
   return(
@@ -60,6 +61,7 @@ function App(){
           <Route path='/receipt/information/:code' element={<ReceiptInformation/>}/>
           <Route path='/create-receipt' element={<CreateReceipt/>}/>
           <Route path='/receipt/modify/:code' element={<ModifyReceipt/>}/>  
+          <Route path='/change-password' element={<PasswordChange/>}/>
           {/*<Route path='/provider-list' element={<ProviderList />}/>
           
          
@@ -73,7 +75,7 @@ function App(){
           <Route path='/create-receipt' element={<CreateReceipt/>}/>
           <Route path='/receipt-information/*' element={<ReceiptInformation/>}/>
           <Route path='employee/information' element={<Information/>}/>
-          <Route path='/change-password' element={<PasswordChange/>}/>
+          
           */}
           </Route>
         </Routes>

@@ -21,12 +21,15 @@ public interface PaymentRepo extends JpaRepository<Payment,Long> {
     @Query("select p from Payment p where " +
             "(:value is null or p.code like concat('%',:value,'%')) " +
             "and" +
+            "(:manager is null or p.manager=:manager)" +
+            "and" +
             "(:date is null or cast(p.created_date1 as date)=:date)" +
             "and" +
             "(:type is null or p.paymentType=:type)" +
             "and " +
             "(:status is null or p.status=:status)")
     List<Payment> list(@Param("value") String value,
+                       @Param("manager") String manager,
                        @Param("date") Date createdDate,
                        @Param("type") PaymentType paymentType,
                        @Param(("status")) String status, Pageable pageable);
@@ -45,13 +48,16 @@ public interface PaymentRepo extends JpaRepository<Payment,Long> {
     Long countDate(Date date);
     @Query("select count(p) from Payment p where " +
             "(:value is null or p.code like concat('%',:value,'%')) " +
-            "and " +
+            "and" +
             "(:date is null or cast(p.created_date1 as date)=:date)" +
+            "and " +
+            "(:manager is null or p.manager=:manager)" +
             "and" +
             "(:type is null or p.paymentType=:type)" +
             "and " +
             "(:status is null or p.status=:status)")
     Long countList(@Param("value") String value,
+                   @Param("manager") String manager,
                    @Param("date") Date createdDate,
                    @Param("type") PaymentType paymentType,
                    @Param("status") String status);
