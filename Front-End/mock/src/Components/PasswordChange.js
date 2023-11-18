@@ -1,4 +1,4 @@
-import { Button, Form, Input, Select } from "antd";
+import { Alert, Button, Form, Input, Select, message } from "antd";
 import React, { useEffect, useState } from "react";
 import Account from "./Account";
 import axios from "axios";
@@ -29,25 +29,25 @@ export default function PasswordChange(){
     const [confirmPassword,setConfirmPassword]=useState("")
     const navigate=useNavigate();
   const handleSubmit = (e) => {
-    e.preventDefault();
     form
       .validateFields()
       .then(() => {
         axios({
           url: "http://localhost:8080/change-password",
-          method: "PUT",
+          method: "POST",
           headers: {
             Authorization: "Bearer " + localStorage.getItem("jwt"),
           },
           data:{
-            t:oldPassword,
-            value:newPassword
+            value:oldPassword,
+            t:newPassword
           }
         })
           .then((res) => {
-            navigate("/information")
+            message.success("Đổi mật khẩu thành công")
+            navigate("/main")
           })
-          .catch((err) => alert("sai mật khẩu hiện tại"));
+          .catch((err) => message.error("Sai mật khẩu hiện tại"));
       })
       .catch((errorInfo) => {
         console.log("Validation Failed:", errorInfo);
@@ -62,46 +62,91 @@ export default function PasswordChange(){
   return (
     <div className="content">
       <div className="taskbar">
-        <h2>Thông tin tài khoản</h2>
+       
+        <h2>Đổi mật khẩu</h2>
         <Account name={localStorage.getItem("name")} />
       </div>
-      <div className="inside">
+      <div
+        className="inside"
+        style={{ backgroundColor: "white", display: "block" }}
+      >
+        <h2 style={{ paddingLeft: "10px" }}>Đổi mật khẩu</h2>
+        <hr style={{ borderTop: "1px solid whitesmoke" }} />
+
         <Form
-          {...layout}
           form={form}
+          onFinish={handleSubmit}
+          layout="vertical"
           style={{
-            maxWidth: 600,
+            maxWidth: "100%",
             margin: "10px",
           }}
         >
-          <Form.Item name="oldPassword" label="Mật khẩu hiện tại" rules={[{ required: true }]}>
+          <Form.Item
+            name="password"
+            label="Mật khẩu hiện tại"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+            style={{width:"50%"}}
+          >
             <Input
-                type="password"
-                onChange={e=>{
+              type="password"
+              onChange={(e) => {
                 setOldPassword(e.target.value)
-                }}
-              name="oldPassword"              
+              }}
             />
           </Form.Item>
-          <Form.Item name="newPassword" label="Mật khẩu mới" rules={[{ required: true }]}>
+          <Form.Item
+            name="newPassword"
+            label="Mật khẩu mới"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+            style={{width:"50%"}}
+          >
             <Input
-                type="password"
-                onChange={e=>{
+              type="password"
+              onChange={(e) => {
                 setNewPassword(e.target.value)
-                }}
-              name="newPassword"              
+              }}
             />
           </Form.Item>
-          <Form.Item name="confirmPassword" label="Nhập lại mật khẩu" rules={[{pattern:newPassword, required: true ,message:"Mật khẩu không giống"}]}>
+          <Form.Item
+            name="confirmPassword"
+            label="Nhập lại"
+            rules={[
+              {
+                pattern:newPassword,
+                required:true,
+                message:"Mật khẩu chưa giống"
+              },
+
+            ]}
+            style={{width:"50%"}}
+          >
             <Input
-                type="password"
-                onChange={e=>{
+              type="password"
+              onChange={(e) => {
+                console.log( confirmPassword != newPassword);
+
                 setConfirmPassword(e.target.value)
-                }}
-              name="confirmPassword"              
+              }}
             />
           </Form.Item>
-          <Button type="primary" onClick={handleSubmit}>Đổi lại</Button>
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{ margin: "10px" }}
+            >
+              Tiếp tục
+            </Button>
+          </Form.Item>
         </Form>
       </div>
     </div>

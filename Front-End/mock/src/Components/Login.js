@@ -42,9 +42,6 @@ export default function Login() {
   return (
     <div
       className={"container"}
-      style={{
-        paddingTop: "15vh",
-      }}
     >
       <div className="login-box">
         <img

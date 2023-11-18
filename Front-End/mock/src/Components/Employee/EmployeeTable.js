@@ -34,7 +34,7 @@ export default function EmployeeTable() {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
-  const[index,setIndex]=useState(true)
+  const [index, setIndex] = useState(true);
   let columns = [
     {
       title: "Mã nhân viên",
@@ -112,7 +112,7 @@ export default function EmployeeTable() {
       .catch((err) => {
         setErr(true);
       });
-  }, [role, value,page,limit, loading, inputFile,index]);
+  }, [role, value, page, limit, loading, inputFile, index]);
   const handleButton = (e) => {
     setLoading(true);
     axios({
@@ -123,9 +123,9 @@ export default function EmployeeTable() {
       },
       data: selectedRowKeys,
     })
-      .then(res=>{
-        setIndex(!index)
-        setSelectedRowKeys([])
+      .then((res) => {
+        setIndex(!index);
+        setSelectedRowKeys([]);
       })
       .catch((err) => setErr(true));
   };
