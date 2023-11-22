@@ -88,68 +88,66 @@ export default function PaymentInformation() {
               borderRadius: "10px",
               padding: "15px",
               display: "flex",
+              margin:"0 auto",
+              textAlign:"left"
             }}
           >
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "80% 20%",
-              }}
-            >
+            
               <h2>Thông tin khách hàng</h2>
-              <div
-                style={{
-                  display: "grid",
-                    }}
-              >
-              <PDFDownloadLink document={<PDF data={data.data}/>} fileName='receipt'>
-                    <Button type="primary" style={{margin:"2px",width:"97%"}}>In</Button>
-            </PDFDownloadLink>
-                <Button type="primary" href={url} style={{margin:"2px"}}>
-                  Chỉnh sửa
-                </Button>
-                <Button type="primary" style={{backgroundColor:"red",margin:"2px"}} onClick={handleDelete}>
-                  Xóa
-                </Button>
-              </div>
-            </div>
             <div
               style={{
                 display: "grid",
                 gridTemplateColumns: "20% 30% 20% 30%",
               }}
             >
-              <div >
                 <p>Mã phiếu chi</p>
+                <p>: {data.data.code}</p>
+
                 <p>Ngày tạo</p>
+                <p>: {Object.keys(data.data).length>0 ? data.data.created_date.substring(0,10)+" "+data.data.created_date.substring(11,19):undefined}</p>
+
                 <p>Giá trị</p>
+                <p>: {data.data.paid}</p>
+
                 <p>Hình thức thanh toán</p>
                 
-              </div>
-              <div style={{wordWrap:"break-word"}}>
-                <p>: {data.data.code}</p>
-                <p>: {Object.keys(data.data).length>0 ? data.data.created_date.substring(0,10)+" "+data.data.created_date.substring(11,19):undefined}</p>
-                <p>: {data.data.paid}</p>
                 <p>: {data.data.paymentType.name}</p>
-              </div>
-              <div style={{marginLeft:"10px"}}>
                 <p>Người quản lý</p>
-                <p>Người nhận</p>
-                <p>Trạng thái</p>
-              </div>
-              <div>
                 <p>
                     : <a href={"/employee/information/  "+data.data.manager_code}>{data.data.manager}</a>
 
                 </p>
+                <p>Người nhận</p>
                 <p>: <a href={"/customer/information/"+data.data.customer.code}> {data.data.customer.name}</a> </p>
+                <p>Loại phiếu thu</p>
+                <p>:{data.data.paymentGroup.name}</p>
+                <p>Trạng thái</p>
                 <p>:
                 <Tag color={data.data.status==="paid"? "green":"red"}>
                 {data.data.status === "paid" ? "Đã thanh toán" : "Chưa thanh toán"}
                 </Tag>
                 </p>
-              </div>
             </div>
+            <div
+                style={{
+                  display: "grid",
+                    }}
+              >
+              <div style={{
+                display:"grid",
+                gridTemplateColumns:"20% 20% 20%"
+              }}>
+              <PDFDownloadLink document={<PDF data={data.data}/>} fileName='receipt'>
+                    <Button type="primary" size="large" style={{width:"90%",marginLeft:"10%"}}>In</Button>
+            </PDFDownloadLink>
+                <Button type="primary" size="large" href={url} style={{width:"90%",marginLeft:"10%"}}>
+                  Chỉnh sửa
+                </Button>
+                <Button type="primary" size="large" style={{backgroundColor:"red",width:"90%",marginLeft:"10%"}} onClick={handleDelete}>
+                  Xóa
+                </Button>
+              </div>
+              </div>
           </Space>
         </div>
       )}

@@ -56,7 +56,7 @@ export default function ModifyEmployee() {
       });
   };
   return (
-    <div className="content">
+    <div className="content" style={{paddingTop:"10px"}}>
       <div className="taskbar">
         {err && (
           <Alert
@@ -82,8 +82,8 @@ export default function ModifyEmployee() {
       ) : (
         <div
           className="inside"
-          style={{ backgroundColor: "white", display: "block" }}
-        >
+          style={{ backgroundColor: "white", display: "block",margin:"3% 5%",textAlign:"left",borderRadius:"10px",padding:"1% 2% 5vh"
+ }}        >
           <h2 style={{ paddingLeft: "10px" }}>Thông tin chung</h2>
           <hr style={{ borderTop: "1px solid whitesmoke" }} />
 
@@ -176,31 +176,6 @@ export default function ModifyEmployee() {
             >
               <Input disabled />
             </Form.Item>
-            <Form.Item
-              name="password"
-              label="Mật khẩu"
-              initialValue={data.data.password}
-              rules={[
-                {
-                  required: true,
-                  message: "Mật khẩu không hợp lệ",
-                },
-              ]}
-            >
-              <Input
-                type="text"
-                onChange={(e) => {
-                  setData({
-                    ...data.data,
-                    data: {
-                      ...data.data,
-                      password: e.target.value,
-                    },
-                  });
-                }}
-              />
-            </Form.Item>
-
             <Form.Item>
               <Button
                 type="primary"

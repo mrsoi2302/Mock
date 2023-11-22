@@ -8,12 +8,12 @@ import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import ExceptionBox from "../ExceptionBox";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
-import PDF from './PDF';
+import PDF from "./PDF";
 export default function ReceiptInformation() {
-  document.title="Thông tin phiếu chi"
+  document.title = "Thông tin phiếu chi";
   const navigate = useNavigate();
   const { code } = useParams();
-  localStorage.setItem("open", "cast");
+  localStorage.setItem("open", "cash");
   localStorage.setItem("selected", "receipt-list");
   const [data, setData] = useState({
     data: {},
@@ -57,7 +57,7 @@ export default function ReceiptInformation() {
   }, []);
   const url = "/receipt/modify/" + code;
   return (
-    <div className="content">
+    <div className="content" >
       <div className="taskbar">
         {err && (
           <Alert
@@ -79,7 +79,7 @@ export default function ReceiptInformation() {
       {data.loading ? (
         <Spin />
       ) : (
-        <div className="inside" style={{ display: "block" }}>
+        <div className="inside" style={{ display: "block",textAlign:"left" }}>
           <Space
             direction="vertical"
             style={{
@@ -100,15 +100,27 @@ export default function ReceiptInformation() {
               <div
                 style={{
                   display: "grid",
-                    }}
+                }}
               >
-              <PDFDownloadLink document={<PDF data={data.data}/>} fileName='receipt'>
-                    <Button type="primary" style={{margin:"2px",width:"97%"}}>In</Button>
-            </PDFDownloadLink>
-                <Button type="primary" href={url} style={{margin:"2px"}}>
+                <PDFDownloadLink
+                  document={<PDF data={data.data} />}
+                  fileName="receipt"
+                >
+                  <Button
+                    type="primary"
+                    style={{ margin: "2px", width: "97%" }}
+                  >
+                    In
+                  </Button>
+                </PDFDownloadLink>
+                <Button type="primary" href={url} style={{ margin: "2px" }}>
                   Chỉnh sửa
                 </Button>
-                <Button type="primary" style={{backgroundColor:"red",margin:"2px"}} onClick={handleDelete}>
+                <Button
+                  type="primary"
+                  style={{ backgroundColor: "red", margin: "2px" }}
+                  onClick={handleDelete}
+                >
                   Xóa
                 </Button>
               </div>
@@ -117,38 +129,49 @@ export default function ReceiptInformation() {
               style={{
                 display: "grid",
                 gridTemplateColumns: "20% 30% 20% 30%",
+                textAlign: "left",
               }}
             >
-              <div >
-                <p>Mã phiếu chi</p>
-                <p>Ngày tạo</p>
-                <p>Giá trị</p>
-                <p>Hình thức thanh toán</p>
-                
-              </div>
-              <div style={{wordWrap:"break-word"}}>
-                <p>: {data.data.code}</p>
-                <p>: {Object.keys(data.data).length>0 ? data.data.created_date.substring(0,10)+" "+data.data.created_date.substring(11,19):undefined}</p>
-                <p>: {data.data.revenue}</p>
-                <p>: {data.data.payment_type.name}</p>
-              </div>
-              <div style={{marginLeft:"10px"}}>
-                <p>Người quản lý</p>
-                <p>Người nhận</p>
-                <p>Trạng thái</p>
-              </div>
-              <div>
-                <p>
-                    : <a href={"/employee/information/  "+data.data.manager_code}>{data.data.manager}</a>
+              <p>Mã phiếu chi</p>
+              <p>Ngày tạo</p>
+              <p>Giá trị</p>
+              <p>Hình thức thanh toán</p>
 
-                </p>
-                <p>: <a href={"/provider/information/"+data.data.provider.code}> {data.data.provider.name}</a> </p>
-                <p>:
-                <Tag color={data.data.status==="paid"? "green":"red"}>
-                {data.data.status === "paid" ? "Đã thanh toán" : "Chưa thanh toán"}
+              <p>: {data.data.code}</p>
+              <p>
+                :{" "}
+                {Object.keys(data.data).length > 0
+                  ? data.data.created_date.substring(0, 10) +
+                    " " +
+                    data.data.created_date.substring(11, 19)
+                  : undefined}
+              </p>
+              <p>: {data.data.revenue}</p>
+              <p>: {data.data.payment_type.name}</p>
+              <p>Người quản lý</p>
+              <p>Người nhận</p>
+              <p>Trạng thái</p>
+              <p>
+                :{" "}
+                <a href={"/employee/information/  " + data.data.manager_code}>
+                  {data.data.manager}
+                </a>
+              </p>
+              <p>
+                :{" "}
+                <a href={"/provider/information/" + data.data.provider.code}>
+                  {" "}
+                  {data.data.provider.name}
+                </a>{" "}
+              </p>
+              <p>
+                :
+                <Tag color={data.data.status === "paid" ? "green" : "red"}>
+                  {data.data.status === "paid"
+                    ? "Đã thanh toán"
+                    : "Chưa thanh toán"}
                 </Tag>
-                </p>
-              </div>
+              </p>
             </div>
           </Space>
         </div>

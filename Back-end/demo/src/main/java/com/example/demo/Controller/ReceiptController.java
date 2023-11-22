@@ -86,8 +86,8 @@ public class ReceiptController {
     @PostMapping("/staff/create-one")
     public void create(@RequestBody Receipt receipt, HttpServletRequest request){
         if (receipt.getCode()==null||receipt.getCode().trim().isEmpty()){
-            receipt.setCode("PMT"+sequenceRepository.generate());
-        }else if(receipt.getCode().matches("^PMT.*")) throw new CustomException("Tiền tố PMT không hợp lệ", HttpStatus.BAD_REQUEST);
+            receipt.setCode("RCV"+sequenceRepository.generate());
+        }else if(receipt.getCode().matches("^RCV.*")) throw new CustomException("Tiền tố RCV không hợp lệ", HttpStatus.BAD_REQUEST);
         else if(receiptService.findByCode(receipt.getCode())!=null) throw new CustomException("Phiếu chi đã tồn tại",HttpStatus.BAD_REQUEST);
         String token = request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);
