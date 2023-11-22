@@ -1,5 +1,6 @@
 package com.example.demo.Service;
 
+import com.example.demo.DataType.EmployeeDTO;
 import com.example.demo.Entities.Employee;
 import com.example.demo.Repositories.EmployeeRepo;
 import com.example.demo.Repositories.SequenceRepo.SequenceRepository;
@@ -18,7 +19,7 @@ public class EmployeeService {
         return employeeRepo.findByUsernameAndPassword(username,password);
     }
 
-    public List<Employee> list(String value, String role, Pageable pageable) {
+    public List<EmployeeDTO> list(String value, String role, Pageable pageable) {
         return employeeRepo.list(value,role,pageable);
     }
     public Long countList(String value,String role){
@@ -31,8 +32,8 @@ public class EmployeeService {
     public Employee findByUsername(String username) {
         return employeeRepo.findByUsername(username);
     }
-    public Employee findByCode(String code) {
-        return employeeRepo.findByCode(code);
+    public EmployeeDTO findByCode(String code) {
+        return employeeRepo.findByCodeDTO(code);
     }
     public void update(Employee employee) {
         Employee temp=employeeRepo.findByCode(employee.getCode());
@@ -51,7 +52,7 @@ public class EmployeeService {
         employeeRepo.saveAll(list);
     }
 
-    public List<Employee> list() {
+    public List<EmployeeDTO> list() {
         return employeeRepo.list();
     }
 

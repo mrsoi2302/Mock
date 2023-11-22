@@ -411,12 +411,6 @@ function ProviderTable(props) {
         <h2>Danh sách nhà cung cấp</h2>
         <Account name={localStorage.getItem("name")} />
       </div>
-      <SearchInput
-        setValue={setValue}
-        filter={items}
-        openFilter={open}
-        setOpenFilter={setOpen}
-      />
       {inputFile && (
         <ImportFile
           setInputFile={setInputFile}
@@ -443,6 +437,8 @@ function ProviderTable(props) {
             <Spin />
           ) : (
             <RowSelectionTable
+                            delete={handleButton}
+
               handlePrint={handlePrint}
               url="/create-provider"
               name="nhà cung cấp"
@@ -454,6 +450,10 @@ function ProviderTable(props) {
               setInputFile={setInputFile}
               setFile={setFile}
               onChange={onChangeClick}
+              setValue={setValue}
+        filter={items}
+        openFilter={open}
+        setOpenFilter={setOpen}
             />
           )}
           <Paginate

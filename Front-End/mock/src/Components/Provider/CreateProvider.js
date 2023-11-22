@@ -54,7 +54,7 @@ export default function CreateProvider(props) {
       });
   };
   return (
-    <div className="content">
+    <div className="content" style={{paddingTop:"10px"}}>
       <div className="taskbar">
         {error && (
           <Alert
@@ -73,8 +73,8 @@ export default function CreateProvider(props) {
         <Account name={localStorage.getItem("name")} />
       </div>
       <div
-        className="inside"
-        style={{ backgroundColor: "white", display: "block" }}
+        style={{ backgroundColor: "white", display: "block",margin:"3% 5%",textAlign:"left",borderRadius:"10px",padding:"1% 2% 5vh"
+ }}
       >
         <h2 style={{ paddingLeft: "10px" }}>Thông tin chung</h2>
         <hr style={{ borderTop: "1px solid whitesmoke" }} />
@@ -85,7 +85,7 @@ export default function CreateProvider(props) {
           layout="vertical"
           style={{
             maxWidth: "100%",
-            margin: "10px",
+            margin:"3% 5%",
           }}
         >
           <Form.Item
@@ -246,6 +246,7 @@ export default function CreateProvider(props) {
               type="primary"
               style={{ margin: "10px" }}
               htmlType="submit"
+              size="large"
             >
               Tạo mới
             </Button>

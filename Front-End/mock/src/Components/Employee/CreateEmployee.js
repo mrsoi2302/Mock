@@ -41,7 +41,7 @@ export default function CreateEmployee() {
       });
   };
   return (
-    <div className="content">
+    <div className="content" style={{paddingTop:"10px"}}>
       <div className="taskbar">
         {error && (
           <Alert
@@ -60,8 +60,8 @@ export default function CreateEmployee() {
         <Account name={localStorage.getItem("name")} />
       </div>
       <div
-        className="inside"
-        style={{ backgroundColor: "white", display: "block" }}
+        style={{ backgroundColor: "white", display: "block",margin:"3% 5%",textAlign:"left",borderRadius:"10px",padding:"1% 2% 5vh"
+ }}
       >
         <h2 style={{ paddingLeft: "10px" }}>Thông tin chung</h2>
         <hr style={{ borderTop: "1px solid whitesmoke" }} />
@@ -172,6 +172,8 @@ export default function CreateEmployee() {
               type="primary"
               htmlType="submit"
               style={{ margin: "10px" }}
+              size="large"
+
             >
               Tạo mới
             </Button>

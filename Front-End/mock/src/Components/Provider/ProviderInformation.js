@@ -9,7 +9,7 @@ import { Token } from "../../Token";
 import ExceptionBox from "../ExceptionBox";
 import ReceiptList from "./ReceiptList";
 export default function ProviderInformation() {
-  document.title="Thông tin nhân viên"
+  document.title = "Thông tin nhân viên";
   const navigate = useNavigate();
   const { code } = useParams();
   localStorage.setItem("open", "provider");
@@ -82,15 +82,18 @@ export default function ProviderInformation() {
           <Space
             direction="vertical"
             style={{
-              width: "60vw",
+              margin: "3% 5%",
               backgroundColor: "white",
               borderRadius: "10px",
               padding: "15px",
-              display: "flex",
+              display: "block",
+              textAlign: "left",
+              flexWrap: "wrap",
             }}
           >
             <div
               style={{
+                borderBottom: "solid 0.5px gainsboro",
                 display: "grid",
                 gridTemplateColumns: "80% 20%",
               }}
@@ -102,12 +105,12 @@ export default function ProviderInformation() {
                   gridTemplateRows: "50% 50%",
                 }}
               >
-                <Button type="primary" href={url}>
+                {/* <Button type="primary" href={url}>
                   Chỉnh sửa
                 </Button>
                 <Button type="link" onClick={handleDelete}>
                   Xóa
-                </Button>
+                </Button> */}
               </div>
             </div>
             <div
@@ -116,39 +119,47 @@ export default function ProviderInformation() {
                 gridTemplateColumns: "20% 30% 20% 30%",
               }}
             >
-              <div >
-                <p>Tên nhà cung cấp</p>
-                <p>Mã nhà cung cấp</p>
-                <p>Số điện thoại</p>
-                <p>Email</p>
-                <p>Nhóm khách hàng</p>
-              </div>
-              <div style={{wordWrap:"break-word"}}>
-                <p>:{data.data.name}</p>
-                <p>: {data.data.code}</p>
-                <p>: {data.data.contact}</p>
-                <p >:{data.data.email}</p>
-                <p>: {data.data.provider_type.content}</p>
-              </div>
-              <div style={{marginLeft:"10px"}}>
-                <p>Ngày tạo</p>
-                <p>Tổng giao dịch</p>
-                <p>Người quản lý</p>
-                <p>Trạng thái</p>
-              </div>
-              <div s>
-                <p>: {data.data.created_date.substring(0,10)}</p>
-                <p>: {data.data.total}</p>
-                <a href={"/employee/information/"+data.data.manager_code}>: {data.data.manager}</a>
-                <p>: 
-                <Tag color={data.data.status==="active"? "green":"red"}>
-                {data.data.status === "active" ? "Đã kích hoạt" : "Chưa kích hoạt"}
+              <p>Tên nhà cung cấp</p>
+              <p>: {data.data.name}</p>
+              <p>Mã nhà cung cấp</p>
+              <p>: {data.data.code}</p>
+              <p>Số điện thoại</p>
+              <p>: {data.data.contact}</p>
+              <p>Email</p>
+              <p>: {data.data.email}</p>
+              <p>Nhóm khách hàng</p>
+              <p>: {data.data.provider_type.content}</p>
+              <p>Ngày tạo</p>
+              <p>: {data.data.created_date.substring(0, 10)}</p>
+              <p>Tổng giao dịch</p>
+              <p>: {data.data.total}</p>
+              <p>Người quản lý</p>
+              <p>
+                <a href={"/employee/information/" + data.data.manager_code}>
+                  : {data.data.manager}
+                </a>
+              </p>
+              <p>Trạng thái</p>
+              <p>
+                :
+                <Tag color={data.data.status === "active" ? "green" : "red"}>
+                  {data.data.status === "active"
+                    ? "Đã kích hoạt"
+                    : "Chưa kích hoạt"}
                 </Tag>
-                </p>
-              </div>
+              </p>
+            </div>
+            <br/>
+            <div style={{margin:"0 auto 2% "}}>
+              <Button size="large" type="primary" href={url}>
+                Chỉnh sửa
+              </Button>
+              <Button size="large" type="link" onClick={handleDelete}>
+                Xóa
+              </Button>
             </div>
           </Space>
-          <ReceiptList data={data.data.receipts}/>
+          <ReceiptList data={data.data.receipts} />
         </div>
       )}
     </div>

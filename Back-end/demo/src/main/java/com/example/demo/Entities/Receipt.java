@@ -12,7 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = " receipts")
+@Table(name = "receipts")
 public class Receipt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,8 +31,9 @@ public class Receipt {
     @ManyToOne
     @JoinColumn(name="payment_types_id")
     private PaymentType payment_type;
-
-
+    @ManyToOne
+    @JoinColumn(name="receipt_group_id")
+    private ReceiptGroup receiptGroup;
     public void setReceipt(Receipt receipt) {
         this.payment_type=receipt.payment_type;
         this.revenue = receipt.revenue;

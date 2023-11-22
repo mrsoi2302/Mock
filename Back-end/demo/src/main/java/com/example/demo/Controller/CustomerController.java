@@ -96,7 +96,7 @@ public class CustomerController {
         if(!customer.getContact().matches("^\\d+$")) throw new CustomException("SĐT không hợp lệ",HttpStatus.BAD_REQUEST);
         if(customerService.findByCode(customer.getCode())!=null) throw new CustomException("KH đã tồn tại",HttpStatus.BAD_REQUEST);
         if(!customer.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) throw new CustomException("Email không hợp lệ", HttpStatus.BAD_REQUEST);
-        if(customer.getCode()==null||customer.getCode().trim().isEmpty()){
+        if(customer.getCode()==null||customer.getCode().trim().isEmpty()    ){
             customer.setCode("CTM"+sequenceRepository.generate());
         }else if(customer.getCode().matches("^CTM.*")) throw new CustomException("Tiền tố CTM không hợp lệ", HttpStatus.BAD_REQUEST);
         String token = request.getHeader("Authorization").substring(7);
@@ -143,7 +143,7 @@ public class CustomerController {
         historyRepository.save(t.getCode(),t.getName(),"đã cập nhật khách hàng "+customer.getCode());
     }
     @PostMapping("/create-payment")
-    public List<Customer> forCreatePayment(@RequestBody CustomerType customerType, HttpServletRequest request){
+    public List<Customer> forCreatePayment( HttpServletRequest request){
         String manager=null;
         String token = request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);
@@ -151,7 +151,7 @@ public class CustomerController {
         if(t.getRole().equals("STAFF")){
             manager=t.getUsername();
         }
-        return customerService.findForPayment(customerType,manager);
+        return customerService.findForPayment(  manager);
     }
     @DeleteMapping("/admin")
     @Transactional

@@ -1,3 +1,4 @@
+
 .container{
     width: 100vw;
     height: 100vh;
@@ -62,7 +63,6 @@
 .taskbar{
     position: fixed;
     display: block;
-    padding-left:2vw;
     top:0;
     right:0;
     width: 83vw;
@@ -72,29 +72,23 @@
     align-items: center;
     float: right;
     justify-content: space-between;
-    z-index: 1000000;
+    z-index: 100;
+    padding-left: 12px
 }
 .content{
-    position: absolute;
+    margin-left: 15vw;
+    margin-top: 10vh;
+    width: 85vw;
     background-color: gainsboro;
     border-style:unset;
-    width: 100%;
-    min-height: 100vh;
-    display:flex;
+    min-height: 88.8vh;
     flex-wrap: wrap;
     box-sizing: inherit;
     align-self: center;
     z-index: -1;
-    padding-bottom: 10vh;
 }
 .inside{
-    position: relative;
-    margin-top: 20vh;
-    margin-left: 20vw;
-    width: 70vw;
-    display: grid;
-    grid-template-columns: 25% 25% 25% 25%;
-    height: fit-content;
+    padding:1% 5% 5vh;
 }
 .grid img{
     padding: 10%;
@@ -116,7 +110,7 @@
     grid-template-columns: 25% 25% 25% 25%;
     width: 30vw;
     height: fit-content;
-    margin-top:75vh;
+    margin-top:70vh;
     left:41vw;
     align-items: center;
 }

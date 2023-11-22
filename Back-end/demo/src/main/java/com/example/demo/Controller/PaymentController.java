@@ -113,7 +113,7 @@ public class PaymentController {
         String username=tokenProvider.extractUsername(token);
         Employee t=employeeService.findByUsername(username);
         String code=payment.getCustomer().getCode();
-        Customer customer=customerService.findByCode("CTM269");
+        Customer customer=customerService.findByCode(code);
         System.out.println(payment.getPaymentType());
         payment.setPaymentType(paymentTypeService.findByName(payment.getPaymentType().getName()));
         payment.setCustomer(customerService.findByCode(payment.getCustomer().getCode()));

@@ -1,5 +1,6 @@
 package com.example.demo.Controller;
 
+import com.example.demo.DataType.EmployeeDTO;
 import com.example.demo.DataType.Value;
 import com.example.demo.Entities.Employee;
 import com.example.demo.Exceptions.CustomException;
@@ -26,11 +27,11 @@ public class EmployeeController {
     private SequenceRepository sequenceRepository;
 
     @PostMapping("/admin/list")
-    public List<Employee> list(@RequestBody Value<Employee> value,@RequestParam(name = "page") int page,@RequestParam(name = "limit") int limit){
+    public List<EmployeeDTO> list(@RequestBody Value<Employee> value,@RequestParam(name = "page") int page,@RequestParam(name = "limit") int limit){
         return employeeService.list(value.getValue(),value.getT().getRole(), PageRequest.of(page,limit));
     }
     @GetMapping("admin/list")
-    public List<Employee> list(){
+    public List<EmployeeDTO> list(){
         return employeeService.list();
     }
     @PostMapping("/count-list")
@@ -75,8 +76,8 @@ public class EmployeeController {
 
     }
     @GetMapping("admin/information")
-    public Employee information(@RequestParam String code){
-        Employee employee=employeeService.findByCode(code);
+    public EmployeeDTO information(@RequestParam String code){
+        EmployeeDTO employee=employeeService.findByCode(code);
         if(employee==null) throw new CustomException("Không tồn tại", HttpStatus.NOT_FOUND);
         return employee;
     }

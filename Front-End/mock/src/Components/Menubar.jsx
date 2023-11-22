@@ -95,6 +95,7 @@ export default function Menubar(props) {
           style={{
             background: "inherit",
             color: "white",
+            textAlign:"left"
           }}
           items={items}
         />

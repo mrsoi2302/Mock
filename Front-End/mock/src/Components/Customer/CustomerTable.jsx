@@ -45,7 +45,7 @@ function CustomerTable(props) {
   const [list, setList] = useState([]);
   const [sort, setSort] = useState("");
   const [index, setIndex] = useState(false);
-  const[dataRequest,setDataRequest]=useState({});
+  const [dataRequest, setDataRequest] = useState({});
   const [dataOfType, setDataOfType] = useState([]);
   const [customer_type, setProvider_type] = useState();
 
@@ -91,8 +91,8 @@ function CustomerTable(props) {
       headers: {
         Authorization: Token,
       },
-      data:{
-        value:null,
+      data: {
+        value: null,
       },
     })
       .then((res) => {
@@ -152,7 +152,7 @@ function CustomerTable(props) {
       .catch((err) => {
         setErr(true);
       });
-  }, [value, loading, inputFile,customer_type,index,sort]);
+  }, [value, loading, inputFile, customer_type, index, sort]);
   const handleButton = () => {
     axios({
       url: baseURL + "/customer/admin",
@@ -162,8 +162,10 @@ function CustomerTable(props) {
       },
       data: selectedRowKeys,
     })
-      .then((res)=>{setIndex(!index)
-      setSelectedRowKeys([])})
+      .then((res) => {
+        setIndex(!index);
+        setSelectedRowKeys([]);
+      })
       .catch((err) => setErr(true));
   };
   const submitList = () => {
@@ -177,45 +179,46 @@ function CustomerTable(props) {
           const sheet = workbook.Sheets[workbook.SheetNames[0]];
           const jsonData = XLSX.utils.sheet_to_json(sheet, {
             header: 2,
-            range:1
+            range: 1,
           });
           console.log(jsonData);
           // Xử lý dữ liệu, ví dụ: log ra console
-          let check=[]
-          dataOfType.map(i=>{
-            check.push(i.content)
-          })
+          let check = [];
+          dataOfType.map((i) => {
+            check.push(i.content);
+          });
           let newArray = [];
           jsonData.map((json) => {
             if (!check.includes(json.customer_type)) throw new Error();
-            if(json.status!="non-acitve"&&json.status!="active") throw new Error()
+            if (json.status != "non-acitve" && json.status != "active")
+              throw new Error();
             let { customer_type, ...newObj } = json;
             newObj = {
               ...newObj,
             };
             console.log(newObj);
             newArray.push(newObj);
-            return newObj
+            return newObj;
           });
-            setList(newArray);
-            // ... rest of the code
-            if (list.length > 0) {
-              console.log(list);
-              axios({
-                method: "post",
-                url: baseURL + "/customer/staff/create-many",
-                headers: {
-                  Authorization: Token,
-                },
-                data: list,
+          setList(newArray);
+          // ... rest of the code
+          if (list.length > 0) {
+            console.log(list);
+            axios({
+              method: "post",
+              url: baseURL + "/customer/staff/create-many",
+              headers: {
+                Authorization: Token,
+              },
+              data: list,
+            })
+              .then((res) => {
+                setInputFile(false);
               })
-                .then((res) => {
-                  setInputFile(false);
-                })
-                .catch((err) => {
-                  message.error("File không hợp lệ");
-                });
-            }
+              .catch((err) => {
+                message.error("File không hợp lệ");
+              });
+          }
         } catch (err) {
           message.error("File không hợp lệ");
         }
@@ -230,116 +233,142 @@ function CustomerTable(props) {
   const onChange = (date, dateString) => {
     setDataRequest({
       ...dataRequest,
-      created_date:dateString
-    })
+      created_date: dateString,
+    });
   };
-  const currentTime=new Date();
+  const currentTime = new Date();
   const handleSubmit = (e) => {
-    setIndex(!index)
+    setIndex(!index);
     console.log(dataRequest);
     setOpen(false);
   };
   let items = [
-    {  
-      label:  <Space direction="vertical">
-    <label>Giới tính</label>
-    <Select
-    style={{marginTop:"10px",width:"10vw"}}
-      allowClear
-      onSelect={(e)=>{
-          setDataRequest(
-            {
-              ...dataRequest,
-              gender:e
-            }
-          )
-      }}
-    > 
-      <Option value="Nam">Nam</Option>
-      <Option value="Nữ">Nữ</Option>
-      <Option value="LGBT">Giới tính thứ 3</Option>
-    </Select>
-  </Space>,
-    key: '1',
-  },
-  {
-      label:
-      <>
-      <label>Ngày tháng năm sinh</label>
-      <br></br>
-      <Space >
-          <InputNumber placeholder='Ngày' min={1} max={31} style={{marginRight:"10px",marginTop:"10px",width:"100px"}} onChange={(e)=>{setDataRequest({...dataRequest,birthday_day:e})}}/>
-          <InputNumber placeholder='Tháng' min={1} max={12} style={{marginRight:"10px",marginTop:"10px",width:"100px"}} onChange={(e)=>{setDataRequest({...dataRequest,birthday_month:e})}}/>
-          <InputNumber placeholder='Năm' min={1900} max={currentTime.getFullYear()} style={{marginRight:"10px",marginTop:"10px",width:"100px"}} onChange={(e)=>{setDataRequest({...dataRequest,birthday_year:e})}}/>
-      </Space>
-      </>,
-        key:"2"
+    {
+      label: (
+        <Space direction="vertical">
+          <label>Giới tính</label>
+          <Select
+            style={{ marginTop: "10px", width: "10vw" }}
+            allowClear
+            onSelect={(e) => {
+              setDataRequest({
+                ...dataRequest,
+                gender: e,
+              });
+            }}
+          >
+            <Option value="Nam">Nam</Option>
+            <Option value="Nữ">Nữ</Option>
+            <Option value="LGBT">Giới tính thứ 3</Option>
+          </Select>
+        </Space>
+      ),
+      key: "1",
     },
-    
-  {
-    label:  <Space direction="vertical">
-    <label>Thời gian tạo</label>
-    <DatePicker onChange={onChange} />
-  </Space>,
-    key: '3',
-  },
-  {
-    label:
-    <Space direction="vertical">
-      <label>Nhóm khách hàng</label>
-      <Form.Item
-      name="customerType"
-    >
-      <Select
-        allowClear
-        onSelect={(e)=>{
-          setDataRequest({
-            ...dataRequest,
-            customer_type:{
-              id:e
-            }
-          })
-        }}
-      >
-      {dataOfType.map(item=>{
-        return <Option key={item.id} >{item.content}</Option>
-      })}
-      </Select>
-    </Form.Item>
-    </Space>,
-  key:'8',
-  },
-  {
-    label: 
-    <Space direction='vertical'>
-    <Form.Item>
-    <label>Trạng thái</label>
-    <br></br>
-    <Select
-    style={{marginTop:"10px",width:"10vw"}}
-      allowClear
-      onClear={e=>{setDataRequest(
-        {...dataRequest,
-        status:null}
-      )}}
-      onSelect={(e)=>{
-        setDataRequest({
-          ...dataRequest,
-          status:e
-        })
-      }}
-    > 
-      <Option value="active">Đã kích hoạt</Option>
-      <Option value="non-active">Chưa kích hoạt</Option>
-    </Select>
-  </Form.Item>
-    </Space>,
-      key:"4"
-  },
-  {
-    label: <Button onClick={handleSubmit}>Lọc</Button>,
-    key: '5',
-  },
+    {
+      label: (
+        <>
+          <label>Ngày tháng năm sinh</label>
+          <br></br>
+          <Space>
+            <InputNumber
+              placeholder="Ngày"
+              min={1}
+              max={31}
+              style={{ marginRight: "10px", marginTop: "10px", width: "100px" }}
+              onChange={(e) => {
+                setDataRequest({ ...dataRequest, birthday_day: e });
+              }}
+            />
+            <InputNumber
+              placeholder="Tháng"
+              min={1}
+              max={12}
+              style={{ marginRight: "10px", marginTop: "10px", width: "100px" }}
+              onChange={(e) => {
+                setDataRequest({ ...dataRequest, birthday_month: e });
+              }}
+            />
+            <InputNumber
+              placeholder="Năm"
+              min={1900}
+              max={currentTime.getFullYear()}
+              style={{ marginRight: "10px", marginTop: "10px", width: "100px" }}
+              onChange={(e) => {
+                setDataRequest({ ...dataRequest, birthday_year: e });
+              }}
+            />
+          </Space>
+        </>
+      ),
+      key: "2",
+    },
+
+    {
+      label: (
+        <Space direction="vertical">
+          <label>Thời gian tạo</label>
+          <DatePicker onChange={onChange} />
+        </Space>
+      ),
+      key: "3",
+    },
+    {
+      label: (
+        <Space direction="vertical">
+          <label>Nhóm khách hàng</label>
+          <Form.Item name="customerType">
+            <Select
+              allowClear
+              onSelect={(e) => {
+                setDataRequest({
+                  ...dataRequest,
+                  customer_type: {
+                    id: e,
+                  },
+                });
+              }}
+            >
+              {dataOfType.map((item) => {
+                return <Option key={item.id}>{item.content}</Option>;
+              })}
+            </Select>
+          </Form.Item>
+        </Space>
+      ),
+      key: "8",
+    },
+    {
+      label: (
+        <Space direction="vertical">
+          <Form.Item>
+            <label>Trạng thái</label>
+            <br></br>
+            <Select
+              style={{ marginTop: "10px", width: "10vw" }}
+              allowClear
+              onClear={(e) => {
+                setDataRequest({ ...dataRequest, status: null });
+              }}
+              onSelect={(e) => {
+                setDataRequest({
+                  ...dataRequest,
+                  status: e,
+                });
+              }}
+            >
+              <Option value="active">Đã kích hoạt</Option>
+              <Option value="non-active">Chưa kích hoạt</Option>
+            </Select>
+          </Form.Item>
+        </Space>
+      ),
+      key: "4",
+    },
+    {
+      label: <Button onClick={handleSubmit}>Lọc</Button>,
+      key: "5",
+    },
   ];
   if (data.data.length > 0) {
     columns = [
@@ -378,7 +407,7 @@ function CustomerTable(props) {
         title: "Tổng giao dịch",
         dataIndex: "total",
         key: "total",
-        sorter:true
+        sorter: true,
       },
       {
         title: "Trang thái",
@@ -449,12 +478,12 @@ function CustomerTable(props) {
         <h2>Danh sách khách hàng</h2>
         <Account name={localStorage.getItem("name")} />
       </div>
-      <SearchInput
+      {/* <SearchInput
         setValue={setValue}
         filter={items}
         openFilter={open}
         setOpenFilter={setOpen}
-      />
+      /> */}
       {inputFile && (
         <ImportFile
           setInputFile={setInputFile}
@@ -482,6 +511,7 @@ function CustomerTable(props) {
             <Spin />
           ) : (
             <RowSelectionTable
+              delete={handleButton}
               handlePrint={handlePrint}
               url="/create-customer"
               name="khách hàng"
@@ -493,6 +523,10 @@ function CustomerTable(props) {
               setInputFile={setInputFile}
               setFile={setFile}
               onChange={onChangeClick}
+              setValue={setValue}
+              filter={items}
+              openFilter={open}
+              setOpenFilter={setOpen}
             />
           )}
           <Paginate

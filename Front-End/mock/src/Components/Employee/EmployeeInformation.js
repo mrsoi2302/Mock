@@ -76,7 +76,7 @@ export default function EmployeeInformation() {
       {data.loading ? (
         <Spin />
       ) : (
-        <div className="inside" style={{ display: "block" }}>
+        <div className="inside" style={{ display: "block",textAlign:"left" }}>
           <Space
             direction="vertical"
             style={{
@@ -94,7 +94,7 @@ export default function EmployeeInformation() {
               }}
             >
               <h2>Thông tin nhân viên</h2>
-              <div
+              {/* <div
                 style={{
                   display: "grid",
                   gridTemplateRows: "50% 50%",
@@ -106,7 +106,7 @@ export default function EmployeeInformation() {
                 <Button type="link" onClick={handleDelete}>
                   Xóa
                 </Button>
-              </div>
+              </div> */}
             </div>
             <div
               style={{
@@ -114,25 +114,31 @@ export default function EmployeeInformation() {
                 gridTemplateColumns: "25% 25% 25% 25%",
               }}
             >
-              <div>
+              
                 <p>Họ và tên</p>
-                <p>Mã nhân viên</p>
-              </div>
-              <div>
                 <p>: {data.data.name}</p>
+                <p>Mã nhân viên</p>
                 <p>: {data.data.code}</p>
-              </div>
-              <div>
                 <p>Tên đăng nhập</p>
-                <p>Vai trò</p>
-              </div>
-              <div>
                 <p>: {data.data.username}</p>
+                <p>Vai trò</p>
                 <p>
                   : {data.data.role === "STAFF" ? "Nhân viên" : "Người dùng"}
                 </p>
-              </div>
             </div>
+            <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "20% 20%",
+                }}
+              >
+                <Button type="primary" href={url} size="large">
+                  Chỉnh sửa
+                </Button>
+                <Button type="link" onClick={handleDelete} size="large">
+                  Xóa
+                </Button>
+              </div>
           </Space>
         </div>
       )}

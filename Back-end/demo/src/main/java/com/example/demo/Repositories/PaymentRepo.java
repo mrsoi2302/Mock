@@ -2,6 +2,7 @@ package com.example.demo.Repositories;
 
 import com.example.demo.Entities.Customer;
 import com.example.demo.Entities.Payment;
+import com.example.demo.Entities.PaymentGroup;
 import com.example.demo.Entities.PaymentType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -70,4 +71,7 @@ public interface PaymentRepo extends JpaRepository<Payment,Long> {
     @Modifying
     @Query("delete from Payment p where p.customer in :list")
     void deleteByCustomerList(List<Customer> list);
+    @Modifying
+    @Query("delete from Payment p where p.paymentGroup=:p")
+    void deleteByPaymentGroup(PaymentGroup p);
 }

@@ -13,16 +13,28 @@ export default function CreatePayment(){
     document.title="Tạo phiếu chi mới"
     const navigate=useNavigate()
     const [data,setData]=useState({});
-    const [value,setValue]=useState()
+    const [value,setValue]=useState("")
     const [error,setError]=useState(false)
     const [dataOfType,setDataOfType]=useState([]);
-    const [employee,setEmployee]=useState([])
-    const [customer_type,setCusTomer_type]=useState([])
+    const [paymentGroup,setPaymentGroup]=useState([])
     const [customer,setCustomer]=useState([]);
     const [form] = Form.useForm();
     useEffect(()=>{
         localStorage.setItem("open","payment")
         localStorage.setItem("selected","create-payment")
+        axios(
+          {
+              url:baseURL+"/customer/create-payment",
+              method:"post",
+              headers:{
+                  "Authorization":Token
+              },
+              data:{
+              }
+          }
+      ).then(res=>{
+          setCustomer(res.data);
+      }).catch(err=>{message.error("Có lỗi khi lấy dữ liệu từ khách hàng")})
         axios(
             {
                 url:baseURL+"/payment-type/list",
@@ -41,7 +53,7 @@ export default function CreatePayment(){
         .catch(err=>{message.error("Có lỗi khi lấy dữ liệu từ hình thức thanh toán")})
         axios(
             {
-                url:baseURL+"/customer-type/list",
+                url:baseURL+"/payment-group/list",
                 method:"post",
                 headers:{
                     "Authorization":Token
@@ -50,8 +62,8 @@ export default function CreatePayment(){
                     value:value
                 }
             }
-        ).then(res=>{setCusTomer_type(res.data)})
-        .catch(err=>{message.error("Có lỗi khi lấy dữ liệu nhóm khách hàng")})
+        ).then(res=>{setPaymentGroup(res.data)})
+        .catch(err=>{message.error("Có lỗi khi lấy dữ liệu nhóm phiếu chi")})
     },[value])
     const handleSubmit=()=>{
         axios(
@@ -84,8 +96,8 @@ export default function CreatePayment(){
         }).catch(err=>{message.error("Có lỗi khi lấy dữ liệu từ khách hàng")})
     }
     return(
-        <div className="content">
-      <div className="taskbar">
+      <div className="content" style={{paddingTop:"10px"}}>
+        <div className="taskbar">
         {error && (
           <Alert
             message="Tạo thất bại"
@@ -102,8 +114,8 @@ export default function CreatePayment(){
         <Account name={localStorage.getItem("name")} />
       </div>
       <div
-        className="inside"
-        style={{ backgroundColor: "white", display: "block" }}
+        style={{ backgroundColor: "white", display: "block",margin:"3% 5%",textAlign:"left",borderRadius:"10px",padding:"1% 2% 5vh"
+ }}
       >
         <h2 style={{ paddingLeft: "10px" }}>Thông tin chung</h2>
         <hr style={{ borderTop: "1px solid whitesmoke" }} />
@@ -142,7 +154,7 @@ export default function CreatePayment(){
             />
           </Form.Item>
           <Form.Item
-            name="customer_type"
+            name="paymentGroup"
             label="Nhóm khách hàng"
             rules={[
               {
@@ -153,14 +165,22 @@ export default function CreatePayment(){
           >
             <Select
               showSearch
-              placeholder="Chọn nhóm khách hàng"              
-              onSelect={handleType}
+              placeholder="Chọn loại phiếu thu"              
+              onSelect={e=>{
+                const arr=e.split("-")
+                setData(
+                  {...data,
+                  paymentGroup:{
+                    id:arr[0]
+                  }}
+                )
+              }}
               style={{ 
                 float:"left"
                 }}
             >
-              {customer_type.map(i=>{
-                if(customer_type.length>0) return <Option value={i.id+"-"+i.content}>{i.content}</Option>
+              {paymentGroup.map(i=>{
+                if(paymentGroup.length>0) return <Option value={i.id+"-"+i.code+"-"+i.name}>{i.name+"-"+i.code}</Option>
               })}
             </Select>
           </Form.Item>
@@ -175,7 +195,6 @@ export default function CreatePayment(){
           >
             <Select
               showSearch
-              disabled={customer.length===0}
               placeholder="Chọn khách hàng"
               style={{ paddingLeft: "10px" }}
               onSelect={e=>{
@@ -190,7 +209,7 @@ export default function CreatePayment(){
               }}
             >
               {customer.map(i=>{
-                if(customer_type.length>0) return <Option value={i.id+"-"+i.name+"-"+i.code}>{i.name+"-"+i.code}</Option>
+                return <Option value={i.id+"-"+i.name+"-"+i.code}>{i.name+"-"+i.code}</Option>
               })}
             </Select>
           </Form.Item>
@@ -284,6 +303,7 @@ export default function CreatePayment(){
               type="primary"
               style={{ margin: "10px" }}
               htmlType="submit"
+              size="large"
             >
               Tạo mới
             </Button>

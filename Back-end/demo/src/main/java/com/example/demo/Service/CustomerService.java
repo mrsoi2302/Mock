@@ -61,8 +61,8 @@ public class CustomerService {
         customerRepo.deleteAllByCode(list);
 
     }
-    public List<Customer> findForPayment(CustomerType customerType, String manager){
-        return customerRepo.findForPayment(manager,customerType);
+    public List<Customer> findForPayment(String manager){
+        return customerRepo.findForPayment(manager);
     }
 
     public List<Customer> findByCodeAndManager(String code, String manager) {

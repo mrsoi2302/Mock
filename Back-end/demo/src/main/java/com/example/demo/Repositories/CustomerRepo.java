@@ -78,8 +78,8 @@ public interface CustomerRepo extends JpaRepository<Customer,Long> {
 
     @Query("select c from Customer c where c.customer_type.code=:code")
     List<Customer> findByType(String code);
-    @Query("select c from Customer c where (:manager is null or c.manager=:manager) and c.status='active' and c.customer_type=:customerType")
-    List<Customer> findForPayment(@Param("manager") String manager,@Param("customerType") CustomerType customerType);
+    @Query("select c from Customer c where (:manager is null or c.manager=:manager) and c.status='active'")
+    List<Customer> findForPayment(@Param("manager") String manager);
     @Query("select c from Customer c where (:manager is null or c.manager=:manager) and c.code=:code")
     List<Customer> findByCodeAndManager(@Param("code") String code, @Param("manager") String manager);
 }

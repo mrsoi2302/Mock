@@ -185,11 +185,6 @@ export default function EmployeeTable() {
         key: "username",
       },
       {
-        title: "Mật khẩu",
-        dataIndex: "password",
-        key: "password",
-      },
-      {
         title: "Vai trò",
         dataIndex: "role",
         key: "role",
@@ -197,11 +192,11 @@ export default function EmployeeTable() {
           <>
             {tag.role === "STAFF" ? (
               <Tag color="red" key={tag}>
-                {tag.role.toUpperCase()}
+                Nhân viên
               </Tag>
             ) : (
               <Tag color="green" key={tag}>
-                {tag.role.toUpperCase()}
+                Người dùng  
               </Tag>
             )}
           </>
@@ -232,12 +227,7 @@ export default function EmployeeTable() {
         <h2>Danh sách nhân viên</h2>
         <Account name={localStorage.getItem("name")} />
       </div>
-      <SearchInput
-        setValue={setValue}
-        filter={items}
-        openFilter={open}
-        setOpenFilter={setOpen}
-      />
+      
       {err ? (
         <ExceptionBox url="/main" msg=<h2>Có lỗi xảy ra</h2> />
       ) : (
@@ -246,6 +236,12 @@ export default function EmployeeTable() {
             <Spin />
           ) : (
             <RowSelectionTable
+                            delete={handleButton}
+
+            setValue={setValue}
+        filter={items}
+        openFilter={open}
+        setOpenFilter={setOpen}
               handlePrint={handlePrint}
               url="/create-employee"
               name="nhân viên"

@@ -9,12 +9,8 @@ function SearchInput(props) {
   return (
     <div
       style={{
-        position: "absolute",
-        marginTop: "12vh",
-        left: "30vw",
         display: "grid",
-        width: "50vw",
-        gridTemplateColumns: "20% 80%",
+        gridTemplateColumns: "16% 84%",
       }}
     >
       <Filter

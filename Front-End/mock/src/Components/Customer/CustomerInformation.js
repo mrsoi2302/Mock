@@ -9,12 +9,12 @@ import { Token } from "../../Token";
 import ExceptionBox from "../ExceptionBox";
 import PaymentList from "./PaymentList";
 export default function CustomerInformation() {
-  document.title="Thông tin nhân viên"
+  document.title = "Thông tin nhân viên";
   const navigate = useNavigate();
   const { code } = useParams();
   localStorage.setItem("open", "customer");
   localStorage.setItem("selected", "customer-list");
-  const[payments,setPayments]=useState([])
+  const [payments, setPayments] = useState([]);
   const [data, setData] = useState({
     data: {},
     loading: true,
@@ -39,24 +39,22 @@ export default function CustomerInformation() {
   };
   useEffect(() => {
     axios({
-      url:
-        baseURL +
-        "/payment/list",
+      url: baseURL + "/payment/list",
       method: "post",
       headers: {
         Authorization: Token,
       },
       data: {
-        value:null,
-        t:{
-          customer:{
-            code:code
-          }
+        value: null,
+        t: {
+          customer: {
+            code: code,
+          },
         },
       },
     })
       .then((res) => {
-        setPayments(res.data)
+        setPayments(res.data);
       })
       .catch((err) => {
         setErr(true);
@@ -102,15 +100,16 @@ export default function CustomerInformation() {
       {data.loading ? (
         <Spin />
       ) : (
-        <div className="inside" style={{ display: "block" }}>
+        <div className="inside" style={{ display: "block",textAlign:"left",margin:"0 auto" }}>
           <Space
             direction="vertical"
             style={{
-              width: "60vw",
+              width: "80%",
               backgroundColor: "white",
               borderRadius: "10px",
               padding: "15px",
               display: "flex",
+              margin:"0% auto"
             }}
           >
             <div
@@ -119,8 +118,8 @@ export default function CustomerInformation() {
                 gridTemplateColumns: "80% 20%",
               }}
             >
-              <h2>Thông tin khách hàng</h2>
-              <div
+              <h2 style={{ textAlign: "left" }}>Thông tin khách hàng</h2>
+              {/* <div
                 style={{
                   display: "grid",
                   gridTemplateRows: "50% 50%",
@@ -132,7 +131,7 @@ export default function CustomerInformation() {
                 <Button type="link" onClick={handleDelete}>
                   Xóa
                 </Button>
-              </div>
+              </div> */}
             </div>
             <div
               style={{
@@ -140,44 +139,66 @@ export default function CustomerInformation() {
                 gridTemplateColumns: "20% 30% 20% 30%",
               }}
             >
-              <div >
-                <p>Tên khách hàng</p>
-                <p>Giới tính</p>
-                <p>Ngày sinh</p>
-                <p>Mã khách hàng</p>
-                <p>Số điện thoại</p>
-                <p>Email</p>
-                
-              </div>
-              <div style={{wordWrap:"break-word"}}>
-                <p>: {data.data.name}</p>
-                <p>: {data.data.gender}</p>
-                <p>: {Object.keys(data.data).length>0 ? data.data.birthday.substring(0,10):undefined}</p>
-                <p>: {data.data.code}</p>
-                <p>: {data.data.contact}</p>
-                <p>: {data.data.email}</p>
-              </div>
-              <div style={{marginLeft:"10px"}}>
-                <p>Ngày tạo</p>
-                <p>Tổng giao dịch</p>
-                <p>Người quản lý</p>
-                <p>Trạng thái</p>
-                <p>Nhóm khách hàng</p>
-                <p>: {data.data.customer_type.content}</p>
-              </div>
-              <div s>
-                <p>: {Object.keys(data.data).length>0 ? data.data.created_date.substring(0,10):undefined}</p>
-                <p>: {data.data.total}</p>
-                <a href={"/employee/information/"+data.data.manager_code}>: {data.data.manager}</a>
-                <p>: 
-                <Tag color={data.data.status==="active"? "green":"red"}>
-                {data.data.status === "active" ? "Đã kích hoạt" : "Chưa kích hoạt"}
-                </Tag>
-                </p>
-              </div>
+              <p>Tên khách hàng</p>
+              <p>: {data.data.name}</p>
+
+              <p>Giới tính</p>
+              <p>: {data.data.gender}</p>
+
+              <p>Ngày sinh</p>
+              <p>
+                :{" "}
+                {Object.keys(data.data).length > 0
+                  ? data.data.birthday.substring(0, 10)
+                  : undefined}
+              </p>
+              <p>Mã khách hàng</p>
+              <p>: {data.data.code}</p>
+              <p>Số điện thoại</p>
+              <p>: {data.data.contact}</p>
+              <p>Email</p>
+              <p>: {data.data.email}</p>
+              <p>Ngày tạo</p>
+              <p>
+                :{" "}
+                {Object.keys(data.data).length > 0
+                  ? data.data.created_date.substring(0, 10)
+                  : undefined}
+              </p>
+              <p>Tổng giao dịch</p>
+              <p>: {data.data.total}</p>
+
+              <p>Người quản lý</p>
+              <p>
+              <a href={"/employee/information/" + data.data.manager_code}>
+                : {data.data.manager}
+              </a>
+              </p>
+              <p>Trạng thái</p>
+              <p>
+                :{" "}
+                {data.data.status === "active"
+                  ? "Đã kích hoạt"
+                  : "Chưa kích hoạt"}
+              </p>
+              <p>Nhóm khách hàng</p>
+              <p>: {data.data.customer_type.content}</p>
             </div>
+            <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "20% 20%",
+                }}
+              >
+                <Button type="primary" size="large" href={url}>
+                  Chỉnh sửa
+                </Button>
+                <Button type="link" size="large" onClick={handleDelete}>
+                  Xóa
+                </Button>
+              </div>
           </Space>
-          <PaymentList data={payments}/>
+          <PaymentList data={payments} />
         </div>
       )}
     </div>

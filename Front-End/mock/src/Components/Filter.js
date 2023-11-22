@@ -28,8 +28,7 @@ export default function Filter(props) {
         <Button
           type="text"
           style={{
-            width: "100%",
-            textAlign: "right",
+            textAlign: "left",
             backgroundColor: "gainsboro",
             boxShadow: "none",
           }}

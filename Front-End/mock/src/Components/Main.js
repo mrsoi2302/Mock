@@ -194,13 +194,19 @@ export default function Main(props) {
   }, []);
 
   return (
-    <div className="content">
+    <div className="content" style={{minHeight:"90vh"}}>
       {err && <ExceptionBox url="/" msg="Phiên đăng nhập của bạn đã hết hạn" />}
       <div className="taskbar">
         <h2>Tổng quan</h2>
         <Account name={localStorage.getItem("name")} />
       </div>
-      <div className="inside">
+      <div className="inside"
+      style={{
+        display:"grid",
+        gridTemplateColumns:"repeat(4,25%)",
+        paddingTop:"5%",
+        paddingBottom:"5%"
+      }}>
         <div className="grid">
           <img src="https://i.pinimg.com/originals/af/87/58/af875899c939bc45c1e41827173a6444.png" />
           <div style={{ color: "rgba(255,184,228,255)" }}>
@@ -229,8 +235,7 @@ export default function Main(props) {
             {billToday.loading ? <Spin /> : <h3>{billToday.data}</h3>}
           </div>
         </div>
-      </div>
-      <div className="socialMedia">
+        <div className="socialMedia">
         <a href="https://www.facebook.com/mrsoi2302">
           <img src="https://www.facebook.com/images/fb_icon_325x325.png" />
         </a>
@@ -243,6 +248,7 @@ export default function Main(props) {
         <a href="https://github.com/mrsoi2302">
           <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/GitHub_Invertocat_Logo.svg/1200px-GitHub_Invertocat_Logo.svg.png" />
         </a>
+      </div>
       </div>
     </div>
   );

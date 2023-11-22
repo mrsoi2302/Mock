@@ -1,60 +1,70 @@
 import { Button, Table } from "antd";
 import React from "react";
+import SearchInput from "./SearchInput";
 
 export default function RowSelectionTable(props) {
   const url = props.url;
   return (
     <div>
-      <Button
-        type="primary"
-        onClick={(e) => {
-          props.setInputFile(true);
-        }}
+      <div
         style={{
-          position: "absolute",
-          zIndex: 1000,
-          marginTop: "-5vh",
-          marginLeft: "8vw",
-          display:props.setInputFile!=undefined ? "block":"none"
+          display: "grid",
+          gridTemplateColumns: "15% 15% 50% 20%",
         }}
       >
-        Nhập danh sách
-      </Button>
-      <Button
-        type="primary"
-        onClick={props.handlePrint}
-        style={{ position: "absolute", zIndex: 1000, marginTop: "-5vh",display:props.handlePrint!=undefined ? "block":"none" }}
-      >
-        In danh sách
-      </Button>
-      {props.selectedRowKeys.length > 0 && (
-        <Button
-
+        {props.selectedRowKeys.length > 0 ? (
+          <Button
+            type="primary"
+            onClick={props.delete}
+            style={{
+              zIndex: 1000,
+              backgroundColor:"red"
+            }}
+          >
+            Xóa
+          </Button>
+        ):props.setInputFile != undefined ? <Button
           type="primary"
-          onClick={props.handleButton}
+          onClick={(e) => {
+            props.setInputFile(true);
+          }}
           style={{
-            position: "absolute",
             zIndex: 1000,
-            marginTop: "-5vh",
-            marginLeft: "17.3vw",
-            display:props.handleButton!=undefined ? "block":"none"
           }}
         >
-          Xóa
+          Nhập danh sách
+        </Button>:<div></div>}
+        {
+          props.handlePrint != undefined ? <Button
+          type="primary"
+          onClick={props.handlePrint}
+          style={{
+            zIndex: 1000,
+            marginLeft: "5px",
+          }}
+        >
+          In danh sách
+        </Button>:<div></div>
+          /* {} */}
+        
+        
+        <SearchInput 
+          setValue={props.setValue}
+          filter={props.filter}
+          openFilter={props.openFilter}
+          setOpenFilter={props.setOpenFilter}
+        />
+        <Button
+          type="primary"
+          href={url}
+          style={{
+            zIndex: 1000,
+            marginLeft: "5px",
+          }}
+        >
+          Thêm {props.name} mới
         </Button>
-      )}
-      <Button
-        type="primary"
-        href={url}
-        style={{
-          position: "absolute",
-          zIndex: 1000,
-          marginTop: "-5vh",
-          right: "1vw",
-        }}
-      >
-        Thêm {props.name} mới
-      </Button>
+      </div>
       <Table
         rowSelection={props.handleSelection}
         pagination={false}

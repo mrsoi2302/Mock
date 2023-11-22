@@ -9,14 +9,6 @@ function Account(props){
   }
   const items = [
     {
-      key: '1',
-      label: (
-        <a target="_blank" rel="noopener noreferrer" href="/information">
-          Thông tin tài khoản
-        </a>
-      ),
-    },
-    {
       key: '2',
       label: (
         <a target="_blank" rel="noopener noreferrer" href="/history">

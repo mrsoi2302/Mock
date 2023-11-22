@@ -32,6 +32,9 @@ public class Payment {
     @ManyToOne
     @JoinColumn(name="payment_types_id")
     private PaymentType paymentType;
+    @ManyToOne
+    @JoinColumn(name="payment_group_id")
+    private PaymentGroup paymentGroup;
 
     public void setPayment(Payment payment) {
         this.paid = payment.paid;
@@ -40,5 +43,6 @@ public class Payment {
         this.manager=payment.manager;
         this.manager_code=payment.manager_code;
         this.status=payment.status;
+        this.paymentGroup=payment.paymentGroup;
     }
 }

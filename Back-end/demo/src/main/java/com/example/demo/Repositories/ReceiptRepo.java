@@ -3,6 +3,7 @@ package com.example.demo.Repositories;
 import com.example.demo.Entities.PaymentType;
 import com.example.demo.Entities.Provider;
 import com.example.demo.Entities.Receipt;
+import com.example.demo.Entities.ReceiptGroup;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -65,4 +66,6 @@ public interface ReceiptRepo extends JpaRepository<Receipt,Long> {
     List<Receipt> findAllByMananger(String manager);
     @Query("select r from Receipt r where (:manager is null or r.manager=:manager) and r.code=:code")
     Receipt findByCodeAndManager(@Param("code") String code,@Param("manager") String manager);
+
+    void deleteByReceiptGroup(ReceiptGroup receiptGroup);
 }

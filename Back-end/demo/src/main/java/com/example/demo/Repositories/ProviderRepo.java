@@ -1,7 +1,6 @@
 package com.example.demo.Repositories;
 
 import com.example.demo.Entities.Provider;
-import com.example.demo.Entities.ProviderType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -66,8 +65,8 @@ public interface ProviderRepo extends JpaRepository<Provider,Long> {
     void deleteAllByCode(List<String> list);
     @Query("select p from Provider p where p.provider_type.code=:code")
     List<Provider> findAllByProviderType(String code);
-    @Query("select p from Provider p where (:manager is null or p.manager=:manager) and p.status='active' and p.provider_type=:providerType")
-    List<Provider> findForReceipt(@Param("manager") String manager, @Param("providerType") ProviderType providerType);
+    @Query("select p from Provider p where (:manager is null or p.manager=:manager) and p.status='active'")
+    List<Provider> findForReceipt(@Param("manager") String manager);
     @Query("select p from Provider p where (:manager is null or p.manager=:manager) and p.code=:code")
     Provider findByCodeAndManager(@Param("code") String code,@Param("manager") String manager);
 }

@@ -1,7 +1,6 @@
 import {
   Alert,
   Button,
-  DatePicker,
   Form,
   Input,
   InputNumber,
@@ -16,7 +15,6 @@ import axios from "axios";
 import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import { useNavigate } from "react-router-dom";
-
 export default function CreateReceipt() {
   document.title = "Tạo phiếu thu mới";
   localStorage.setItem("open", "cash");
@@ -26,10 +24,25 @@ export default function CreateReceipt() {
   const [value, setValue] = useState();
   const [error, setError] = useState(false);
   const [dataOfType, setDataOfType] = useState([]);
-  const [provider_type, setProvider_type] = useState([]);
+  const [receiptGroup,setReceiptGroup]=useState([])
   const [provider, setProvider] = useState([]);
   const [form] = Form.useForm();
   useEffect(() => {
+    axios({
+      url: baseURL + "/provider/create-receipt",
+      method: "post",
+      headers: {
+        Authorization: Token,
+      },
+      data: {
+      },
+    })
+      .then((res) => {
+        setProvider(res.data);
+      })
+      .catch((err) => {
+        message.error("Có lỗi khi lấy dữ liệu từ nhà cung cấp");
+      });
     axios({
       url: baseURL + "/payment-type/list",
       method: "post",
@@ -47,22 +60,19 @@ export default function CreateReceipt() {
       .catch((err) => {
         message.error("Có lỗi khi lấy dữ liệu từ hình thức thanh toán");
       });
-    axios({
-      url: baseURL + "/provider-type/list",
-      method: "post",
-      headers: {
-        Authorization: Token,
-      },
-      data: {
-        value: value,
-      },
-    })
-      .then((res) => {
-        setProvider_type(res.data);
-      })
-      .catch((err) => {
-        message.error("Có lỗi khi lấy dữ liệu nhóm nhà cung cấp");
-      });
+      axios(
+        {
+            url:baseURL+"/receipt-group/list",
+            method:"post",
+            headers:{
+                "Authorization":Token
+            },
+            data:{
+                value:value
+            }
+        }
+    ).then(res=>{setReceiptGroup(res.data)})
+    .catch(err=>{message.error("Có lỗi khi lấy dữ liệu nhóm phiếu thu")})
   }, [value]);
   const handleSubmit = () => {
     axios({
@@ -80,28 +90,9 @@ export default function CreateReceipt() {
         message.error("Tạo thất bại");
       });
   };
-  const handleType = (e) => {
-    const arr = e.split("-");
-    axios({
-      url: baseURL + "/provider/create-receipt",
-      method: "post",
-      headers: {
-        Authorization: Token,
-      },
-      data: {
-        id: arr[0],
-      },
-    })
-      .then((res) => {
-        setProvider(res.data);
-      })
-      .catch((err) => {
-        message.error("Có lỗi khi lấy dữ liệu từ nhà cung cấp");
-      });
-  };
+  
   return (
-    <div className="content">
-      <div className="taskbar">
+<div className="content" style={{paddingTop:"10px"}}>      <div className="taskbar">
         {error && (
           <Alert
             message="Tạo thất bại"
@@ -118,8 +109,8 @@ export default function CreateReceipt() {
         <Account name={localStorage.getItem("name")} />
       </div>
       <div
-        className="inside"
-        style={{ backgroundColor: "white", display: "block" }}
+        style={{ backgroundColor: "white", display: "block",margin:"3% 5%",textAlign:"left",borderRadius:"10px",padding:"1% 2% 5vh"
+ }}
       >
         <h2 style={{ paddingLeft: "10px" }}>Thông tin chung</h2>
         <hr style={{ borderTop: "1px solid whitesmoke" }} />
@@ -156,31 +147,33 @@ export default function CreateReceipt() {
             />
           </Form.Item>
           <Form.Item
-            name="provider_type"
-            label="Nhóm nhà cung cấp"
+            name="receiptGroup"
+            label="Nhóm khách hàng"
             rules={[
               {
-                required: true,
+                required:true
               },
             ]}
-            style={{ float: "left", width: "40%" }}
+            style={{float:"left",width:"40%"}}
           >
             <Select
               showSearch
-              placeholder="Chọn nhóm nhà cung cấp"
-              onChange={e=>{
-                form.setFieldsValue({ provider:null });
+              placeholder="Chọn loại phiếu thu"              
+              onSelect={e=>{
+                const arr=e.split("-")
+                setData(
+                  {...data,
+                  receiptGroup:{
+                    id:arr[0]
+                  }}
+                )
               }}
-              onSelect={handleType}
-              style={{
-                float: "left",
-              }}
+              style={{ 
+                float:"left"
+                }}
             >
-              {provider_type.map((i) => {
-                if (provider_type.length > 0)
-                  return (
-                    <Option value={i.id + "-" + i.content}>{i.content}</Option>
-                  );
+              {receiptGroup.map(i=>{
+                if(receiptGroup.length>0) return <Option value={i.id+"-"+i.code+"-"+i.name}>{i.name+"-"+i.code}</Option>
               })}
             </Select>
           </Form.Item>
@@ -211,7 +204,6 @@ export default function CreateReceipt() {
               style={{ paddingLeft: "10px" }}
             >
               {provider.map((i) => {
-                if (provider_type.length > 0)
                   return (
                     <Option value={i.id + "-" + i.name + "-" + i.code}>
                       {i.name + "-" + i.code}
@@ -310,7 +302,7 @@ export default function CreateReceipt() {
             </Select>
           </Form.Item>
           <Form.Item>
-            <Button type="primary" style={{ margin: "10px" }} htmlType="submit">
+            <Button type="primary" style={{ margin: "10px" }} htmlType="submit"               size="large">
               Tạo mới
             </Button>
           </Form.Item>
