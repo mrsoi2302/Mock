@@ -1,4 +1,6 @@
-
+body{
+    overflow-x: hidden;
+}
 .container{
     width: 100vw;
     height: 100vh;
@@ -86,9 +88,10 @@
     box-sizing: inherit;
     align-self: center;
     z-index: -1;
+    padding-bottom: 20px;
 }
 .inside{
-    padding:1% 5% 5vh;
+    padding:1% 5% 5%;
 }
 .grid img{
     padding: 10%;

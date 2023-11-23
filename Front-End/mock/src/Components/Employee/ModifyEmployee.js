@@ -178,6 +178,7 @@ export default function ModifyEmployee() {
             </Form.Item>
             <Form.Item>
               <Button
+                size="large"
                 type="primary"
                 htmlType="submit"
                 style={{ margin: "10px" }}

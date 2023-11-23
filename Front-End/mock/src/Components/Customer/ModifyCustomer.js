@@ -365,6 +365,7 @@ export default function ModifyCustomer(props) {
           
           <Form.Item>
             <Button
+            size="large"
               type="primary"
               style={{ margin: "10px" }}
               htmlType="submit"

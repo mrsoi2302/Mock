@@ -102,7 +102,7 @@ export default function ModifyProvider(props) {
       </div>
       <div
         className="inside"
-        style={{ backgroundColor: "white", display: "block",margin:"3% 5%",textAlign:"left",borderRadius:"10px",padding:"1% 2% 5vh"
+        style={{ backgroundColor: "white", display: "block",margin:"3% 5% 3%",textAlign:"left",borderRadius:"10px",padding:"1% 2% 5vh"
  }}
       >
         <h2 style={{ paddingLeft: "10px" }}>Thông tin chung</h2>
@@ -305,6 +305,7 @@ export default function ModifyProvider(props) {
           </Form.Item>
           <Form.Item>
             <Button
+              size="large"
               type="primary"
               style={{ margin: "10px" }}
               htmlType="submit"

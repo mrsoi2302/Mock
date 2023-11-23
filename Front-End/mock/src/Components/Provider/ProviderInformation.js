@@ -78,7 +78,7 @@ export default function ProviderInformation() {
       {data.loading ? (
         <Spin />
       ) : (
-        <div className="inside" style={{ display: "block" }}>
+        <div className="inside" >
           <Space
             direction="vertical"
             style={{
@@ -154,7 +154,7 @@ export default function ProviderInformation() {
               <Button size="large" type="primary" href={url}>
                 Chỉnh sửa
               </Button>
-              <Button size="large" type="link" onClick={handleDelete}>
+              <Button size="large" type="primary" style={{backgroundColor:"red"}} onClick={handleDelete}>
                 Xóa
               </Button>
             </div>

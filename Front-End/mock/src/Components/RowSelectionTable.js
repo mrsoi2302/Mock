@@ -17,7 +17,7 @@ export default function RowSelectionTable(props) {
             type="primary"
             onClick={props.delete}
             style={{
-              zIndex: 1000,
+              
               backgroundColor:"red"
             }}
           >
@@ -29,7 +29,7 @@ export default function RowSelectionTable(props) {
             props.setInputFile(true);
           }}
           style={{
-            zIndex: 1000,
+            
           }}
         >
           Nhập danh sách
@@ -39,7 +39,7 @@ export default function RowSelectionTable(props) {
           type="primary"
           onClick={props.handlePrint}
           style={{
-            zIndex: 1000,
+            
             marginLeft: "5px",
           }}
         >
@@ -58,7 +58,7 @@ export default function RowSelectionTable(props) {
           type="primary"
           href={url}
           style={{
-            zIndex: 1000,
+            
             marginLeft: "5px",
           }}
         >

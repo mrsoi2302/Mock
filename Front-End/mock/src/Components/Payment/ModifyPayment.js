@@ -387,6 +387,7 @@ export default function ModifyPayment() {
             </Form.Item>
             <Form.Item>
               <Button
+                size="large"
                 type="primary"
                 style={{ margin: "10px" }}
                 htmlType="submit"

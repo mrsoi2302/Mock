@@ -288,6 +288,7 @@ export default function CreateCustomer(){
               type="primary"
               style={{ margin: "10px" }}
               htmlType="submit"
+              size="large"
             >
               Tạo mới
             </Button>

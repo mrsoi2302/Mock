@@ -14,32 +14,35 @@ export default function RowSelectionTableForBill(props) {
       >
         {props.selectedRowKeys.length > 0 ? (
           <Button
+            
             type="primary"
             onClick={props.delete}
             style={{
-              zIndex: 1000,
+              
               backgroundColor:"red"
             }}
           >
             Xóa
           </Button>
         ):<Button
+          
           type="primary"
           onClick={(e) => {
             props.setOpenBillModal(true)
             
           }}
           style={{
-            zIndex: 1000,
+            
           }}
         >
           Thêm loại {props.name} mới
         </Button>}
           <Button
+            
           type="primary"
           onClick={e=>{props.setOpenModal(true)}}
           style={{
-            zIndex: 1000,
+            
             marginLeft: "5px",
           }}
         >
@@ -55,10 +58,11 @@ export default function RowSelectionTableForBill(props) {
 
         />
         <Button
+          
           type="primary"
           href={url}
           style={{
-            zIndex: 1000,
+            
             marginLeft: "5px",
           }}
         >
