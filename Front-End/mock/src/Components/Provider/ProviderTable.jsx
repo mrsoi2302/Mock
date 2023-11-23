@@ -4,6 +4,7 @@ import {
   Button,
   DatePicker,
   Form,
+  Modal,
   Select,
   Space,
   Spin,
@@ -49,10 +50,12 @@ function ProviderTable(props) {
   const [list, setList] = useState([]);
   const [sort, setSort] = useState("");
   const [index, setIndex] = useState(false);
-
   const [dataOfType, setDataOfType] = useState([]);
   const [provider_type, setProvider_type] = useState();
-
+  const [success,setSuccess]=useState(0)
+  const [failed,setFailed]=useState(0)
+  const [typeCreated,setTypeCreated]=useState(0)
+  const [checkBox,setCheckBox]=useState(false)
   let columns = [
     {
       title: "Mã nhà cung cấp",
@@ -208,41 +211,56 @@ function ProviderTable(props) {
           dataOfType.map(i=>{
             check.push(i.content)
           })
-          let newArray = [];
-          jsonData.map((json) => {
-            if (!check.includes(json.provider_type)) throw new Error();
+          jsonData.map(async(json) => {
+            console.log(2);
+            if(typeof json.provider_type!="undefined"&&(json.status === "non-acitve" || json.status === "active")){
+            if (!check.includes(String(json.provider_type))){
+              await axios({
+                method: "post",
+                url: baseURL + "/provider-type/admin/create",
+                headers: {
+                  Authorization: Token,
+                },
+                data:{
+                  content:json.provider_type==="undefined" ? "":String(json.provider_type).trim()
+                },
+              })
+                .then((res) => {
+                  message.success("Đã tạo thêm nhóm nhà cung cấp "+json.provider_type)
+                  setTypeCreated(typeCreated+1);
+                })
+                .catch((err) => {
+                  message.error("Tạo nhóm thất bại");
+                });
+            }
             let { provider_type, ...newObj } = json;
             newObj = {
               ...newObj,
               provider_type: {
-                content: json.provider_type,
+                content: json.provider_type===undefined ? "":String(json.provider_type).trim()
               },
             };
-            console.log(newObj);
-            newArray.push(newObj);
-            return newObj
+            await axios(
+              {
+                  method:"post",
+                  url:baseURL+"/provider/staff/create-one",
+                  headers:{
+                      "Authorization":Token
+                  },
+                  data:newObj
+              }
+          ).then(res=>{
+            setSuccess(success+1)
+            message.success("Tạo thành công nhà cung cấp "+newObj.name)
+          }).catch(err=>{
+            setFailed(failed+1)
+            message.error("Tạo thất bại nhà cung cấp "+newObj.name)
+          })
+            return newObj}
+            else message.error("Đối tượng "+json.name+" không hợp lệ")
           });
-            setList(newArray);
-            // ... rest of the code
-            if (list.length > 0) {
-              console.log(list);
-              axios({
-                method: "post",
-                url: baseURL + "/provider/staff/create-many",
-                headers: {
-                  Authorization: Token,
-                },
-                data: list,
-              })
-                .then((res) => {
-                  setInputFile(false);
-                })
-                .catch((err) => {
-                  message.error("File không hợp lệ");
-                });
-                console.log(inputFile);
-            }
-        } catch (err) {
+          setCheckBox(true)
+        }catch (err) {
           message.error("File không hợp lệ");
         }
       };
@@ -429,6 +447,24 @@ function ProviderTable(props) {
           </div>
         />
       )}
+      {checkBox && 
+      <Modal
+      open={checkBox}
+      onCancel={e=>{setCheckBox(!checkBox)
+      setSuccess(0)
+      setTypeCreated(0)
+      setFailed(0)
+      setInputFile(false)}}
+      onOk={e=>{setCheckBox(!checkBox)
+        setSuccess(0)
+      setTypeCreated(0)
+      setFailed(0)
+      setInputFile(false)}}>
+        <p>Số nhà cung cấp đã thêm thành công:{success}</p>
+        <p>Số nhà cung cấp thêm không thành công:{failed}</p>
+        <p>Số nhóm nhà cung cấp đã bổ sung:{typeCreated}</p>
+
+      </Modal>}
       {err ? (
         <ExceptionBox url="/main" msg=<h2>Có lỗi xảy ra</h2> />
       ) : (

@@ -4,6 +4,7 @@ import {
   DatePicker,
   Form,
   InputNumber,
+  Modal,
   Select,
   Space,
   Spin,
@@ -48,7 +49,10 @@ function CustomerTable(props) {
   const [dataRequest, setDataRequest] = useState({});
   const [dataOfType, setDataOfType] = useState([]);
   const [customer_type, setProvider_type] = useState();
-
+  const [success, setSuccess] = useState(0);
+  const [failed, setFailed] = useState(0);
+  const [typeCreated, setTypeCreated] = useState(0);
+  const [checkBox, setCheckBox] = useState(false);
   let columns = [
     {
       title: "Mã khách hàng",
@@ -152,7 +156,7 @@ function CustomerTable(props) {
       .catch((err) => {
         setErr(true);
       });
-  }, [value, loading, inputFile, customer_type, index, sort]);
+  }, [value, loading, inputFile, customer_type, index, sort, page, limit]);
   const handleButton = () => {
     axios({
       url: baseURL + "/customer/admin",
@@ -168,7 +172,7 @@ function CustomerTable(props) {
       })
       .catch((err) => setErr(true));
   };
-  const submitList = () => {
+  const submitList = async () => {
     if (file && file.files[0]) {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -181,44 +185,73 @@ function CustomerTable(props) {
             header: 2,
             range: 1,
           });
-          console.log(jsonData);
           // Xử lý dữ liệu, ví dụ: log ra console
           let check = [];
           dataOfType.map((i) => {
             check.push(i.content);
           });
-          let newArray = [];
-          jsonData.map((json) => {
-            if (!check.includes(json.customer_type)) throw new Error();
-            if (json.status != "non-acitve" && json.status != "active")
-              throw new Error();
-            let { customer_type, ...newObj } = json;
-            newObj = {
-              ...newObj,
-            };
-            console.log(newObj);
-            newArray.push(newObj);
-            return newObj;
-          });
-          setList(newArray);
-          // ... rest of the code
-          if (list.length > 0) {
-            console.log(list);
-            axios({
-              method: "post",
-              url: baseURL + "/customer/staff/create-many",
-              headers: {
-                Authorization: Token,
-              },
-              data: list,
-            })
-              .then((res) => {
-                setInputFile(false);
+          jsonData.map(async (json) => {
+            if (
+              typeof json.customer_type != "undefined" &&
+              (json.status === "non-acitve" || json.status === "active")
+            ) {
+              if (!check.includes(String(json.customer_type))) {
+                await axios({
+                  method: "post",
+                  url: baseURL + "/customer-type/admin/create",
+                  headers: {
+                    Authorization: Token,
+                  },
+                  data: {
+                    content:
+                      typeof json.customer_type === "undefined"
+                        ? null
+                        : String(json.customer_type).trim(),
+                  },
+                })
+                  .then((res) => {
+                    message.success(
+                      "Đã tạo thêm nhóm nhà cung cấp " + json.customer_type
+                    );
+                    setTypeCreated(typeCreated + 1);
+                  })
+                  .catch((err) => {
+                    message.error("Tạo nhóm thất bại");
+                  });
+              }
+              if (json.status != "non-acitve" && json.status != "active")
+                throw new Error();
+              let { customer_type, ...newObj } = json;
+              console.log(typeof json.customer_type === "undefined");
+              newObj = {
+                ...newObj,
+                customer_type: {
+                  content:
+                    typeof json.customer_type === "undefined"
+                      ? null
+                      : String(json.customer_type).trim(),
+                },
+              };
+              await axios({
+                method: "post",
+                url: baseURL + "/customer/staff/create-one",
+                headers: {
+                  Authorization: Token,
+                },
+                data: newObj,
               })
-              .catch((err) => {
-                message.error("File không hợp lệ");
-              });
-          }
+                .then((res) => {
+                  setSuccess(success + 1);
+                  message.success("Tạo thành công nhà cung cấp " + newObj.name);
+                })
+                .catch((err) => {
+                  setFailed(failed + 1);
+                  message.error("Tạo thất bại nhà cung cấp " + newObj.name);
+                });
+              return newObj;
+            } else message.error("Đối tượng " + json.name + " không hợp lệ");
+          });
+          setCheckBox(true);
         } catch (err) {
           message.error("File không hợp lệ");
         }
@@ -484,6 +517,29 @@ function CustomerTable(props) {
         openFilter={open}
         setOpenFilter={setOpen}
       /> */}
+      {checkBox && (
+        <Modal
+          open={checkBox}
+          onCancel={(e) => {
+            setInputFile(!inputFile)
+            setCheckBox(!checkBox);
+            setSuccess(0);
+            setTypeCreated(0);
+            setFailed(0);
+          }}
+          onOk={(e) => {
+            setInputFile(!inputFile)
+            setCheckBox(!checkBox);
+            setSuccess(0);
+            setTypeCreated(0);
+            setFailed(0);
+          }}
+        >
+          <p>Số khách hàng đã thêm thành công:{success}</p>
+          <p>Số khách hàng thêm không thành công:{failed}</p>
+          <p>Số nhóm khách hàng đã bổ sung:{typeCreated}</p>
+        </Modal>
+      )}
       {inputFile && (
         <ImportFile
           setInputFile={setInputFile}

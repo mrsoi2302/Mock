@@ -70,6 +70,7 @@ public class ProviderController {
             provider.setCode("PRV"+sequenceRepository.generate());
         }else if(provider.getCode().matches("^PRV.*")) throw new CustomException("Tiền tố PRV không hợp lệ", HttpStatus.BAD_REQUEST);
         else if(providerService.findByCode(provider.getCode())!=null) throw new CustomException("NCC đã tồn tại",HttpStatus.BAD_REQUEST);
+        provider.setProvider_type(providerTypeService.findByContent(provider.getProvider_type().getContent()));
         String token = request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);
         Employee t=employeeService.findByUsername(username);

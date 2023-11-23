@@ -1,8 +1,10 @@
 package com.example.demo.Service;
 
 import com.example.demo.Entities.Provider;
+import com.example.demo.Entities.ProviderType;
 import com.example.demo.Entities.Receipt;
 import com.example.demo.Repositories.ProviderRepo;
+import com.example.demo.Repositories.ProviderTypeRepo;
 import com.example.demo.Repositories.ReceiptRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -16,8 +18,10 @@ import java.util.List;
 public class ProviderService {
     private ProviderRepo providerRepo;
     private ReceiptRepo receiptRepo;
+    private ProviderTypeRepo providerTypeRepo;
     public List<Provider> list(String value, String manager, Date createdDate, String type, String status, Pageable pageable) {
-        List<Provider> t=providerRepo.list(value,manager,createdDate,type,status,pageable);
+        ProviderType p=providerTypeRepo.findByContent(type);
+        List<Provider> t=providerRepo.list(value,manager,createdDate,p,status,pageable);
         for(Provider i:t){
             long sum=0;
             for(Receipt j:i.getReceipts()){
@@ -26,7 +30,7 @@ public class ProviderService {
             i.setTotal(sum);
             providerRepo.save(i);
         }
-        return providerRepo.list(value,manager,createdDate,type,status,pageable);
+        return providerRepo.list(value,manager,createdDate,p,status,pageable);
     }
     public void save(Provider provider) {
         providerRepo.save(provider);
@@ -65,7 +69,9 @@ public class ProviderService {
     }
 
     public Long countList(String value, String manager, Date createdDate,String type, String status) {
-        return providerRepo.countList(value,manager,createdDate,type,status);
+        ProviderType p=providerTypeRepo.findByContent(type);
+
+        return providerRepo.countList(value,manager,createdDate,p,status);
     }
     public List<Provider> findForReceipt(String manager){
         return providerRepo.findForReceipt(manager);

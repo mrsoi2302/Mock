@@ -89,29 +89,23 @@ export default function ProviderType() {
             Authorization: Token,
           },
         }).then((ress) => {
+          temp.push({
+            code: i.code,
+            content: i.content,
+            quantity: ress.data,
+          },)
           setData({
-            data: [
-              ...data.data,
-              {
-                code: i.code,
-                content: i.content,
-                quantity: ress.data,
-              },
-            ],
+            data: temp,
             loading: false,
           });
         });
-      });
-      setData({
-        data: temp,
-        loading: false,
       });
       console.log(data);
     });
   }, [value, loading, index]);
   const handleDelete = (e) => {
     axios({
-      method: "delet",
+      method: "delete",
       url: baseURL + "/provider-type/admin?code=" + e.code,
       headers: {
         Authorization: Token,
@@ -124,6 +118,7 @@ export default function ProviderType() {
         message.error("Không thành công");
       });
   };
+  console.log(data.data);
   const createType = (e) => {
     axios({
       method: "post",

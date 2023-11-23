@@ -22,7 +22,6 @@ public class Provider {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false,unique = true)
     private String code;
     @NotNull
     private String name;
@@ -38,7 +37,6 @@ public class Provider {
     private String status;
     private String manager;
     private String manager_code;
-    @Email
     private String email;
     @JsonIgnore
     @OneToMany(mappedBy = "provider",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)

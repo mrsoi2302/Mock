@@ -86,17 +86,15 @@ export default function CustomerType() {
               Authorization: Token,
             },
           }).then((ress) => {
+            temp.push({
+              code: i.code,
+              content: i.content,
+              quantity: ress.data,
+            },)
             setData({
-              data: [
-                ...data.data,
-                {
-                  code: i.code,
-                  content: i.content,
-                  quantity: ress.data,
-                },
-              ],
-              loading: false,
-            });
+              data:temp,
+              loading:"false"
+            })
           });
         });
         setData({

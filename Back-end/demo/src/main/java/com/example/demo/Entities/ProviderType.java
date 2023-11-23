@@ -5,7 +5,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import java.util.List;
 
@@ -21,6 +25,8 @@ public class ProviderType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String code;
+    @Column(unique = true,nullable = false)
+    @NotBlank
     private String content;
     @JsonIgnore
     @OneToMany(mappedBy ="provider_type",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)

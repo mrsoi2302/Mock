@@ -39,4 +39,8 @@ public class CustomerTypeService {
         customerRepo.deleteAllByCode(codeList);
         customerTypeRepo.deleteByCode(code);
     }
+
+    public CustomerType findByContent(String content) {
+        return  customerTypeRepo.findByContent(content);
+    }
 }

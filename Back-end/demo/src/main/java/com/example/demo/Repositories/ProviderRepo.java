@@ -1,6 +1,7 @@
 package com.example.demo.Repositories;
 
 import com.example.demo.Entities.Provider;
+import com.example.demo.Entities.ProviderType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -21,7 +22,7 @@ public interface ProviderRepo extends JpaRepository<Provider,Long> {
             "or " +
             "p.contact like concat('%',:value,'%')" +
             "or " +
-            "p.email like concat('%',:value,'%'))" +
+            "p.email like concat('%',:value,'%'))"+
             "and" +
             "(:createdDate is null or cast(p.created_date1 as date )=:createdDate )" +
             "and" +
@@ -29,14 +30,15 @@ public interface ProviderRepo extends JpaRepository<Provider,Long> {
             "and" +
             "(:manager is null or p.manager=:manager)" +
             "and" +
-            "(:type is null or p.provider_type.content=:type)")
+            "(:type is null or p.provider_type=:type)")
     List<Provider> list(@Param("value")String value,
                         @Param("manager") String manager,
                         @Param("createdDate")Date createdDate,
-                        @Param("type") String type,
+                        @Param("type") ProviderType type,
                         @Param("status")String status,
-                        Pageable pageable);
-    @Query("SELECT count(p) from Provider p where " +
+                        Pageable pageable
+                        );
+    @Query("select count(p) from Provider p where " +
             "(:value is null or " +
             "(p.code like concat('%',:value,'%'))" +
             "or" +
@@ -52,11 +54,11 @@ public interface ProviderRepo extends JpaRepository<Provider,Long> {
             "and" +
             "(:manager is null or p.manager=:manager)" +
             "and" +
-            "(:type is null or p.provider_type.content=:type)")
+            "(:type is null or p.provider_type=:type)")
     Long countList(@Param("value")String value,
                         @Param("manager") String manager,
                         @Param("date")Date createdDate,
-                        @Param("type") String type,
+                        @Param("type") ProviderType type,
                         @Param("status")String status);
     @Query("select p from Provider p where p.code=:code")
     Provider findByCode(String code);
@@ -65,7 +67,7 @@ public interface ProviderRepo extends JpaRepository<Provider,Long> {
     void deleteAllByCode(List<String> list);
     @Query("select p from Provider p where p.provider_type.code=:code")
     List<Provider> findAllByProviderType(String code);
-    @Query("select p from Provider p where (:manager is null or p.manager=:manager) and p.status='active'")
+    @Query("select p from Provider p where p.manager=:manager")
     List<Provider> findForReceipt(@Param("manager") String manager);
     @Query("select p from Provider p where (:manager is null or p.manager=:manager) and p.code=:code")
     Provider findByCodeAndManager(@Param("code") String code,@Param("manager") String manager);

@@ -11,6 +11,7 @@ import com.example.demo.Service.EmployeeService;
 import com.example.demo.Service.ProviderTypeService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class ProviderTypeController {
         return providerTypeService.list(value.getValue());
     }
         @PostMapping("/admin/create")
-    public void create(@RequestBody ProviderType providerType,HttpServletRequest request){
+    public void create(@RequestBody @Valid ProviderType providerType, HttpServletRequest request){
         if(providerType.getCode()==null){
             providerType.setCode("PRT"+sequenceRepository.generate());
         }

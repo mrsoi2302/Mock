@@ -12,6 +12,7 @@ import com.example.demo.Service.CustomerTypeService;
 import com.example.demo.Service.EmployeeService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ public class CustomerTypeController {
         return customerTypeService.list(value.getValue());
     }
     @PostMapping("/admin/create")
-    public void create(@RequestBody CustomerType customerType,HttpServletRequest request){
+    public void create(@RequestBody @Valid CustomerType customerType, HttpServletRequest request){
         if(customerTypeService.findByContentOrCode(customerType.getContent(),customerType.getCode())!=null) throw new CustomException("Nhóm KH đã tồn tại", HttpStatus.BAD_REQUEST);
         if(customerType.getCode()==null||customerType.getCode().trim().isEmpty()){
             customerType.setCode("CTT"+sequenceRepository.generate());

@@ -9,6 +9,7 @@ import com.example.demo.Repositories.HistoryRepository.HistoryRepository;
 import com.example.demo.Repositories.SequenceRepo.SequenceRepository;
 import com.example.demo.Security.TokenProvider;
 import com.example.demo.Service.CustomerService;
+import com.example.demo.Service.CustomerTypeService;
 import com.example.demo.Service.EmployeeService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -29,6 +30,7 @@ public class CustomerController {
     private TokenProvider tokenProvider;
     private EmployeeService employeeService;
     private HistoryRepository historyRepository;
+    private CustomerTypeService customerTypeService;
 
     @PostMapping("/list")
     List<Customer> list(@RequestBody Value<Customer> value,
@@ -101,6 +103,7 @@ public class CustomerController {
         }else if(customer.getCode().matches("^CTM.*")) throw new CustomException("Tiền tố CTM không hợp lệ", HttpStatus.BAD_REQUEST);
         String token = request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);
+        customer.setCustomer_type(customerTypeService.findByContent(customer.getCustomer_type().getContent()));
         Employee t=employeeService.findByUsername(username);
         customer.setManager(t.getUsername());
         customer.setCreated_date(new Date(System.currentTimeMillis()+(1000*60*60*7)));

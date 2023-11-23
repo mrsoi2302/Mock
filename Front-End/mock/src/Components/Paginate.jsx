@@ -12,7 +12,7 @@ function Paginate(props) {
       onChange={handleShowSizeChange}
       showSizeChanger={true}
       onShowSizeChange={handleShowSizeChange}
-      style={{ margin:"10px 40%  " }}
+      style={{ marginTop:"10px",marginLeft:"80%" }}
       locale={{ items_per_page: "/ trang"}}
     />
   );
