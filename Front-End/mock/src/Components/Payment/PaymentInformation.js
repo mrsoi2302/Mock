@@ -143,7 +143,7 @@ export default function PaymentInformation() {
                 <Button type="primary" size="large" href={url} style={{width:"90%",marginLeft:"10%"}}>
                   Chỉnh sửa
                 </Button>
-                <Button type="primary" size="large" style={{backgroundColor:"red",width:"90%",marginLeft:"10%"}} onClick={handleDelete}>
+                <Button type="link" size="large" style={{width:"90%",marginLeft:"10%"}} onClick={handleDelete}>
                   Xóa
                 </Button>
               </div>

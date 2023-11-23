@@ -117,8 +117,8 @@ export default function ReceiptInformation() {
                   Chỉnh sửa
                 </Button>
                 <Button
-                  type="primary"
-                  style={{ backgroundColor: "red", margin: "2px" }}
+                  type="link"
+                  style={{ margin: "2px" }}
                   onClick={handleDelete}
                 >
                   Xóa

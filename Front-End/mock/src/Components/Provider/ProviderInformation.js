@@ -154,7 +154,7 @@ export default function ProviderInformation() {
               <Button size="large" type="primary" href={url}>
                 Chỉnh sửa
               </Button>
-              <Button size="large" type="primary" style={{backgroundColor:"red"}} onClick={handleDelete}>
+              <Button size="large" type="primary" onClick={handleDelete}>
                 Xóa
               </Button>
             </div>
