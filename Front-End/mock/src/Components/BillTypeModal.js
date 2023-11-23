@@ -4,10 +4,11 @@ import {
   Form,
   Input,
   Modal,
+  Space,
   Table,
   message,
 } from "antd";
-import { CloseCircleOutlined } from "@ant-design/icons";
+import { CloseCircleOutlined ,PlusCircleOutlined } from "@ant-design/icons";
 import Search from "antd/es/input/Search";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -203,14 +204,17 @@ export default function BillTypeModal(props) {
         </Form>
       ) : (
         <div>
-          <Search
-            placeholder="Tìm kiếm"
+        <Space.Compact
+        style={{width:"100%"}}>
+          <Input 
+            placeholder="Tìm kiếm"
             onChange={(e) => {
               setValue(e.target.value);
             }}
             enterButton
-            style={{ width: "100%", marginBottom: "10px" }}
           />
+           <Button type="primary" onClick={e=>{setCreateForm(true)}}><PlusCircleOutlined size={"10px"}/></Button>
+          </Space.Compact>
           <Table
             rowSelection={handleSelection}
             pagination={false}
