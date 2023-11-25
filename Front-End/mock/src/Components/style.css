@@ -74,7 +74,7 @@ body{
     align-items: center;
     float: right;
     justify-content: space-between;
-    z-index: 100;
+    z-index: 1000;
     padding-left: 12px
 }
 .content{

@@ -1,8 +1,10 @@
-import { Button, Table } from "antd";
+import { Button, Modal, Table } from "antd";
 import React from "react";
 import SearchInput from "./SearchInput";
+import { useNavigate } from "react-router-dom";
 
 export default function RowSelectionTable(props) {
+  const navigate=useNavigate();
   const url = props.url;
   return (
     <div>
@@ -15,16 +17,28 @@ export default function RowSelectionTable(props) {
         {props.selectedRowKeys.length > 0 ? (
           <Button
             type="primary"
-            onClick={props.delete}
-            style={{
-              
+            onClick={
+              e=>{
+                Modal.confirm({
+                    title: "Xác nhận xoá",
+                    content: "Bạn có chắc chắn muốn xoá "+props.quantity+" "+props.name+" không ?",
+                    onOk() {
+                      props.delete()
+                    },
+
+                    cancelText:"Hủy bỏ"
+                  });
+              }
+              //props.delete
+              }
+            style={{  
               backgroundColor:"red"
             }}
           >
             Xóa
           </Button>
         ):props.setInputFile != undefined ? <Button
-          type="primary"
+          type="link"
           onClick={(e) => {
             props.setInputFile(true);
           }}
@@ -36,7 +50,7 @@ export default function RowSelectionTable(props) {
         </Button>:<div></div>}
         {
           props.handlePrint != undefined ? <Button
-          type="primary"
+          type="link"
           onClick={props.handlePrint}
           style={{
             
@@ -56,7 +70,7 @@ export default function RowSelectionTable(props) {
         />
         <Button
           type="primary"
-          href={url}
+          onClick={e=>{navigate(url)}}
           style={{
             
             marginLeft: "5px",

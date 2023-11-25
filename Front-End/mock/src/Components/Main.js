@@ -27,14 +27,14 @@ export default function Main(props) {
   const [err, setErr] = useState(false);
   document.title = "Trang chủ";
   useEffect( () => {
-    localStorage.removeItem("open");
-    localStorage.removeItem("selected");
+    props.setOpenKeys("")
+    props.setSelectedKeys("")
     let x=0,y=0
     axios({
       url: baseURL + "/receipt/count-trade",
       method: "get",
       headers: {
-        Authorization: Token,
+        Authorization:"Bearer "+localStorage.getItem("jwt"),
       },
     })
       .then((ress) => {
@@ -42,7 +42,7 @@ export default function Main(props) {
           url: baseURL + "/payment/count-trade",
           method: "get",
           headers: {
-            Authorization: Token,
+            Authorization:"Bearer "+localStorage.getItem("jwt"),
           },
         })
           .then((res) => {
@@ -64,7 +64,7 @@ export default function Main(props) {
       url: baseURL + "/receipt/count-list",
       method: "post",
       headers: {
-        Authorization: Token,
+        Authorization:"Bearer "+localStorage.getItem("jwt"),
       },
       data: {
         value: null,
@@ -78,7 +78,7 @@ export default function Main(props) {
           url: baseURL + "/payment/count-list",
           method: "post",
           headers: {
-            Authorization: Token,
+            Authorization:"Bearer "+localStorage.getItem("jwt"),
           },
           data: {
             value: null,
@@ -105,7 +105,7 @@ export default function Main(props) {
       url: baseURL + "/provider/count-list",
       method: "post",
       headers: {
-        Authorization: Token,
+        Authorization:"Bearer "+localStorage.getItem("jwt"),
       },
       data: {
         value: null,
@@ -121,7 +121,7 @@ export default function Main(props) {
           url: baseURL + "/customer/count-list",
           method: "post",
           headers: {
-            Authorization: Token,
+            Authorization:"Bearer "+localStorage.getItem("jwt"),
           },
           data: {
             value: null,
@@ -155,7 +155,7 @@ export default function Main(props) {
       url: baseURL + "/payment/count-list",
       method: "post",
       headers: {
-        Authorization: Token,
+        Authorization:"Bearer "+localStorage.getItem("jwt"),
       },
       data: {
         value: null,
@@ -169,7 +169,7 @@ export default function Main(props) {
           url: baseURL + "/receipt/count-list",
           method: "post",
           headers: {
-            Authorization: Token,
+            Authorization:"Bearer "+localStorage.getItem("jwt"),
           },
           data: {
             value: null,
@@ -191,6 +191,7 @@ export default function Main(props) {
       .catch((err) => {
         setErr(true);
       });
+      const v=Token
   }, []);
 
   return (

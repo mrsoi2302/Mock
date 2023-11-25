@@ -19,8 +19,8 @@ export default function ModifyProvider(props) {
   const [dataOfEmployee,setDataOfEmployee]=useState([])
   const [value,setValue]=useState("");
   useEffect(() => {
-    localStorage.setItem("open", "provider");
-    localStorage.setItem("selected", "provider-list");
+    props.setOpenKeys("provider")
+    props.setSelectedKeys("provider-list")
     axios({
         url: baseURL + "/provider/information?code=" + code,
         method: "get",

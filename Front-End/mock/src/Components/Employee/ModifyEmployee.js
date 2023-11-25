@@ -8,7 +8,7 @@ import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import ExceptionBox from "../ExceptionBox";
 import { Option } from "antd/es/mentions";
-export default function ModifyEmployee() {
+export default function ModifyEmployee(props) {
   document.title = "Danh sách nhân viên";
   const navigate = useNavigate();
   const [form] = Form.useForm();
@@ -21,6 +21,8 @@ export default function ModifyEmployee() {
   });
   const [err, setErr] = useState(false);
   useEffect(() => {
+    props.setOpenKeys("employee")
+    props.setSelectedKeys("employee-list")
     axios({
       url: baseURL + "/employee/admin/information?code=" + code,
       method: "get",
@@ -174,7 +176,30 @@ export default function ModifyEmployee() {
                 },
               ]}
             >
-              <Input disabled />
+              <Input 
+              onChange={e=>{
+                setData({
+                    ...data.data,
+                    data: {
+                      ...data.data,
+                      username: e.target.value,
+                    },
+                  });
+              }} />
+            </Form.Item>
+            <Form.Item
+              name="password"
+              label="Mật khẩu"
+            >
+              <Input type="password" onChange={e=>{
+                setData({
+                    ...data.data,
+                    data: {
+                      ...data.data,
+                      password: e.target.value,
+                    },
+                  });
+              }} />
             </Form.Item>
             <Form.Item>
               <Button

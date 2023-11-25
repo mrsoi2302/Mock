@@ -13,11 +13,10 @@ import Paginate from "../Paginate";
 import RowSelectionTable from "../RowSelectionTable";
 import * as XLSX from "xlsx";
 import ImportFile from "../ImportFile";
-export default function EmployeeTable() {
+export default function EmployeeTable(props) {
   document.title = "Danh sách nhân viên";
   localStorage.setItem("open", "employee");
   localStorage.setItem("selected", "employee-list");
-  const [file, setFile] = useState();
   const navigate = useNavigate();
   const [data, setData] = useState({
     data: [],
@@ -63,6 +62,8 @@ export default function EmployeeTable() {
     },
   ];
   useEffect(() => {
+    props.setOpenKeys("employee")
+    props.setSelectedKeys("employee-list")
     let temp = [];
     axios({
       method: "post",
