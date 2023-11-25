@@ -7,8 +7,9 @@ import "../style.css";
 import Account from "../Account";
 import ExceptionBox from "../ExceptionBox";
 import Search from "antd/es/input/Search";
+import WarningModal from "../WarningModal";
 
-export default function ProviderType() {
+export default function ProviderType(props) {
   document.title = "Nhóm nhà cung cấp";
   localStorage.setItem("open", "provider");
   localStorage.setItem("selected", "provider-type");
@@ -25,6 +26,7 @@ export default function ProviderType() {
   const [loading, setLoading] = useState(false);
   const [index, setIndex] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [warningModal, setWarningModal] = useState(false);
   let columns = [
     {
       title: "Mã nhóm",
@@ -61,6 +63,8 @@ export default function ProviderType() {
     },
   ];
   useEffect(() => {
+    props.setOpenKeys("provider");
+    props.setSelectedKeys("provider-type");
     setData({
       data: [],
       loading: true,
@@ -93,7 +97,7 @@ export default function ProviderType() {
             code: i.code,
             content: i.content,
             quantity: ress.data,
-          },)
+          });
           setData({
             data: temp,
             loading: false,
@@ -159,16 +163,27 @@ export default function ProviderType() {
         dataIndex: "action",
         key: "action",
         render: (_, record) => (
-          <Space size="middle">
-            <Button
-              type="link"
-              onClick={(e) => {
-                handleDelete(record);
-              }}
-            >
-              Delete
-            </Button>
-          </Space>
+          <div>
+            <Space size="middle">
+              <Button
+                type="link"
+                style={{ color: "red" }}
+                onClick={(e) => {
+                  Modal.confirm({
+                    title: "Xác nhận xoá",
+                    content: "Bạn có chắc chắn muốn xoá nhóm nhà cung cấp "+record.code+" không?",
+                    onOk() {
+                      handleDelete(record)
+                    },
+
+                    cancelText:"Hủy bỏ"
+                  });
+                }}
+              >
+                Xóa
+              </Button>
+            </Space>
+          </div>
         ),
       },
     ];
@@ -176,7 +191,7 @@ export default function ProviderType() {
   return (
     <div className="content">
       <div className="taskbar">
-        <h2>Danh sách nhân viên</h2>
+        <h2>Danh sách nhóm nhà cung cấp</h2>
         <Account name={localStorage.getItem("name")} />
       </div>
       <Modal
@@ -185,7 +200,7 @@ export default function ProviderType() {
           setOpenModal(false);
         }}
         onOk={createType}
-        okButtonProps={{ disabled:create.content.trim().length===0}}
+        okButtonProps={{ disabled: create.content.trim().length === 0 }}
         title="Tạo nhóm nhà cung cấp mới"
       >
         <Form
@@ -238,18 +253,11 @@ export default function ProviderType() {
           </Form.Item>
         </Form>
       </Modal>
-      <div
-        style={{
-          marginTop: "12vh",
-          display: "grid",
-          width: "50vw",
-          gridTemplateColumns: "20% 80%",
-        }}
-      ></div>
+
       {err ? (
         <ExceptionBox url="/main" msg=<h2>Có lỗi xảy ra</h2> />
       ) : (
-        <div className="inside" style={{ textAlign: "right" }}>
+        <div className="inside" style={{ display: "block" }}>
           {data.loading && loading ? (
             <Spin />
           ) : (
@@ -272,6 +280,7 @@ export default function ProviderType() {
                 <Button
                   type="primary"
                   style={{
+                    marginLeft:"10px",
                     zIndex: 1000,
                   }}
                   onClick={(e) => {

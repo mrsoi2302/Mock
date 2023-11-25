@@ -10,7 +10,7 @@ import { Token } from "../../Token";
 import { useNavigate, useParams } from "react-router-dom";
 import ExceptionBox from "../ExceptionBox";
 
-export default function ModifyReceipt(){
+export default function ModifyReceipt(props){
     document.title="Tạo phiếu chi mới"
     const {code}= useParams()
     const navigate=useNavigate()
@@ -24,8 +24,8 @@ export default function ModifyReceipt(){
 
     const [form] = Form.useForm();
     useEffect(()=>{
-        localStorage.setItem("open","cash")
-        localStorage.setItem("selected","receipt-list")
+        props.setOpenKeys("cash")
+        props.setSelectedKeys("receipt-list")
         axios(
           {
               url:baseURL+"/receipt-group/list",

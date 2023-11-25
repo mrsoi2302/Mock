@@ -29,7 +29,7 @@ import CreatePayment from "./CreatePayment";
 import { isDisabled } from "@testing-library/user-event/dist/utils";
 import RowSelectionTableForBill from "../RowSelectionTableForBill";
 import BillTypeModal from "../BillTypeModal";
-function PaymentTable() {
+function PaymentTable(props) {
   document.title = "Danh sách phiếu chi";
   localStorage.setItem("open", "cash");
   localStorage.setItem("selected", "payment-list");
@@ -80,6 +80,8 @@ function PaymentTable() {
     },
   ];
   useEffect(() => {
+    props.setOpenKeys("cash")
+      props.setSelectedKeys("payment-list")
     let temp = [];
     axios({
       method: "post",

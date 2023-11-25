@@ -29,19 +29,6 @@ public class PaymentTypeService {
     }
 
     public void deleteByName(String name) {
-        List<Payment> payments= paymentService.findByType(name);
-        List<String> paymentCode=new ArrayList<>();
-        for(Payment i:payments){
-            paymentCode.add(i.getCode());
-        }
-        paymentService.deleteAllByCode(paymentCode);
-
-        List<Receipt> receipts= receiptService.findByType(name);
-        List<String> receiptCode=new ArrayList<>();
-        for(Receipt i:receipts){
-            receiptCode.add(i.getCode());
-        }
-        receiptService.deleteAllByCode(receiptCode);
         paymentTypeRepo.deleteByName(name);
     }
 

@@ -8,7 +8,7 @@ import axios from "axios";
 import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 
-export default function CreateEmployee() {
+export default function CreateEmployee(props) {
   document.title = "Tạo mới nhân viên";
   const [code, setCode] = useState();
   const [name, setName] = useState("");
@@ -19,8 +19,8 @@ export default function CreateEmployee() {
   const [error, setError] = useState(false);
   const [form] = Form.useForm();
   useEffect(() => {
-    localStorage.setItem("open", "employee");
-    localStorage.setItem("selected", "create-employee");
+    props.setOpenKeys("employee")
+    props.setSelectedKeys("create-employee")
   }, []);
   const handleSubmit = (e) => {
     form

@@ -30,13 +30,6 @@ public class CustomerTypeService {
     }
 
     public void deleteByCode(String code) {
-        List<Customer> list=customerRepo.findByType(code);
-        List<String> codeList=new ArrayList<>();
-        for(Customer i:list){
-            codeList.add(i.getCode());
-        }
-        paymentRepo.deleteByCustomerList(list);
-        customerRepo.deleteAllByCode(codeList);
         customerTypeRepo.deleteByCode(code);
     }
 

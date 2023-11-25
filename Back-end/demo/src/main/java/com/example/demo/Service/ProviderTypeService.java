@@ -27,10 +27,7 @@ public class ProviderTypeService {
     }
 
     public void deleteByCode(String code) {
-        List<Provider> list= providerService.findByProviderType(code);
-        for(Provider i:list){
-            providerService.deleteAllByCode(Collections.singletonList(i.getCode()));
-        }
+
         providerTypeRepo.deleteByCode(code);
     }
 

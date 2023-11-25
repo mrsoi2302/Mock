@@ -20,8 +20,8 @@ export default function ModifyCustomer(props) {
   const [dataOfEmployee,setDataOfEmployee]=useState([])
   const [value,setValue]=useState();
   useEffect(() => {
-    localStorage.setItem("open", "customer");
-    localStorage.setItem("selected", "customer-list");
+    props.setOpenKeys("customer")
+    props.setSelectedKeys("customer-list")
     axios({
         url: baseURL + "/customer/information?code=" + code,
         method: "get",

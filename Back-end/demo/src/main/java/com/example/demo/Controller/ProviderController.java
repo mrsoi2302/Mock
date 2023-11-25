@@ -70,7 +70,7 @@ public class ProviderController {
             provider.setCode("PRV"+sequenceRepository.generate());
         }else if(provider.getCode().matches("^PRV.*")) throw new CustomException("Tiền tố PRV không hợp lệ", HttpStatus.BAD_REQUEST);
         else if(providerService.findByCode(provider.getCode())!=null) throw new CustomException("NCC đã tồn tại",HttpStatus.BAD_REQUEST);
-        provider.setProvider_type(providerTypeService.findByContent(provider.getProvider_type().getContent()));
+        if(provider.getProvider_type()!=null) provider.setProvider_type(providerTypeService.findByContent(provider.getProvider_type().getContent()));
         String token = request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);
         Employee t=employeeService.findByUsername(username);
@@ -94,7 +94,7 @@ public class ProviderController {
                 i.setCode("PRV"+sequenceRepository.generate());
             }else if(i.getCode().matches("^PRV.*")) throw new CustomException("Tiền tố PRV không hợp lệ", HttpStatus.BAD_REQUEST);
             else if(providerService.findByCode(i.getCode())!=null) throw new CustomException("NCC đã tồn tại",HttpStatus.BAD_REQUEST);
-            i.setProvider_type(providerTypeService.findByContent(i.getProvider_type().getContent()));
+            if(i.getProvider_type()!=null)i.setProvider_type(providerTypeService.findByContent(i.getProvider_type().getContent()));
             i.setCreated_date(new Date(System.currentTimeMillis()+(1000*60*60*7)));
             i.setCreated_date1(new Date(System.currentTimeMillis()));
             i.setManager(t.getUsername());

@@ -24,7 +24,7 @@ import { Token } from "../../Token";
 import { Option } from "antd/es/mentions";
 import RowSelectionTableForBill from "../RowSelectionTableForBill";
 import BillTypeModal from "../BillTypeModal";
-function ReceiptTable() {
+function ReceiptTable(props) {
   document.title = "Danh sách phiếu thu";
   localStorage.setItem("open", "cash");
   localStorage.setItem("selected", "receipt-list");
@@ -75,6 +75,8 @@ function ReceiptTable() {
     },
   ];
   useEffect(() => {
+    props.setOpenKeys("cash")
+    props.setSelectedKeys("receipt-list")
     let temp = [];
     axios({
       method: "post",

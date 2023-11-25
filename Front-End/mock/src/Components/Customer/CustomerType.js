@@ -8,10 +8,8 @@ import Account from "../Account";
 import ExceptionBox from "../ExceptionBox";
 import Search from "antd/es/input/Search";
 
-export default function CustomerType() {
+export default function CustomerType(props) {
   document.title = "Nhóm khách hàng";
-  localStorage.setItem("open", "customer");
-  localStorage.setItem("selected", "customer-type");
   const [create, setCreate] = useState({
     content: "  ",
   });
@@ -61,6 +59,8 @@ export default function CustomerType() {
     },
   ];
   useEffect(() => {
+    props.setOpenKeys("customer")
+    props.setSelectedKeys("customer-type")
     let temp = [];
     axios({
       method: "post",
@@ -241,14 +241,6 @@ export default function CustomerType() {
           </Form.Item>
         </Form>
       </Modal>
-      <div
-        style={{
-          marginTop: "12vh",
-          display: "grid",
-          width: "50vw",
-          gridTemplateColumns: "20% 80%",
-        }}
-      ></div>
       {err ? (
         <ExceptionBox url="/main" msg=<h2>Có lỗi xảy ra</h2> />
       ) : (

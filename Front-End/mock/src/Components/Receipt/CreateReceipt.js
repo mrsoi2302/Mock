@@ -15,10 +15,9 @@ import axios from "axios";
 import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import { useNavigate } from "react-router-dom";
-export default function CreateReceipt() {
+export default function CreateReceipt(props) {
   document.title = "Tạo phiếu thu mới";
-  localStorage.setItem("open", "cash");
-  localStorage.setItem("selected", "create-receipt");
+  
   const navigate = useNavigate();
   const [data, setData] = useState({});
   const [value, setValue] = useState();
@@ -28,6 +27,8 @@ export default function CreateReceipt() {
   const [provider, setProvider] = useState([]);
   const [form] = Form.useForm();
   useEffect(() => {
+    props.setOpenKeys("cash")
+    props.setSelectedKeys("receipt-list")
     axios({
       url: baseURL + "/provider/create-receipt",
       method: "post",
@@ -148,7 +149,7 @@ export default function CreateReceipt() {
           </Form.Item>
           <Form.Item
             name="receiptGroup"
-            label="Nhóm khách hàng"
+            label="Loại phiếu thu"
             rules={[
               {
                 required:true
@@ -199,7 +200,6 @@ export default function CreateReceipt() {
                   },
                 });
               }}
-              disabled={provider.length === 0}
               placeholder="Chọn nhà cung cấp"
               style={{ paddingLeft: "10px" }}
             >

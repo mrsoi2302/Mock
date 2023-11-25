@@ -7,11 +7,9 @@ import axios from "axios";
 import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import ExceptionBox from "../ExceptionBox";
-export default function EmployeeInformation() {
+export default function EmployeeInformation(props) {
   const navigate = useNavigate();
   const { code } = useParams();
-  localStorage.setItem("open", "employee");
-  localStorage.setItem("selected", "employee-list");
   const [data, setData] = useState({
     data: {},
     loading: true,
@@ -35,6 +33,8 @@ export default function EmployeeInformation() {
       });
   };
   useEffect(() => {
+    props.setOpenKeys("employee")
+    props.setSelectedKeys("employee-list")
     axios({
       url: baseURL + "/employee/admin/information?code=" + code,
       method: "get",
@@ -85,6 +85,8 @@ export default function EmployeeInformation() {
               borderRadius: "10px",
               padding: "15px",
               display: "flex",
+              margin:"0 auto",
+              textAlign:"left"
             }}
           >
             <div

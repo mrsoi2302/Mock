@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ConfigProvider, Menu } from "antd";
 import { useLocalStorage } from "./useLocalStorage";
+import { Link } from "react-router-dom";
 function getItem(label, key, icon, children, type) {
   return {
     key,
@@ -12,25 +13,21 @@ function getItem(label, key, icon, children, type) {
 }
 const items = [
   getItem(<strong>Nhà cung cấp</strong>, "provider", null, [
-    getItem(<a href="/provider-table">Danh sách nhà cung cấp</a>, "provider-list"),
-    getItem(<a href="/create-provider">Tạo mới</a>, "create-provider"),
-    getItem(<a href="/provider-type">Nhóm nhà cung cấp</a>, "provider-type"),
+    getItem(<Link to="/provider-table">Danh sách nhà cung cấp</Link>, "provider-list"),
+    getItem(<Link to="/provider-type">Nhóm nhà cung cấp</Link>, "provider-type"),
   ]),
   getItem(<strong>Khách hàng</strong>, "customer", null, [
-    getItem(<a href="/customer-table">Danh sách</a>, "customer-list"),
-    getItem(<a href="/create-customer">Tạo mới</a>, "create-customer"),
-    getItem(<a href="/customer-type">Nhóm khách hàng</a>, "customer-type"),
+    getItem(<Link to="/customer-table">Danh sách</Link>, "customer-list"),
+    getItem(<Link to="/customer-type">Nhóm khách hàng</Link>, "customer-type"),
   ]),
   getItem(<strong>Sổ quỹ</strong>, "cash", null, [
-    getItem(<a href="/payment-table">Danh sách phiếu chi</a>, "payment-list"),
-    getItem(<a href="/create-payment">Tạo phiếu chi</a>, "create-payment"),
-    getItem(<a href="/receipt-table">Danh sách phiếu thu</a>, "receipt-list"),
-    getItem(<a href="/create-receipt">Tạo phiếu thu</a>, "create-receipt"),
+    getItem(<Link to="/payment-table">Danh sách phiếu chi</Link>, "payment-list"),
+    getItem(<Link to="/receipt-table">Danh sách phiếu thu</Link>, "receipt-list"),
   ]),
   getItem(<strong>Quản lý nhân viên</strong>, "employee", null, [
-    getItem(<a href="/employee-table">Danh sách nhân viên</a>, "employee-list"),
+    getItem(<Link to="/employee-table">Danh sách nhân viên</Link>, "employee-list"),
     getItem(
-      <a href="/create-employee">Tạo nhân viên mới</a>,
+      <Link to="/create-employee">Tạo nhân viên mới</Link>,
       "create-employee"
     ),
   ]),
@@ -38,24 +35,14 @@ const items = [
 const rootSubmenuKeys = ["provider", "customer", "cash", "employee"];
 
 export default function Menubar(props) {
-  const [openKeys, setOpenKeys] = useState([]);
-  const [selectedKeys, setSelectedKeys] = useState();
-  const [myValue, setMyValue] = useLocalStorage("selected");
-  const handleStorageChange = () => {
-    console.log(localStorage.getItem("open"));
-    setOpenKeys(localStorage.getItem("open"));
-    setSelectedKeys(localStorage.getItem("selected"));
-  };
-  // Get current location information
+  const[openKeys,setOpenKeys]=useState([])
+  const[selectedKeys,setSelectedKeys]=useState([])
+  useEffect(()=>{
+    setOpenKeys([props.openKeys])
+    setSelectedKeys(props.selectedKeys)
+  },[props.selectedKeys,props.openKeys])
 
-  useEffect(() => {
-    setOpenKeys([localStorage.getItem("open")]);
-    setSelectedKeys(localStorage.getItem("selected"));
-  }, [myValue]);
-  let open = localStorage.getItem("open");
-  const onClick = (e) => {
-    setSelectedKeys(e.key);
-  };
+  // Get current location information
   const onOpenChange = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
     if (latestOpenKey && rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
@@ -64,16 +51,15 @@ export default function Menubar(props) {
       setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
     }
   };
-
   return (
     <nav className="menubar">
-      <a href="/main">
+      <Link to="/main">
         <img
           src="https://sapo.dktcdn.net/fe-cdn-production/images/sapo-omnichannel-w.png"
           alt=""
           className="logo"
         />
-      </a>
+      </Link>
       <ConfigProvider
         theme={{
           components: {
@@ -87,11 +73,10 @@ export default function Menubar(props) {
         }}
       >
         <Menu
-          onClick={onClick}
           mode="inline"
           onOpenChange={onOpenChange}
           openKeys={openKeys}
-          selectedKeys={[localStorage.getItem("selected")]}
+          selectedKeys={selectedKeys}
           style={{
             background: "inherit",
             color: "white",

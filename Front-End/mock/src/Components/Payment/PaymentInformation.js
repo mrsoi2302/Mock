@@ -9,12 +9,10 @@ import { Token } from "../../Token";
 import ExceptionBox from "../ExceptionBox";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import PDF from './PDF';
-export default function PaymentInformation() {
+export default function PaymentInformation(props) {
   document.title="Thông tin phiếu chi"
   const navigate = useNavigate();
   const { code } = useParams();
-  localStorage.setItem("open", "payment");
-  localStorage.setItem("selected", "payment-list");
   const [data, setData] = useState({
     data: {},
     loading: true,
@@ -22,6 +20,8 @@ export default function PaymentInformation() {
   const [err, setErr] = useState(false);
 
   const handleDelete = () => {
+    props.setOpenKeys("cash")
+      props.setSelectedKeys("payment-list")
     axios({
       url: baseURL + "/payment/admin",
       method: "delete",

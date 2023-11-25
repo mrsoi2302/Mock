@@ -9,7 +9,7 @@ import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import { useNavigate } from "react-router-dom";
 
-export default function CreateCustomer(){
+export default function CreateCustomer(props){
     document.title="Tạo khách hàng mới"
     const navigate=useNavigate()
     const [data,setData]=useState({});
@@ -18,8 +18,8 @@ export default function CreateCustomer(){
     const [dataOfType,setDataOfType]=useState([]);
     const [form] = Form.useForm();
     useEffect(()=>{
-        localStorage.setItem("open","customer")
-        localStorage.setItem("selected","create-customer")
+      props.setOpenKeys("customer")
+      props.setSelectedKeys("customer-list")
         axios(
             {
                 url:baseURL+"/customer-type/list",

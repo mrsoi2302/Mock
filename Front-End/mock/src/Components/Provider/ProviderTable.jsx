@@ -86,6 +86,8 @@ function ProviderTable(props) {
     },
   ];
   useEffect(() => {
+    props.setOpenKeys("provider")
+    props.setSelectedKeys("provider-list")
     let temp = [];
     axios({
       method: "post",
@@ -474,7 +476,7 @@ function ProviderTable(props) {
           ) : (
             <RowSelectionTable
                             delete={handleButton}
-
+              quantity={selectedRowKeys.length}
               handlePrint={handlePrint}
               url="/create-provider"
               name="nhà cung cấp"

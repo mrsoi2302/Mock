@@ -32,7 +32,6 @@ public class ReceiptGroupService {
     public void deleteByListCode(List<String> listCode) {
         for(String i:listCode){
             ReceiptGroup receiptGroup=receiptGroupRepository.findByCode(i);
-            receiptRepo.deleteByReceiptGroup(receiptGroup);
             receiptGroupRepository.delete(receiptGroup);
         }
     }

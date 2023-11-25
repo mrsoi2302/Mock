@@ -26,8 +26,6 @@ import { Token } from "../../Token";
 import { Option } from "antd/es/mentions";
 function CustomerTable(props) {
   document.title = "Danh sách khách hàng";
-  localStorage.setItem("open", "customer");
-  localStorage.setItem("selected", "customer-list");
   const [file, setFile] = useState();
   const navigate = useNavigate();
   const [data, setData] = useState({
@@ -88,6 +86,8 @@ function CustomerTable(props) {
     },
   ];
   useEffect(() => {
+    props.setOpenKeys("customer")
+    props.setSelectedKeys("customer-list")
     let temp = [];
     axios({
       method: "post",

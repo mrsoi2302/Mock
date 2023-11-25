@@ -54,10 +54,6 @@ public class CustomerService {
     }
 
     public void deleteAllByCode(List<String> list) {
-        for(String i:list){
-            Customer customer=customerRepo.findByCode(i);
-            paymentRepo.deleteByCustomerCode(customer);
-        }
         customerRepo.deleteAllByCode(list);
 
     }

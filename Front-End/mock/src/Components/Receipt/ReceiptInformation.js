@@ -9,12 +9,11 @@ import { Token } from "../../Token";
 import ExceptionBox from "../ExceptionBox";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import PDF from "./PDF";
-export default function ReceiptInformation() {
+export default function ReceiptInformation(props) {
   document.title = "Thông tin phiếu chi";
   const navigate = useNavigate();
   const { code } = useParams();
-  localStorage.setItem("open", "cash");
-  localStorage.setItem("selected", "receipt-list");
+  
   const [data, setData] = useState({
     data: {},
     loading: true,
@@ -38,6 +37,8 @@ export default function ReceiptInformation() {
       });
   };
   useEffect(() => {
+    props.setOpenKeys("cash")
+  props.setSelectedKeys("receipt-list")
     axios({
       url: baseURL + "/receipt/information?code=" + code,
       method: "get",

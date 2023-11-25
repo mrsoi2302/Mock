@@ -8,8 +8,10 @@ import com.example.demo.Entities.Receipt;
 import com.example.demo.Exceptions.CustomException;
 import com.example.demo.Repositories.EmployeeRepo;
 import com.example.demo.Repositories.HistoryRepository.HistoryRepository;
+import com.example.demo.Repositories.PaymentTypeRepo;
 import com.example.demo.Repositories.SequenceRepo.SequenceRepository;
 import com.example.demo.Security.TokenProvider;
+import com.example.demo.Service.PaymentTypeService;
 import com.example.demo.Service.ReceiptService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -32,6 +34,7 @@ public class ReceiptController {
     private SequenceRepository sequenceRepository;
     private TokenProvider tokenProvider;
     private EmployeeRepo employeeService;
+    private PaymentTypeService paymentTypeService;
 
     @PostMapping("/list")
     List<Receipt> list(@RequestBody Value<Receipt> value,
@@ -92,6 +95,7 @@ public class ReceiptController {
         String token = request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);
         Employee t=employeeService.findByUsername(username);
+        receipt.setPayment_type(paymentTypeService.findByName(receipt.getPayment_type().getName()));
         receipt.setCreated_date(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)));
         receipt.setCreated_date1(new Timestamp(System.currentTimeMillis()));
         receipt.setManager_code(t.getCode());

@@ -9,7 +9,7 @@ import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import { useNavigate } from "react-router-dom";
 
-export default function CreatePayment(){
+export default function CreatePayment(props){
     document.title="Tạo phiếu chi mới"
     const navigate=useNavigate()
     const [data,setData]=useState({});
@@ -20,8 +20,8 @@ export default function CreatePayment(){
     const [customer,setCustomer]=useState([]);
     const [form] = Form.useForm();
     useEffect(()=>{
-        localStorage.setItem("open","payment")
-        localStorage.setItem("selected","create-payment")
+      props.setOpenKeys("cash")
+      props.setSelectedKeys("payment-list")
         axios(
           {
               url:baseURL+"/customer/create-payment",
@@ -155,7 +155,7 @@ export default function CreatePayment(){
           </Form.Item>
           <Form.Item
             name="paymentGroup"
-            label="Nhóm khách hàng"
+            label="Loại phiếu chi"
             rules={[
               {
                 required:true

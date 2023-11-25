@@ -2,18 +2,16 @@ import { Alert, Button, Card, Space, Spin, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import "../style.css";
 import Account from "../Account";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import ExceptionBox from "../ExceptionBox";
 import ReceiptList from "./ReceiptList";
-export default function ProviderInformation() {
+export default function ProviderInformation(props) {
   document.title = "Thông tin nhân viên";
   const navigate = useNavigate();
   const { code } = useParams();
-  localStorage.setItem("open", "provider");
-  localStorage.setItem("selected", "provider-list");
   const [data, setData] = useState({
     data: {},
     loading: true,
@@ -37,6 +35,8 @@ export default function ProviderInformation() {
       });
   };
   useEffect(() => {
+    props.setOpenKeys("provider")
+    props.setSelectedKeys("provider-list")
     axios({
       url: baseURL + "/provider/information?code=" + code,
       method: "get",
@@ -128,16 +128,16 @@ export default function ProviderInformation() {
               <p>Email</p>
               <p>: {data.data.email}</p>
               <p>Nhóm khách hàng</p>
-              <p>: {data.data.provider_type.content}</p>
+              <p>: {data.data.provider_type===null ? "Không xác định":data.data.provider_type.content}</p>
               <p>Ngày tạo</p>
               <p>: {data.data.created_date.substring(0, 10)}</p>
               <p>Tổng giao dịch</p>
               <p>: {data.data.total}</p>
               <p>Người quản lý</p>
               <p>
-                <a href={"/employee/information/" + data.data.manager_code}>
+                <Link to={"/employee/information/" + data.data.manager_code}>
                   : {data.data.manager}
-                </a>
+                </Link>
               </p>
               <p>Trạng thái</p>
               <p>
@@ -154,7 +154,7 @@ export default function ProviderInformation() {
               <Button size="large" type="primary" href={url}>
                 Chỉnh sửa
               </Button>
-              <Button size="large" type="primary" onClick={handleDelete}>
+              <Button size="large" type="link" onClick={handleDelete}>
                 Xóa
               </Button>
             </div>

@@ -18,7 +18,7 @@ import { Token } from "../../Token";
 import { useNavigate, useParams } from "react-router-dom";
 import ExceptionBox from "../ExceptionBox";
 
-export default function ModifyPayment() {
+export default function ModifyPayment(props) {
   document.title = "Tạo phiếu chi mới";
   const { code } = useParams();
   const navigate = useNavigate();
@@ -32,8 +32,8 @@ export default function ModifyPayment() {
   const [paymentGroup, setPaymentGroup] = useState([]);
   const [form] = Form.useForm();
   useEffect(() => {
-    localStorage.setItem("open", "payment");
-    localStorage.setItem("selected", "create-payment");
+    props.setOpenKeys("cash")
+    props.setSelectedKeys("payment-list")
     axios({
       url: baseURL + "/payment-group/list",
       method: "post",

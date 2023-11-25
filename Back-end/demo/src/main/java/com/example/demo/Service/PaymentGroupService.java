@@ -31,7 +31,6 @@ public class PaymentGroupService {
     public void deleteByListCode(List<String> listCode) {
         for(String i:listCode){
             PaymentGroup p=paymentGroupRepository.findByCode(i);
-            paymentRepo.deleteByPaymentGroup(p);
             paymentGroupRepository.delete(p);
         }
     }

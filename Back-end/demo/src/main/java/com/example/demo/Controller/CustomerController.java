@@ -103,7 +103,7 @@ public class CustomerController {
         }else if(customer.getCode().matches("^CTM.*")) throw new CustomException("Tiền tố CTM không hợp lệ", HttpStatus.BAD_REQUEST);
         String token = request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);
-        customer.setCustomer_type(customerTypeService.findByContent(customer.getCustomer_type().getContent()));
+        if(customer.getCustomer_type()!=null)customer.setCustomer_type(customerTypeService.findByContent(customer.getCustomer_type().getContent()));
         Employee t=employeeService.findByUsername(username);
         customer.setManager(t.getUsername());
         customer.setCreated_date(new Date(System.currentTimeMillis()+(1000*60*60*7)));

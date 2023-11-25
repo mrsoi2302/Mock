@@ -8,12 +8,10 @@ import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import ExceptionBox from "../ExceptionBox";
 import PaymentList from "./PaymentList";
-export default function CustomerInformation() {
+export default function CustomerInformation(props) {
   document.title = "Thông tin nhân viên";
   const navigate = useNavigate();
   const { code } = useParams();
-  localStorage.setItem("open", "customer");
-  localStorage.setItem("selected", "customer-list");
   const [payments, setPayments] = useState([]);
   const [data, setData] = useState({
     data: {},
@@ -38,6 +36,8 @@ export default function CustomerInformation() {
       });
   };
   useEffect(() => {
+    props.setOpenKeys("customer")
+    props.setSelectedKeys("customer-list")
     axios({
       url: baseURL + "/payment/list",
       method: "post",

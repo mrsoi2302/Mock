@@ -17,8 +17,8 @@ export default function CreateProvider(props) {
   const [dataOfType, setDataOfType] = useState([]);
   const [value,setValue]=useState("");
   useEffect(() => {
-    localStorage.setItem("open", "provider");
-    localStorage.setItem("selected", "create-provider");
+    props.setOpenKeys("provider")
+    props.setSelectedKeys("provider-list")
     axios({
       method: "post",
       url: baseURL + "/provider-type/list",
@@ -137,11 +137,6 @@ export default function CreateProvider(props) {
           <Form.Item
             name="provider_type"
             label="Nhóm khách hàng"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
           >
             <Select
               showSearch
