@@ -169,14 +169,10 @@ export default function ModifyProvider(props) {
             initialValue={data.provider_type.content}
             name="provider_type"
             label="Nhóm khách hàng"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
           >
             <Select
               showSearch
+              allowClear
               placeholder="Chọn nhóm khách hàng"
               filterOption={false}
               onSearch={e=>{

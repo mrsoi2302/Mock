@@ -4,6 +4,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.DataType.Value;
 import com.example.demo.Entities.Employee;
+import com.example.demo.Entities.Provider;
 import com.example.demo.Entities.Receipt;
 import com.example.demo.Exceptions.CustomException;
 import com.example.demo.Repositories.EmployeeRepo;
@@ -12,6 +13,7 @@ import com.example.demo.Repositories.PaymentTypeRepo;
 import com.example.demo.Repositories.SequenceRepo.SequenceRepository;
 import com.example.demo.Security.TokenProvider;
 import com.example.demo.Service.PaymentTypeService;
+import com.example.demo.Service.ProviderService;
 import com.example.demo.Service.ReceiptService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -35,6 +37,7 @@ public class ReceiptController {
     private TokenProvider tokenProvider;
     private EmployeeRepo employeeService;
     private PaymentTypeService paymentTypeService;
+    private ProviderService providerService;
 
     @PostMapping("/list")
     List<Receipt> list(@RequestBody Value<Receipt> value,
@@ -77,6 +80,11 @@ public class ReceiptController {
         }
         if(receiptService.findByCodeAndManager(code,manager)==null) throw new CustomException("Không tồn tại", HttpStatus.NOT_FOUND);
         return receiptService.findByCodeAndManager(code,manager);
+    }
+    @GetMapping("receipt-list")
+    List<Receipt> receipts(String code){
+        Provider p=providerService.findByCode(code);
+        return receiptService.findByProvider(p);
     }
     @GetMapping("count-trade")
     Long count(){

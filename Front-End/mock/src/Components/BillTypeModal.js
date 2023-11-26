@@ -88,10 +88,12 @@ export default function BillTypeModal(props) {
         setSelectedRowKeys([]);
         setRender(!render);
         props.setIndex(!props.index)
+        message.success("Xóa thành công")
       })
-      .catch((err) => {
-        message.error("Xóa không thành công");
-      });
+      .catch(err=>{
+        console.log(err);
+        message.error("Xóa không thành công")
+      })
   };
   const columns = [
     {

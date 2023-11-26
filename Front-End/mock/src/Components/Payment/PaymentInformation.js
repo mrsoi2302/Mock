@@ -1,8 +1,8 @@
-import { Alert, Button, Card, Space, Spin, Tag } from "antd";
+import { Alert, Button, Card, Modal, Space, Spin, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import "../style.css";
 import Account from "../Account";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { baseURL } from "../../Config";
 import { Token } from "../../Token";
@@ -104,7 +104,7 @@ export default function PaymentInformation(props) {
                 <p>: {data.data.code}</p>
 
                 <p>Ngày tạo</p>
-                <p>: {Object.keys(data.data).length>0 ? data.data.created_date.substring(0,10)+" "+data.data.created_date.substring(11,19):undefined}</p>
+                <p>: {Object.keys(data.data).length>0 ? data.data.created_date.substring(0,10)+" "+data.data.created_date.substring(11,19):"Không xác định"}</p>
 
                 <p>Giá trị</p>
                 <p>: {data.data.paid}</p>
@@ -114,18 +114,15 @@ export default function PaymentInformation(props) {
                 <p>: {data.data.paymentType.name}</p>
                 <p>Người quản lý</p>
                 <p>
-                    : <a href={"/employee/information/  "+data.data.manager_code}>{data.data.manager}</a>
+                    : <Link to={"/employee/information/  "+data.data.manager_code}>{data.data.manager}</Link>
 
                 </p>
                 <p>Người nhận</p>
-                <p>: <a href={"/customer/information/"+data.data.customer.code}> {data.data.customer.name}</a> </p>
+                <p>: {data.data.customer===null ? "Không xác định": <Link to={"/customer/information/"+data.data.customer.code}> {data.data.customer.name}</Link> }</p>
                 <p>Loại phiếu thu</p>
-                <p>:{data.data.paymentGroup.name}</p>
+                <p>: {data.data.paymentGroup===null ? "Không xác định":data.data.paymentGroup.name}</p>
                 <p>Trạng thái</p>
-                <p>:
-                <Tag color={data.data.status==="paid"? "green":"red"}>
-                {data.data.status === "paid" ? "Đã thanh toán" : "Chưa thanh toán"}
-                </Tag>
+                <p>: {data.data.status === "paid" ? "Đã thanh toán" : "Chưa thanh toán"}
                 </p>
             </div>
             <div
@@ -140,10 +137,19 @@ export default function PaymentInformation(props) {
               <PDFDownloadLink document={<PDF data={data.data}/>} fileName='receipt'>
                     <Button type="primary" size="large" style={{width:"90%",marginLeft:"10%"}}>In</Button>
             </PDFDownloadLink>
-                <Button type="primary" size="large" href={url} style={{width:"90%",marginLeft:"10%"}}>
+                <Button type="primary" size="large" onClick={e=>{navigate(url)}} style={{width:"90%",marginLeft:"10%"}}>
                   Chỉnh sửa
                 </Button>
-                <Button type="link" size="large" style={{width:"90%",marginLeft:"10%"}} onClick={handleDelete}>
+                <Button type="link" size="large" style={{color:"red",width:"90%",marginLeft:"10%"}} onClick={e=>{
+                  Modal.confirm(
+                    {
+                      content:"Bạn muốn xóa phiếu chi "+code+" ?",
+                      onOk(){
+                        handleDelete();
+                      }
+                    }
+                  )
+                }}>
                   Xóa
                 </Button>
               </div>

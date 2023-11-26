@@ -13,7 +13,7 @@ import {
 } from "antd";
 import axios from "axios";
 import "../style.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Account from "../Account";
 import ExceptionBox from "../ExceptionBox";
 import RowSelectionTable from "../RowSelectionTable";
@@ -319,15 +319,21 @@ function ReceiptTable(props) {
         key: "provider-name",
         render: (_, record) => (
           <Space size="middle">
-            <a
+            {record.provider===null ? <p>Không xác định</p>:<Link
               onClick={(e) =>
                 navigate("/provider/information/" + record.provider.code)
               }
             >
               {record.provider.name + "-" + record.provider.code}
-            </a>
+            </Link>}
           </Space>
         ),
+      },
+      {
+        title: "Giá trị",
+        dataIndex: "revenue",
+        key: "revenue",
+        sorter:true,
       },
       {
         title: "Ngày tạo",
@@ -419,6 +425,7 @@ function ReceiptTable(props) {
                 title="Các loại phiếu thu"
                 name="receipt"
                 setOpenBillModal={setOpenBillModal}
+                setIndex={setIndex}
                 code="RCG"
               />
               <RowSelectionTableForBill
@@ -436,6 +443,7 @@ function ReceiptTable(props) {
                 handleSelection={handleSelection}
                 columns={columns}
                 data={data.data}
+                quantity={selectedRowKeys.length}
                 onChange={onChangeClick}
               />
             </div>

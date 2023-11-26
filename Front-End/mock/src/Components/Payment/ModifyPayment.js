@@ -144,7 +144,7 @@ export default function ModifyPayment(props) {
     <div className="content" style={{ paddingTop: "10px" }}>
       <div className="taskbar">
         {error && <ExceptionBox msg="Sửa thất bại" url="/main" />}
-        <h2>Tạo phiếu chi</h2>
+        <h2>Cập nhật phiếu chi</h2>
         <Account name={localStorage.getItem("name")} />
       </div>
       <div
@@ -196,17 +196,18 @@ export default function ModifyPayment(props) {
             </Form.Item>
             <Form.Item
               name="paymentGroup"
-              initialValue={data.paymentGroup.name}
-              label="Nhóm khách hàng"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
+              initialValue={data.paymentGroup===null ? null : data.paymentGroup.name}
+              label="Nhóm phiếu chi"
               style={{ float: "left", width: "40%" }}
             >
               <Select
                 showSearch
+                allowClear
+                onClear={e=>{
+                setData({
+                    ...data,
+                    paymentGroup: null,
+                  });}}
                 placeholder="Chọn loại phiếu thu"
                 onSelect={(e) => {
                   const arr = e.split("-");
@@ -243,7 +244,6 @@ export default function ModifyPayment(props) {
             >
               <Select
                 showSearch
-                disabled={data.customer.customer_type.name != null}
                 placeholder="Chọn khách hàng"
                 style={{ paddingLeft: "10px" }}
                 onSelect={(e) => {

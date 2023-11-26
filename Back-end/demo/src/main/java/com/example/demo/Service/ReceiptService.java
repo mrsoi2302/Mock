@@ -74,4 +74,8 @@ public class ReceiptService {
     public Receipt findByCodeAndManager(String code, String manager) {
         return receiptRepo.findByCodeAndManager(code,manager);
     }
+
+    public List<Receipt> findByProvider(Provider p) {
+        return receiptRepo.findByProvider(p);
+    }
 }

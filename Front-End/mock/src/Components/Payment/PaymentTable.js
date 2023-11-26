@@ -15,7 +15,7 @@ import {
 import * as XLSX from "xlsx";
 import axios from "axios";
 import "../style.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Account from "../Account";
 import ExceptionBox from "../ExceptionBox";
 import RowSelectionTable from "../RowSelectionTable";
@@ -323,15 +323,23 @@ function PaymentTable(props) {
         key: "customer-name",
         render: (_, record) => (
           <Space size="middle">
-            <a
+            {record.customer===null ? <p>Không xác định</p>
+            :
+            <Link
               onClick={(e) =>
                 navigate("/customer/information/" + record.customer.code)
               }
             >
               {record.customer.name + "-" + record.customer.code}
-            </a>
+            </Link>}
           </Space>
         ),
+      },
+      {
+        title: "Giá trị",
+        dataIndex: "paid",
+        key: "paid",
+        sorter:true
       },
       {
         title: "Ngày tạo",

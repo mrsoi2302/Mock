@@ -50,7 +50,6 @@ export default function ModifyReceipt(props){
               setEmployee(res.data);
             })
             .catch((err) => {
-              setError(true);
             });
         axios({
             url: baseURL + "/receipt/information?code=" + code,
@@ -69,16 +68,12 @@ export default function ModifyReceipt(props){
                         "Authorization":Token
                     },
                     data:{
-                        id:res.data.provider.provider_type.id
                     }
                 }
             ).then(ress=>{
                 setProvider(ress.data);
             }).catch(err=>{message.error("Có lỗi khi lấy dữ liệu từ khách hàng")})
             })
-            .catch((err) => {
-              setError(true);
-            });
         axios(
             {
                 url:baseURL+"/payment-type/list",
@@ -127,7 +122,7 @@ export default function ModifyReceipt(props){
             setProvider(res.data);
         }).catch(err=>{message.error("Có lỗi khi lấy dữ liệu từ khách hàng")})
     }
-    console.log(data.code);
+    console.log(error);
     return(
       <div className="content" style={{ paddingTop: "10px" }}>
       <div className="taskbar">
@@ -173,7 +168,7 @@ export default function ModifyReceipt(props){
               },
             ]}
             style={{
-              width: "40%",
+              width: "47%",
             }}
           >
             <Input
@@ -190,18 +185,20 @@ export default function ModifyReceipt(props){
           </Form.Item>
           <Form.Item
               name="receiptGroup"
-              initialValue={data.receiptGroup.name}
+              initialValue={data.receiptGroup===null ? null:data.receiptGroup.name}
               label="Loại phiếu chi"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-              style={{ float: "left", width: "40%" }}
+              style={{ float: "left", width: "47%" }}
             >
               <Select
                 showSearch
-                placeholder="Chọn loại phiếu thu"
+                allowClear
+                onClear={e=>{
+                  setData({
+                    ...data,
+                    receiptGroup:null
+                  });
+                }}
+                placeholder="Chọn loại phiếu chi"
                 onSelect={(e) => {
                   const arr = e.split("-");
                   setData({
@@ -226,7 +223,7 @@ export default function ModifyReceipt(props){
               </Select>
             </Form.Item>
           <Form.Item
-            initialValue={data.provider.name+"-"+data.provider.code}
+            initialValue={data.provider===null ? null:data.provider.name+"-"+data.provider.code}
             name="provider"
             label="Nhà cung cập thanh toán"
             rules={[
@@ -237,7 +234,6 @@ export default function ModifyReceipt(props){
           >
             <Select
               showSearch
-              disabled={data.provider.provider_type.name!=null}
               placeholder="Chọn nhà cung cấp"
               style={{ paddingLeft: "10px" }}
               onSelect={e=>{
@@ -265,7 +261,7 @@ export default function ModifyReceipt(props){
                 required:true
               },
             ]}
-            style={{width:"40%",float:"left"}}
+            style={{width:"47%",float:"left"}}
           >
             <Select
               showSearch
@@ -324,7 +320,7 @@ export default function ModifyReceipt(props){
                 required: true,
               },
             ]}
-            style={{ width:"40%",float:"left"}}
+            style={{ width:"47%",float:"left"}}
 
           >
             <Select

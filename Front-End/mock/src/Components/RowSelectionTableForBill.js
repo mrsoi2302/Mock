@@ -1,9 +1,11 @@
-import { Button, Table } from "antd";
+import { Button, Modal, Table } from "antd";
 import React from "react";
 import SearchInput from "./SearchInput";
+import { useNavigate } from "react-router-dom";
 
 export default function RowSelectionTableForBill(props) {
   const url = props.url;
+  const navigate=useNavigate();
   return (
     <div>
       <div
@@ -16,7 +18,16 @@ export default function RowSelectionTableForBill(props) {
           <Button
             
             type="primary"
-            onClick={props.delete}
+            onClick={e=>{
+              Modal.confirm(
+                {
+                  title:"Bạn muốn xóa "+props.quantity+" "+props.name+" ?",
+                  onOk(){
+                    props.delete()
+                  }
+                }
+              )
+            }}
             style={{
               
               backgroundColor:"red"
@@ -60,7 +71,9 @@ export default function RowSelectionTableForBill(props) {
         <Button
           
           type="primary"
-          href={url}
+          onClick={e=>{
+            navigate(url)
+          }}
           style={{
             
             marginLeft: "5px",

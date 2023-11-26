@@ -1,13 +1,15 @@
-import { Alert, Button, Card, Space, Spin, Tag } from "antd";
+import { Alert, Button, Card, ConfigProvider, Modal, Space, Spin, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import "../style.css";
 import Account from "../Account";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import ExceptionBox from "../ExceptionBox";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import {CaretLeftOutlined } from "@ant-design/icons";
+
 import PDF from "./PDF";
 export default function ReceiptInformation(props) {
   document.title = "Thông tin phiếu chi";
@@ -73,7 +75,19 @@ export default function ReceiptInformation(props) {
             closable
           />
         )}
-        <h2>Thông tin khách hàng</h2>
+        <ConfigProvider
+        theme={
+          {
+            components:{
+              Button:{
+                textHoverBg:"none"
+              }
+            }
+          }
+        }>
+          <Button type="text" onClick={e=>{navigate("/receipt-table")}} size="large" style={{height:"fit-content"}}><h2><CaretLeftOutlined/> Danh sách phiếu thu</h2></Button>
+          
+        </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
       </div>
       {err && <ExceptionBox url="/main" msg=<h2>Có lỗi xảy ra</h2> />}
@@ -81,14 +95,16 @@ export default function ReceiptInformation(props) {
         <Spin />
       ) : (
         <div className="inside" style={{ display: "block",textAlign:"left" }}>
-          <Space
+        <Space
             direction="vertical"
             style={{
-              width: "60vw",
+              margin: "3% 5%",
               backgroundColor: "white",
               borderRadius: "10px",
               padding: "15px",
-              display: "flex",
+              display: "block",
+              textAlign: "left",
+              flexWrap: "wrap",
             }}
           >
             <div
@@ -103,24 +119,33 @@ export default function ReceiptInformation(props) {
                   display: "grid",
                 }}
               >
+                <Button type="primary" onClick={e=>{navigate(url)}} style={{ margin: "2px" }}>
+                  Chỉnh sửa
+                </Button>
                 <PDFDownloadLink
                   document={<PDF data={data.data} />}
                   fileName="receipt"
                 >
                   <Button
-                    type="primary"
+                    type="link"
                     style={{ margin: "2px", width: "97%" }}
                   >
-                    In
+                    In phiếu thu
                   </Button>
                 </PDFDownloadLink>
-                <Button type="primary" href={url} style={{ margin: "2px" }}>
-                  Chỉnh sửa
-                </Button>
                 <Button
                   type="link"
-                  style={{ margin: "2px" }}
-                  onClick={handleDelete}
+                  style={{ margin: "2px",color:"red", }}
+                  onClick={e=>{
+                    Modal.confirm(
+                      {
+                        title:"Bạn muốn xóa phiếu thu "+code+" ?",
+                        onOk(){
+                          handleDelete()
+                        }
+                      }
+                    )
+                  }}
                 >
                   Xóa
                 </Button>
@@ -134,11 +159,8 @@ export default function ReceiptInformation(props) {
               }}
             >
               <p>Mã phiếu chi</p>
-              <p>Ngày tạo</p>
-              <p>Giá trị</p>
-              <p>Hình thức thanh toán</p>
-
               <p>: {data.data.code}</p>
+              <p>Ngày tạo</p>
               <p>
                 :{" "}
                 {Object.keys(data.data).length > 0
@@ -147,31 +169,33 @@ export default function ReceiptInformation(props) {
                     data.data.created_date.substring(11, 19)
                   : undefined}
               </p>
+              <p>Giá trị</p>
               <p>: {data.data.revenue}</p>
+              <p>Hình thức thanh toán</p>
               <p>: {data.data.payment_type.name}</p>
               <p>Người quản lý</p>
-              <p>Người nhận</p>
-              <p>Trạng thái</p>
               <p>
                 :{" "}
-                <a href={"/employee/information/  " + data.data.manager_code}>
+                <Link to={"/employee/information/  " + data.data.manager_code}>
                   {data.data.manager}
-                </a>
+                </Link>
               </p>
+              <p>Loại phiếu thu</p>
+              <p>: {data.data.receiptGroup===null ? "Không xác định":data.data.receiptGroup.name}
+              </p>
+              <p>Người nhận</p>
               <p>
                 :{" "}
-                <a href={"/provider/information/" + data.data.provider.code}>
+                {data.data.provider===null? "Không xác định":<Link to={"/provider/information/" + data.data.provider.code}>
                   {" "}
                   {data.data.provider.name}
-                </a>{" "}
+                </Link>}{" "}
               </p>
+              <p>Trạng thái</p>
               <p>
-                :
-                <Tag color={data.data.status === "paid" ? "green" : "red"}>
-                  {data.data.status === "paid"
+                : {data.data.status === "paid"
                     ? "Đã thanh toán"
                     : "Chưa thanh toán"}
-                </Tag>
               </p>
             </div>
           </Space>
