@@ -25,7 +25,7 @@ public class CustomerType {
     @NotBlank
     private String content;
     private String code;
-    @OneToMany(mappedBy ="customer_type",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy ="customer_type",cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},fetch = FetchType.LAZY)
     private Set<Customer> customers;
 
 }

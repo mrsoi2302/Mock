@@ -20,10 +20,10 @@ public class PaymentType {
     @Column(nullable = false,unique = true)
     private String name;
     @JsonIgnore
-    @OneToMany(mappedBy = "paymentType",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "paymentType",cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     private Set<Payment> payments;
     @JsonIgnore
-    @OneToMany(mappedBy = "payment_type",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "payment_type",cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     private Set<Receipt> receipts;
 
     public void setPaymentType(PaymentType paymentType) {

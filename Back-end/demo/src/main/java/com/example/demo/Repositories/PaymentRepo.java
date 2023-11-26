@@ -74,4 +74,6 @@ public interface PaymentRepo extends JpaRepository<Payment,Long> {
     @Modifying
     @Query("delete from Payment p where p.paymentGroup=:p")
     void deleteByPaymentGroup(PaymentGroup p);
+
+    List<Payment> findByPaymentGroup(PaymentGroup p);
 }

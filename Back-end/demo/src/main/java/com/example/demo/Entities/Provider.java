@@ -39,7 +39,7 @@ public class Provider {
     private String manager_code;
     private String email;
     @JsonIgnore
-    @OneToMany(mappedBy = "provider",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "provider",cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},fetch = FetchType.LAZY)
     private Set<Receipt> receipts;
     @ManyToOne
     @JoinColumn(name = "provider_type_id",referencedColumnName = "id")

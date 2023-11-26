@@ -26,6 +26,6 @@ public class PaymentGroup {
     @Column(unique = true)
     private String name;
     @JsonIgnore
-    @OneToMany(mappedBy = "paymentGroup",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "paymentGroup",cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     private Set<Payment> payments;
 }

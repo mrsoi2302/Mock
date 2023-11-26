@@ -1,5 +1,6 @@
 package com.example.demo.Service;
 
+import com.example.demo.Entities.Payment;
 import com.example.demo.Entities.PaymentGroup;
 import com.example.demo.Repositories.PaymentGroupRepository;
 import com.example.demo.Repositories.PaymentRepo;
@@ -31,6 +32,12 @@ public class PaymentGroupService {
     public void deleteByListCode(List<String> listCode) {
         for(String i:listCode){
             PaymentGroup p=paymentGroupRepository.findByCode(i);
+            List<Payment> list=paymentRepo.findByPaymentGroup(p);
+            for(Payment j:list){
+                int index=list.indexOf(j);
+                j.setPaymentGroup(null);
+                list.set(index,j);
+            }
             paymentGroupRepository.delete(p);
         }
     }

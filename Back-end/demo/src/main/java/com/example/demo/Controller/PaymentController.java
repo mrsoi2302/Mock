@@ -40,8 +40,8 @@ public class PaymentController {
     private PaymentTypeService paymentTypeService;
     @PostMapping("/list")
     List<Payment> list(@RequestBody Value<Payment> value,
-                       @RequestParam(name="sort",required = false,defaultValue = "0") int page,
-                       @RequestParam(name="sort",required = false,defaultValue = "10") int limit,
+                       @RequestParam(name="page",required = false,defaultValue = "0") int page,
+                       @RequestParam(name="limit",required = false,defaultValue = "10") int limit,
                        @RequestParam(name="sort",required = false,defaultValue = "created_date-desc") String sort,
                        HttpServletRequest request){
         String token = request.getHeader("Authorization").substring(7);
@@ -115,7 +115,7 @@ public class PaymentController {
         String code=payment.getCustomer().getCode();
         Customer customer=customerService.findByCode(code);
         System.out.println(payment.getPaymentType());
-        payment.setPaymentType(paymentTypeService.findByName(payment.getPaymentType().getName()));
+                payment.setPaymentType(paymentTypeService.findByName(payment.getPaymentType().getName()));
         payment.setCustomer(customerService.findByCode(payment.getCustomer().getCode()));
         payment.setCreated_date(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)));
         payment.setCreated_date1(new Timestamp(System.currentTimeMillis()));

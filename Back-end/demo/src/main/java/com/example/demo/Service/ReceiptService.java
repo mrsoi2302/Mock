@@ -24,11 +24,13 @@ public class ReceiptService {
     }
     public List<Receipt> list(String value, String manager, Date createdDate, PaymentType paymentType, String status, Pageable pageable) {
         List<Receipt> list =receiptRepo.list(value,manager,createdDate,paymentType,status,pageable);
-        for(Receipt i:list){
-            Provider provider=providerRepo.findByCode(i.getProvider().getCode());
-            provider.setTotal(countBill(provider));
-            providerRepo.save(provider);
-        }
+            for (Receipt i : list) {
+                if(i.getProvider()!=null){
+                    Provider provider = providerRepo.findByCode(i.getProvider().getCode());
+                    provider.setTotal(countBill(provider));
+                    providerRepo.save(provider);
+                }
+            }
         return list;
     }
     public Long countList(String value, String manager, Date createdDate, PaymentType paymentType, String status){

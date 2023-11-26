@@ -27,7 +27,7 @@ public class Payment {
     @NotNull
     private long paid;
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id",referencedColumnName = "id")
     private Customer customer;
     @ManyToOne
     @JoinColumn(name="payment_types_id")

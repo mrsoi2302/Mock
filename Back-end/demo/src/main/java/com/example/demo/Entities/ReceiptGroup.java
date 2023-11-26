@@ -26,6 +26,6 @@ public class ReceiptGroup {
     @Column(unique = true)
     private String name;
     @JsonIgnore
-    @OneToMany(mappedBy = "receiptGroup",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "receiptGroup",cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     private Set<Receipt> receipts;
 }

@@ -29,6 +29,6 @@ public class ProviderType {
     @NotBlank
     private String content;
     @JsonIgnore
-    @OneToMany(mappedBy ="provider_type",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy ="provider_type",cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},fetch = FetchType.LAZY)
     List<Provider> providers;
 }

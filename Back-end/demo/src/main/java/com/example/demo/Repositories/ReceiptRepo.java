@@ -66,6 +66,7 @@ public interface ReceiptRepo extends JpaRepository<Receipt,Long> {
     List<Receipt> findAllByMananger(String manager);
     @Query("select r from Receipt r where (:manager is null or r.manager=:manager) and r.code=:code")
     Receipt findByCodeAndManager(@Param("code") String code,@Param("manager") String manager);
+    public List<Receipt> findByReceiptGroup(ReceiptGroup receiptGroup);
 
-    void deleteByReceiptGroup(ReceiptGroup receiptGroup);
+    List<Receipt> findByProvider(Provider p);
 }

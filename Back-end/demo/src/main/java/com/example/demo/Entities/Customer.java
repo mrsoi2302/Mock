@@ -11,6 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -50,7 +51,7 @@ public class Customer{
     @ManyToOne
     @JoinColumn(name = "customer_type_id",referencedColumnName = "id")
     private CustomerType customer_type;
-    @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "customer",orphanRemoval = true,fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     private Set<Payment> payments;
     public void setPayments(Set<Payment> payments){
         payments.addAll(payments);

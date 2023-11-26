@@ -57,7 +57,15 @@ public class ProviderService {
     }
 
     public void deleteAllByCode(List<String> list) {
-        providerRepo.deleteAllByCode(list);
+        for(String i:list){
+            Provider p=providerRepo.findByCode(i);
+            List<Receipt> receipts=receiptRepo.findByProvider(p);
+            for(Receipt j:receipts){
+                j.setProvider(null);
+                receiptRepo.save(j);
+            }
+            providerRepo.delete(p);
+        }
     }
 
     public List<Provider> findByProviderType(String code) {

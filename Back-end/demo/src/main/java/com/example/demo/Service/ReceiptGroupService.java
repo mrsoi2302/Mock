@@ -1,5 +1,6 @@
 package com.example.demo.Service;
 
+import com.example.demo.Entities.Receipt;
 import com.example.demo.Entities.ReceiptGroup;
 import com.example.demo.Repositories.ReceiptGroupRepository;
 import com.example.demo.Repositories.ReceiptRepo;
@@ -32,6 +33,12 @@ public class ReceiptGroupService {
     public void deleteByListCode(List<String> listCode) {
         for(String i:listCode){
             ReceiptGroup receiptGroup=receiptGroupRepository.findByCode(i);
+            List<Receipt> list=receiptRepo.findByReceiptGroup(receiptGroup);
+            for(Receipt j:list){
+                int index=list.indexOf(j);
+                j.setReceiptGroup(null);
+                list.set(index,j);
+            }
             receiptGroupRepository.delete(receiptGroup);
         }
     }
