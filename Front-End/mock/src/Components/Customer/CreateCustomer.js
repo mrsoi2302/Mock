@@ -100,6 +100,8 @@ export default function CreateCustomer(props){
             rules={[
               {
                 required: true,
+                message:"Vùng này không được để trống"
+
               },
             ]}
             style={
@@ -125,6 +127,8 @@ export default function CreateCustomer(props){
             rules={[
               {
                 required: true,
+                message:"Vùng này không được để trống"
+
               },
             ]}
             style={
@@ -142,6 +146,8 @@ export default function CreateCustomer(props){
             rules={[
               {
                 required: true,
+                message:"Vùng này không được để trống"
+
               },
             ]}
           >
@@ -194,7 +200,9 @@ export default function CreateCustomer(props){
             label="Nhóm khách hàng"
             rules={[
               {
-                required:true
+                required:true,
+                message:"Vùng này không được để trống"
+
               },
             ]}
           >
@@ -273,6 +281,8 @@ export default function CreateCustomer(props){
             rules={[
               {
                 required: true,
+                message:"Vùng này không được để trống"
+
               },
             ]}
           >

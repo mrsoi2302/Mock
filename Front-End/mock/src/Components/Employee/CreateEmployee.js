@@ -81,6 +81,8 @@ export default function CreateEmployee(props) {
             rules={[
               {
                 required: true,
+                message:"Vùng này không được để trống"
+
               },
             ]}
           >
@@ -117,6 +119,8 @@ export default function CreateEmployee(props) {
             rules={[
               {
                 required: true,
+                message:"Vùng này không được để trống"
+
               },
             ]}
             style={{}}

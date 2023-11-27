@@ -319,6 +319,7 @@ export default function ModifyPayment(props) {
               rules={[
                 {
                   required: true,
+                  message:"Vùng này không được để trống"
                 },
               ]}
             >

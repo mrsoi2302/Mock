@@ -262,6 +262,8 @@ export default function ModifyProvider(props) {
             rules={[
               {
                 required: true,
+                message:"Vùng này không được để trống"
+
               },
             ]}
           >
@@ -291,6 +293,8 @@ export default function ModifyProvider(props) {
             rules={[
               {
                 required: true,
+                message:"Vùng này không được để trống"
+
               },
             ]}
           >

@@ -170,7 +170,9 @@ export default function CreatePayment(props){
             label="Khách hàng nhận"
             rules={[
               {
-                required:true
+                required:true,
+                message:"Vùng này không được để trống"
+
               },
             ]}
           >
@@ -199,7 +201,8 @@ export default function CreatePayment(props){
             label="Loại phiếu chi"
             rules={[
               {
-                required:true
+                required:true,
+                message:"Vùng này không được để trống"
               },
             ]}
             style={{float:"left",width:"47%"}}
@@ -231,6 +234,8 @@ export default function CreatePayment(props){
             rules={[
               {
                 required: true,
+                message:"Vùng này không được để trống"
+
               },
             ]}
           >
@@ -255,7 +260,9 @@ export default function CreatePayment(props){
             label="Hình thức thanh toán"
             rules={[
               {
-                required:true
+                required:true,
+                message:"Vùng này không được để trống"
+
               },
             ]}
             style={{width:"47%",float:"left"}}
@@ -290,6 +297,8 @@ export default function CreatePayment(props){
             rules={[
               {
                 required:true,
+                message:"Vùng này không được để trống"
+
               },
             ]}
           >

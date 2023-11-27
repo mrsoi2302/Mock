@@ -105,6 +105,8 @@ export default function ModifyEmployee(props) {
               rules={[
                 {
                   required: true,
+                  message:"Vùng này không được để trống"
+
                 },
               ]}
             >
@@ -143,6 +145,8 @@ export default function ModifyEmployee(props) {
               rules={[
                 {
                   required: true,
+                  message:"Vùng này không được để trống"
+
                 },
               ]}
               style={{}}
