@@ -13,7 +13,7 @@ import {CaretLeftOutlined } from "@ant-design/icons";
 
 
 export default function ModifyReceipt(props){
-    document.title="Tạo phiếu chi mới"
+    document.title="Chỉnh sửa phiếu thu"
     const {code}= useParams()
     const navigate=useNavigate()
     const [data,setData]=useState({});

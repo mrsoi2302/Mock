@@ -9,7 +9,7 @@ import { Token } from "../../Token";
 import ExceptionBox from "../ExceptionBox";
 import { Option } from "antd/es/mentions";
 export default function ModifyEmployee(props) {
-  document.title = "Danh sách nhân viên";
+  document.title = "Chỉnh sửa nhân viên";
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const { code } = useParams();

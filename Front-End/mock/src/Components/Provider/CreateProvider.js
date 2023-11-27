@@ -107,6 +107,8 @@ export default function CreateProvider(props) {
             rules={[
               {
                 required: true,
+                message:"Vùng này không được để trống"
+
               },
             ]}
           >
@@ -226,6 +228,8 @@ export default function CreateProvider(props) {
             rules={[
               {
                 required: true,
+                message:"Vùng này không được để trống"
+
               },
             ]}
           >

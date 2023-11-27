@@ -8,6 +8,7 @@ import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import ExceptionBox from "../ExceptionBox";
 export default function EmployeeInformation(props) {
+  document.title="Thông tin nhân viên"
   const navigate = useNavigate();
   const { code } = useParams();
   const [data, setData] = useState({
@@ -134,7 +135,7 @@ export default function EmployeeInformation(props) {
                   gridTemplateColumns: "20% 20%",
                 }}
               >
-                <Button type="primary" href={url} size="large">
+                <Button type="primary" onClick={e=>{navigate(url)}} size="large">
                   Chỉnh sửa
                 </Button>
                 <Button type="link" style={{color:"red"}} onClick={e=>{

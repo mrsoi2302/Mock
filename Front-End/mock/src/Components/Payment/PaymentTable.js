@@ -331,13 +331,13 @@ function PaymentTable(props) {
           <Space size="middle">
             {record.customer===null ? <p>Không xác định</p>
             :
-            <Link
+            <a
               onClick={(e) =>
                 navigate("/customer/information/" + record.customer.code)
               }
             >
               {record.customer.name + "-" + record.customer.code}
-            </Link>}
+            </a>}
           </Space>
         ),
       },

@@ -176,7 +176,10 @@ export default function ProviderInformation(props) {
               </p>
             </div>
             <br/>
-            <div style={{margin:"0 auto 2% "}}>
+            <div style={{
+                  display: "grid",
+                  gridTemplateColumns: "20% 20%",
+                }}>
               <Button size="large" type="primary" onClick={e=>{navigate(url)}}>
                 Chỉnh sửa
               </Button>
