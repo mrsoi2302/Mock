@@ -10,7 +10,7 @@ import { Token } from "../../Token";
 import {CaretLeftOutlined } from "@ant-design/icons";
 
 export default function ModifyProvider(props) {
-  document.title = "Chỉnh sửa cung cấp";
+  document.title = "Chỉnh sửa nhà cung cấp";
   const {code}=useParams()
   const [data,setData]=useState({})
   const navigate = useNavigate();

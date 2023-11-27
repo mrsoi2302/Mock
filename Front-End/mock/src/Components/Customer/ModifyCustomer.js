@@ -12,7 +12,7 @@ import {CaretLeftOutlined } from "@ant-design/icons";
 
 const dateFormat = 'YYYY/MM/DD';
 export default function ModifyCustomer(props) {
-  document.title = "Chỉnh sửa cung cấp";
+  document.title = "Chỉnh sửa thông tin khách hàng";
   const {code}=useParams()
   const [data,setData]=useState({})
   const navigate = useNavigate();

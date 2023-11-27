@@ -22,7 +22,7 @@ import {CaretLeftOutlined } from "@ant-design/icons";
 
 
 export default function ModifyPayment(props) {
-  document.title = "Tạo phiếu chi mới";
+  document.title = "Chỉnh sửa phiếu chi";
   const { code } = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState({});
