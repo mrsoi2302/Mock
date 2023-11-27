@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import "../style.css";
 import Account from "../Account";
 import { useNavigate, useParams } from "react-router-dom";
-import { Alert, Button, DatePicker, Form, Input, Select } from "antd";
+import { Alert, Button, ConfigProvider, DatePicker, Form, Input, Select } from "antd";
 import { Option } from "antd/es/mentions";
 import axios from "axios";
 import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import dayjs from "dayjs";
+import {CaretLeftOutlined } from "@ant-design/icons";
+
 const dateFormat = 'YYYY/MM/DD';
 export default function ModifyCustomer(props) {
   document.title = "Chỉnh sửa cung cấp";
@@ -98,7 +100,19 @@ export default function ModifyCustomer(props) {
             closable
           />
         )}
-        <h2>Tạo nhà cung cấp</h2>
+        <ConfigProvider
+        theme={
+          {
+            components:{
+              Button:{
+                textHoverBg:"none"
+              }
+            }
+          }
+        }>
+          <Button type="text" onClick={e=>{navigate("/customer/information/"+code)}} size="large" style={{height:"fit-content"}}><h2><CaretLeftOutlined/> Thông tin khách hàng</h2></Button>
+          
+        </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
       </div>
       <div
@@ -218,7 +232,7 @@ export default function ModifyCustomer(props) {
             />
           </Form.Item>
           <Form.Item
-          initialValue={data.customer_type.content}
+          initialValue={data.customer_type===null ? null:data.customer_type.content}
             name="customer_type"
             label="Nhóm khách hàng"
             rules={[

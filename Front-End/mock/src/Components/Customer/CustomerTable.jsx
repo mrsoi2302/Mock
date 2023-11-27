@@ -55,7 +55,7 @@ function CustomerTable(props) {
     {
       title: "Mã khách hàng",
       dataIndex: "code",
-      key: "code",
+      key: "code",  
       width: "15%",
     },
     {
@@ -281,7 +281,8 @@ function CustomerTable(props) {
         <Space direction="vertical">
           <label>Giới tính</label>
           <Select
-            style={{ marginTop: "10px", width: "10vw" }}
+          placeholder="Chọn giới tính"
+            style={{ marginTop: "10px", width: "15vw",textAlign:"center" }}
             allowClear
             onSelect={(e) => {
               setDataRequest({
@@ -303,30 +304,33 @@ function CustomerTable(props) {
         <>
           <label>Ngày tháng năm sinh</label>
           <br></br>
-          <Space>
+          <Space >
             <InputNumber
+
               placeholder="Ngày"
               min={1}
               max={31}
-              style={{ marginRight: "10px", marginTop: "10px", width: "100px" }}
+              style={{ marginRight: "10px", marginTop: "10px", width: "100px",textAlign:"center" }}
               onChange={(e) => {
                 setDataRequest({ ...dataRequest, birthday_day: e });
               }}
             />
             <InputNumber
+
               placeholder="Tháng"
               min={1}
               max={12}
-              style={{ marginRight: "10px", marginTop: "10px", width: "100px" }}
+              style={{ marginRight: "10px", marginTop: "10px", width: "100px",textAlign:"center" }}
               onChange={(e) => {
                 setDataRequest({ ...dataRequest, birthday_month: e });
               }}
             />
             <InputNumber
+
               placeholder="Năm"
               min={1900}
               max={currentTime.getFullYear()}
-              style={{ marginRight: "10px", marginTop: "10px", width: "100px" }}
+              style={{ marginRight: "10px", marginTop: "10px", width: "100px",textAlign:"center" }}
               onChange={(e) => {
                 setDataRequest({ ...dataRequest, birthday_year: e });
               }}
@@ -341,7 +345,7 @@ function CustomerTable(props) {
       label: (
         <Space direction="vertical">
           <label>Thời gian tạo</label>
-          <DatePicker onChange={onChange} />
+          <DatePicker onChange={onChange} style={{width:"15vw",textAlign:"center"}} placeholder="YYYY-MM-DD" />
         </Space>
       ),
       key: "3",
@@ -352,6 +356,11 @@ function CustomerTable(props) {
           <label>Nhóm khách hàng</label>
           <Form.Item name="customerType">
             <Select
+              placeholder="Chọn nhóm khách hàng"
+              style={{
+                width:"15vw",
+                textAlign:"center"
+              }}
               allowClear
               onSelect={(e) => {
                 setDataRequest({
@@ -378,7 +387,8 @@ function CustomerTable(props) {
             <label>Trạng thái</label>
             <br></br>
             <Select
-              style={{ marginTop: "10px", width: "10vw" }}
+            placeholder="Chọn trạng thái"
+              style={{ marginTop: "10px", width: "15vw",textAlign:"center" }}
               allowClear
               onClear={(e) => {
                 setDataRequest({ ...dataRequest, status: null });

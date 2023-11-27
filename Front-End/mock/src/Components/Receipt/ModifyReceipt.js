@@ -1,5 +1,5 @@
 
-import { Alert, Button, DatePicker, Form, Input, InputNumber, Select, message } from "antd";
+import { Alert, Button, ConfigProvider, DatePicker, Form, Input, InputNumber, Select, message } from "antd";
 import { Option } from "antd/es/mentions";
 import "../Account"
 import React, { useEffect, useState } from "react";
@@ -9,6 +9,8 @@ import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import { useNavigate, useParams } from "react-router-dom";
 import ExceptionBox from "../ExceptionBox";
+import {CaretLeftOutlined } from "@ant-design/icons";
+
 
 export default function ModifyReceipt(props){
     document.title="Tạo phiếu chi mới"
@@ -132,7 +134,19 @@ export default function ModifyReceipt(props){
             url="/main"
           />
         )}
-        <h2>Tạo phiếu chi</h2>
+        <ConfigProvider
+        theme={
+          {
+            components:{
+              Button:{
+                textHoverBg:"none"
+              }
+            }
+          }
+        }>
+          <Button type="text" onClick={e=>{navigate("/receipt/information/"+code)}} size="large" style={{height:"fit-content"}}><h2><CaretLeftOutlined/> Thông tin phiếu thu</h2></Button>
+          
+        </ConfigProvider>        
         <Account name={localStorage.getItem("name")} />
       </div>
       <div
@@ -226,11 +240,6 @@ export default function ModifyReceipt(props){
             initialValue={data.provider===null ? null:data.provider.name+"-"+data.provider.code}
             name="provider"
             label="Nhà cung cập thanh toán"
-            rules={[
-              {
-                required:true
-              },
-            ]}
           >
             <Select
               showSearch
@@ -258,7 +267,9 @@ export default function ModifyReceipt(props){
             label="Hình thức thanh toán"
             rules={[
               {
-                required:true
+                required:true,
+                message:"Vùng này không được để trống",
+
               },
             ]}
             style={{width:"47%",float:"left"}}
@@ -292,6 +303,8 @@ export default function ModifyReceipt(props){
             rules={[
               {
                 required:true,
+                message:"Vùng này không được để trống",
+
               },
             ]}
           >
@@ -318,6 +331,8 @@ export default function ModifyReceipt(props){
             rules={[
               {
                 required: true,
+                message:"Vùng này không được để trống",
+
               },
             ]}
             style={{ width:"47%",float:"left"}}
@@ -345,6 +360,8 @@ export default function ModifyReceipt(props){
             rules={[
               {
                 required:true,
+                message:"Vùng này không được để trống",
+
               },
             ]}
           >

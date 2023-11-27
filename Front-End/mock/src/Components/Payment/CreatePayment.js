@@ -1,5 +1,5 @@
 
-import { Alert, Button, DatePicker, Form, Input, InputNumber, Select, message } from "antd";
+import { Alert, Button, ConfigProvider, DatePicker, Form, Input, InputNumber, Select, message } from "antd";
 import { Option } from "antd/es/mentions";
 import "../Account"
 import React, { useEffect, useState } from "react";
@@ -8,7 +8,7 @@ import axios from "axios";
 import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import { useNavigate } from "react-router-dom";
-
+import {CaretLeftOutlined } from "@ant-design/icons";
 export default function CreatePayment(props){
     document.title="Tạo phiếu chi mới"
     const navigate=useNavigate()
@@ -109,7 +109,19 @@ export default function CreatePayment(props){
             closable
           />
         )}
-        <h2>Tạo phiếu chi</h2>
+        <ConfigProvider
+        theme={
+          {
+            components:{
+              Button:{
+                textHoverBg:"none"
+              }
+            }
+          }
+        }>
+          <Button type="text" onClick={e=>{navigate("/payment-table")}} size="large" style={{height:"fit-content"}}><h2><CaretLeftOutlined/> Danh sách phiếu chi</h2></Button>
+          
+        </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
       </div>
       <div
@@ -138,7 +150,8 @@ export default function CreatePayment(props){
               },
             ]}
             style={{
-              width: "40%",
+              width: "47%",
+              float:"left"
             }}
           >
             <Input
@@ -151,37 +164,6 @@ export default function CreatePayment(props){
                 )
               }}
             />
-          </Form.Item>
-          <Form.Item
-            name="paymentGroup"
-            label="Loại phiếu chi"
-            rules={[
-              {
-                required:true
-              },
-            ]}
-            style={{float:"left",width:"40%"}}
-          >
-            <Select
-              showSearch
-              placeholder="Chọn loại phiếu thu"              
-              onSelect={e=>{
-                const arr=e.split("-")
-                setData(
-                  {...data,
-                  paymentGroup:{
-                    id:arr[0]
-                  }}
-                )
-              }}
-              style={{ 
-                float:"left"
-                }}
-            >
-              {paymentGroup.map(i=>{
-                if(paymentGroup.length>0) return <Option value={i.id+"-"+i.code+"-"+i.name}>{i.name+"-"+i.code}</Option>
-              })}
-            </Select>
           </Form.Item>
           <Form.Item
             name="customer"
@@ -213,6 +195,62 @@ export default function CreatePayment(props){
             </Select>
           </Form.Item>
           <Form.Item
+            name="paymentGroup"
+            label="Loại phiếu chi"
+            rules={[
+              {
+                required:true
+              },
+            ]}
+            style={{float:"left",width:"47%"}}
+          >
+            <Select
+              showSearch
+              placeholder="Chọn loại phiếu thu"              
+              onSelect={e=>{
+                const arr=e.split("-")
+                setData(
+                  {...data,
+                  paymentGroup:{
+                    id:arr[0]
+                  }}
+                )
+              }}
+              style={{ 
+                float:"left"
+                }}
+            >
+              {paymentGroup.map(i=>{
+                if(paymentGroup.length>0) return <Option value={i.id+"-"+i.code+"-"+i.name}>{i.name+"-"+i.code}</Option>
+              })}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name="status"
+            label="Trạng thái"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Select
+              placeholder="Chọn trạng thái"
+              onSelect={(e) => {
+                setData(
+                  {
+                    ...data,
+                    status:e
+                  }
+                )
+              }}
+              style={{ paddingLeft:"10px"  }}
+            >
+              <Option value="paid">Đã thanh toán</Option>
+              <Option value="unpaid"> Chưa thanh toán</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
             name="payment_type"
             label="Hình thức thanh toán"
             rules={[
@@ -220,7 +258,7 @@ export default function CreatePayment(props){
                 required:true
               },
             ]}
-            style={{width:"40%",float:"left"}}
+            style={{width:"47%",float:"left"}}
           >
             <Select
               showSearch
@@ -271,31 +309,7 @@ export default function CreatePayment(props){
             )}}
             />
           </Form.Item>
-          <Form.Item
-            name="status"
-            label="Trạng thái"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Select
-              placeholder="Chọn trạng thái"
-              onSelect={(e) => {
-                setData(
-                  {
-                    ...data,
-                    status:e
-                  }
-                )
-              }}
-              style={{ width:"40%" }}
-            >
-              <Option value="paid">Đã thanh toán</Option>
-              <Option value="unpaid"> Chưa thanh toán</Option>
-            </Select>
-          </Form.Item>
+          
 
           <Form.Item>
             <Button

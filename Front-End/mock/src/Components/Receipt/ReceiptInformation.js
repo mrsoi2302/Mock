@@ -1,4 +1,13 @@
-import { Alert, Button, Card, ConfigProvider, Modal, Space, Spin, Tag } from "antd";
+import {
+  Alert,
+  Button,
+  Card,
+  ConfigProvider,
+  Modal,
+  Space,
+  Spin,
+  Tag,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import "../style.css";
 import Account from "../Account";
@@ -8,14 +17,14 @@ import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import ExceptionBox from "../ExceptionBox";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
-import {CaretLeftOutlined } from "@ant-design/icons";
+import { CaretLeftOutlined } from "@ant-design/icons";
 
 import PDF from "./PDF";
 export default function ReceiptInformation(props) {
   document.title = "Thông tin phiếu chi";
   const navigate = useNavigate();
   const { code } = useParams();
-  
+
   const [data, setData] = useState({
     data: {},
     loading: true,
@@ -39,8 +48,8 @@ export default function ReceiptInformation(props) {
       });
   };
   useEffect(() => {
-    props.setOpenKeys("cash")
-  props.setSelectedKeys("receipt-list")
+    props.setOpenKeys("cash");
+    props.setSelectedKeys("receipt-list");
     axios({
       url: baseURL + "/receipt/information?code=" + code,
       method: "get",
@@ -60,7 +69,7 @@ export default function ReceiptInformation(props) {
   }, []);
   const url = "/receipt/modify/" + code;
   return (
-    <div className="content" >
+    <div className="content">
       <div className="taskbar">
         {err && (
           <Alert
@@ -76,17 +85,26 @@ export default function ReceiptInformation(props) {
           />
         )}
         <ConfigProvider
-        theme={
-          {
-            components:{
-              Button:{
-                textHoverBg:"none"
-              }
-            }
-          }
-        }>
-          <Button type="text" onClick={e=>{navigate("/receipt-table")}} size="large" style={{height:"fit-content"}}><h2><CaretLeftOutlined/> Danh sách phiếu thu</h2></Button>
-          
+          theme={{
+            components: {
+              Button: {
+                textHoverBg: "none",
+              },
+            },
+          }}
+        >
+          <Button
+            type="text"
+            onClick={(e) => {
+              navigate("/receipt-table");
+            }}
+            size="large"
+            style={{ height: "fit-content" }}
+          >
+            <h2>
+              <CaretLeftOutlined /> Danh sách phiếu thu
+            </h2>
+          </Button>
         </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
       </div>
@@ -94,8 +112,8 @@ export default function ReceiptInformation(props) {
       {data.loading ? (
         <Spin />
       ) : (
-        <div className="inside" style={{ display: "block",textAlign:"left" }}>
-        <Space
+        <div className="inside" style={{ display: "block", textAlign: "left" }}>
+          <Space
             direction="vertical"
             style={{
               margin: "3% 5%",
@@ -114,42 +132,6 @@ export default function ReceiptInformation(props) {
               }}
             >
               <h2>Thông tin khách hàng</h2>
-              <div
-                style={{
-                  display: "grid",
-                }}
-              >
-                <Button type="primary" onClick={e=>{navigate(url)}} style={{ margin: "2px" }}>
-                  Chỉnh sửa
-                </Button>
-                <PDFDownloadLink
-                  document={<PDF data={data.data} />}
-                  fileName="receipt"
-                >
-                  <Button
-                    type="link"
-                    style={{ margin: "2px", width: "97%" }}
-                  >
-                    In phiếu thu
-                  </Button>
-                </PDFDownloadLink>
-                <Button
-                  type="link"
-                  style={{ margin: "2px",color:"red", }}
-                  onClick={e=>{
-                    Modal.confirm(
-                      {
-                        title:"Bạn muốn xóa phiếu thu "+code+" ?",
-                        onOk(){
-                          handleDelete()
-                        }
-                      }
-                    )
-                  }}
-                >
-                  Xóa
-                </Button>
-              </div>
             </div>
             <div
               style={{
@@ -181,22 +163,75 @@ export default function ReceiptInformation(props) {
                 </Link>
               </p>
               <p>Loại phiếu thu</p>
-              <p>: {data.data.receiptGroup===null ? "Không xác định":data.data.receiptGroup.name}
-              </p>
-              <p>Người nhận</p>
               <p>
                 :{" "}
-                {data.data.provider===null? "Không xác định":<Link to={"/provider/information/" + data.data.provider.code}>
-                  {" "}
-                  {data.data.provider.name}
-                </Link>}{" "}
+                {data.data.receiptGroup === null
+                  ? "Không xác định"
+                  : data.data.receiptGroup.name}
+              </p>
+              <p>Người thanh toán</p>
+              <p>
+                :{" "}
+                {data.data.provider === null ? (
+                  "Không xác định"
+                ) : (
+                  <Link to={"/provider/information/" + data.data.provider.code}>
+                    {" "}
+                    {data.data.provider.name}
+                  </Link>
+                )}{" "}
               </p>
               <p>Trạng thái</p>
               <p>
-                : {data.data.status === "paid"
-                    ? "Đã thanh toán"
-                    : "Chưa thanh toán"}
+                :{" "}
+                {data.data.status === "paid"
+                  ? "Đã thanh toán"
+                  : "Chưa thanh toán"}
               </p>
+            </div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "20% 20% 20%",
+              }}
+            >
+              <Button
+                type="primary"
+                size="large"
+                onClick={(e) => {
+                  navigate(url);
+                }}
+                style={{ width: "90%", marginLeft: "10%" }}
+              >
+                Chỉnh sửa
+              </Button>
+              <PDFDownloadLink
+                document={<PDF data={data.data} />}
+                fileName="receipt"
+              >
+                <Button
+                  type="primary"
+                  size="large"
+                  style={{ width: "90%", marginLeft: "10%" }}
+                >
+                  In phiếu thu
+                </Button>
+              </PDFDownloadLink>
+              <Button
+                type="link"
+                size="large"
+                style={{ color: "red", width: "90%", marginLeft: "10%" }}
+                onClick={(e) => {
+                  Modal.confirm({
+                    content: "Bạn muốn xóa phiếu thu " + code + " ?",
+                    onOk() {
+                      handleDelete();
+                    },
+                  });
+                }}
+              >
+                Xóa
+              </Button>
             </div>
           </Space>
         </div>

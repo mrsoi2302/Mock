@@ -42,11 +42,13 @@ public class ProviderService {
     public Provider findByCode(String code) {
         Provider i=providerRepo.findByCode(code);
         long sum=0;
-        for(Receipt j:i.getReceipts()){
-            sum+=j.getRevenue();
+        if(i!=null){
+            for (Receipt j : i.getReceipts()) {
+                sum += j.getRevenue();
+            }
+            i.setTotal(sum);
+            providerRepo.save(i);
         }
-        i.setTotal(sum);
-        providerRepo.save(i);
         return providerRepo.findByCode(code);
     }
 

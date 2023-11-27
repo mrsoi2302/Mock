@@ -251,6 +251,7 @@ export default function EmployeeTable(props) {
               handleSelection={handleSelection}
               columns={columns}
               data={data.data}
+              quantity={selectedRowKeys.length}
             />
           )}
           <Paginate

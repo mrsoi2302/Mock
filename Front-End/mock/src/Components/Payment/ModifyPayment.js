@@ -1,6 +1,7 @@
 import {
   Alert,
   Button,
+  ConfigProvider,
   DatePicker,
   Form,
   Input,
@@ -17,6 +18,8 @@ import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import { useNavigate, useParams } from "react-router-dom";
 import ExceptionBox from "../ExceptionBox";
+import {CaretLeftOutlined } from "@ant-design/icons";
+
 
 export default function ModifyPayment(props) {
   document.title = "Tạo phiếu chi mới";
@@ -144,8 +147,19 @@ export default function ModifyPayment(props) {
     <div className="content" style={{ paddingTop: "10px" }}>
       <div className="taskbar">
         {error && <ExceptionBox msg="Sửa thất bại" url="/main" />}
-        <h2>Cập nhật phiếu chi</h2>
-        <Account name={localStorage.getItem("name")} />
+        <ConfigProvider
+        theme={
+          {
+            components:{
+              Button:{
+                textHoverBg:"none"
+              }
+            }
+          }
+        }>
+          <Button type="text" onClick={e=>{navigate("/payment/information/"+code)}} size="large" style={{height:"fit-content"}}><h2><CaretLeftOutlined/> Thông tin phiếu chi</h2></Button>
+          
+        </ConfigProvider>        <Account name={localStorage.getItem("name")} />
       </div>
       <div
         className="inside"
@@ -181,7 +195,7 @@ export default function ModifyPayment(props) {
                 },
               ]}
               style={{
-                width: "40%",
+                width: "47%",
               }}
             >
               <Input
@@ -198,7 +212,7 @@ export default function ModifyPayment(props) {
               name="paymentGroup"
               initialValue={data.paymentGroup===null ? null : data.paymentGroup.name}
               label="Nhóm phiếu chi"
-              style={{ float: "left", width: "40%" }}
+              style={{ float: "left", width: "47%" }}
             >
               <Select
                 showSearch
@@ -233,14 +247,9 @@ export default function ModifyPayment(props) {
               </Select>
             </Form.Item>
             <Form.Item
-              initialValue={data.customer.name + "-" + data.customer.code}
+              initialValue={data.customer===null ? null:data.customer.name + "-" + data.customer.code}
               name="customer"
               label="Khách hàng nhận"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
             >
               <Select
                 showSearch
@@ -268,15 +277,17 @@ export default function ModifyPayment(props) {
               </Select>
             </Form.Item>
             <Form.Item
-              initialValue={data.paymentType.name}
+              initialValue={data.paymentType===null ? null:data.paymentType.name}
               name="payment_type"
               label="Hình thức thanh toán"
               rules={[
                 {
                   required: true,
+                  message:"Vùng này không được để trống",
+
                 },
               ]}
-              style={{ width: "40%", float: "left" }}
+              style={{ width: "47%", float: "left" }}
             >
               <Select
                 showSearch
@@ -338,9 +349,10 @@ export default function ModifyPayment(props) {
               rules={[
                 {
                   required: true,
+                  message:"Vùng này không được để trống",
                 },
               ]}
-              style={{ width: "40%", float: "left" }}
+              style={{ width: "47%", float: "left" }}
             >
               <Select
                 placeholder="Chọn trạng thái"
@@ -362,6 +374,8 @@ export default function ModifyPayment(props) {
               rules={[
                 {
                   required: true,
+                  message:"Vùng này không được để trống",
+
                 },
               ]}
             >

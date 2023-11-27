@@ -279,18 +279,19 @@ function ProviderTable(props) {
       label: (
         <Space direction="vertical">
           <label>Thời gian tạo</label>
-          <DatePicker onChange={onChange} />
+          <DatePicker onChange={onChange} placeholder="YYYY-MM-DD" style={{width:"15vw"}}/>
         </Space>
       ),
       key: "1",
     },
     {
       label: (
-        <Form.Item>
+        <Space direction="vertical"
+        >
           <label>Trạng thái</label>
           <Select
-            style={{ marginTop: "10px" }}
-            placeholder="Select a option and change input text above"
+            style={{width:"15vw" }}
+            placeholder="Chọn trạng thái"
             allowClear
             onSelect={(e) => {
               setStatus(e);
@@ -299,17 +300,17 @@ function ProviderTable(props) {
             <Option value="active">Đã kích hoạt</Option>
             <Option value="non-active">Chưa kích hoạt</Option>
           </Select>
-        </Form.Item>
+        </Space>
       ),
       key: "2",
     },
     {
       label: (
-        <Form.Item>
+        <Space direction="vertical" >
           <label>Nhóm nhà cung cấp</label>
           <Select
-            style={{ marginTop: "10px" }}
-            placeholder="Select a option and change input text above"
+            style={{ width:"15vw" }}
+            placeholder="Chọn trạng thái"
             allowClear
             onSelect={(e) => {
               setProvider_type(e);
@@ -320,7 +321,7 @@ function ProviderTable(props) {
                 return <Option value={i.content}>{i.content}</Option>;
             })}
           </Select>
-        </Form.Item>
+        </Space>
       ),
       key: "3",
     },
@@ -489,9 +490,9 @@ function ProviderTable(props) {
               setFile={setFile}
               onChange={onChangeClick}
               setValue={setValue}
-        filter={items}
-        openFilter={open}
-        setOpenFilter={setOpen}
+              filter={items}
+              openFilter={open}
+              setOpenFilter={setOpen}
             />
           )}
           <Paginate

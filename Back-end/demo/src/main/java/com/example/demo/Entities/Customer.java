@@ -51,7 +51,7 @@ public class Customer{
     @ManyToOne
     @JoinColumn(name = "customer_type_id",referencedColumnName = "id")
     private CustomerType customer_type;
-    @OneToMany(mappedBy = "customer",orphanRemoval = true,fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "customer",fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     private Set<Payment> payments;
     public void setPayments(Set<Payment> payments){
         payments.addAll(payments);

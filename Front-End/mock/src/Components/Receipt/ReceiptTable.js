@@ -180,7 +180,8 @@ function ReceiptTable(props) {
         <Space direction="vertical">
           <label>Người quản lý</label>
           <Select
-            style={{ marginTop: "10px", width: "10vw" }}
+            placeholder="Chọn người quản lý"
+            style={{ marginTop: "10px", width: "15vw" }}
             allowClear
             showSearch
             onClear={(e) => {
@@ -217,6 +218,8 @@ function ReceiptTable(props) {
         <Space direction="vertical">
           <label>Thời gian tạo</label>
           <DatePicker
+          placeholder="YYYY-MM-DD"
+          style={{ marginTop: "10px", width: "15vw" }}
             allowClear
             onChange={(e, s) => {
               setDataRequest({
@@ -235,6 +238,8 @@ function ReceiptTable(props) {
           <label>Hình thức thanh toán</label>
           <Form.Item name="receiptType">
             <Select
+            placeholder="Chọn hình thức thanh toán"
+            style={{ marginTop: "10px", width: "15vw" }}
               allowClear
               showSearch
               onChange={(e) => {
@@ -273,7 +278,8 @@ function ReceiptTable(props) {
             <label>Trạng thái</label>
             <br></br>
             <Select
-              style={{ marginTop: "10px", width: "10vw" }}
+            placeholder="Chọn trạng thái"
+              style={{ marginTop: "10px", width: "15vw" }}
               allowClear
               onClear={(e) => {
                 setDataRequest({ ...dataRequest, status: null });
@@ -314,18 +320,18 @@ function ReceiptTable(props) {
         width: "15%",
       },
       {
-        title: "Khách hàng thanh toán",
+        title: "Nhà cung cấp thanh toán",
         dataIndex: "provider-name",
         key: "provider-name",
         render: (_, record) => (
           <Space size="middle">
-            {record.provider===null ? <p>Không xác định</p>:<Link
+            {record.provider===null ? <p>Không xác định</p>:<a
               onClick={(e) =>
                 navigate("/provider/information/" + record.provider.code)
               }
             >
               {record.provider.name + "-" + record.provider.code}
-            </Link>}
+            </a>}
           </Space>
         ),
       },

@@ -1,4 +1,4 @@
-import { Alert, Button, Card, Modal, Space, Spin, Tag } from "antd";
+import { Alert, Button, Card, ConfigProvider, Modal, Space, Spin, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import "../style.css";
 import Account from "../Account";
@@ -7,7 +7,8 @@ import axios from "axios";
 import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import ExceptionBox from "../ExceptionBox";
-import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import {CaretLeftOutlined } from "@ant-design/icons";
 import PDF from './PDF';
 export default function PaymentInformation(props) {
   document.title="Thông tin phiếu chi"
@@ -72,7 +73,19 @@ export default function PaymentInformation(props) {
             closable
           />
         )}
-        <h2>Thông tin khách hàng</h2>
+        <ConfigProvider
+        theme={
+          {
+            components:{
+              Button:{
+                textHoverBg:"none"
+              }
+            }
+          }
+        }>
+          <Button type="text" onClick={e=>{navigate("/payment-table")}} size="large" style={{height:"fit-content"}}><h2><CaretLeftOutlined/> Danh sách phiếu chi</h2></Button>
+          
+        </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
       </div>
       {err && <ExceptionBox url="/main" msg=<h2>Có lỗi xảy ra</h2> />}
@@ -111,7 +124,7 @@ export default function PaymentInformation(props) {
 
                 <p>Hình thức thanh toán</p>
                 
-                <p>: {data.data.paymentType.name}</p>
+                <p>: {data.data.paymentType===null ? "Không xác định":data.data.paymentType.name}</p>
                 <p>Người quản lý</p>
                 <p>
                     : <Link to={"/employee/information/  "+data.data.manager_code}>{data.data.manager}</Link>

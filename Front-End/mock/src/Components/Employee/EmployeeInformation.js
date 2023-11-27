@@ -1,4 +1,4 @@
-import { Alert, Button, Card, Space, Spin } from "antd";
+import { Alert, Button, Card, Modal, Space, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import "../style.css";
 import Account from "../Account";
@@ -137,7 +137,16 @@ export default function EmployeeInformation(props) {
                 <Button type="primary" href={url} size="large">
                   Chỉnh sửa
                 </Button>
-                <Button type="link" onClick={handleDelete} size="large">
+                <Button type="link" style={{color:"red"}} onClick={e=>{
+                  Modal.confirm(
+                    {
+                      title:"Bạn muốn xóa nhân viên "+code+"?",
+                      onOk(){
+                        handleDelete()
+                      }
+                    }
+                  )
+                }} size="large">
                   Xóa
                 </Button>
               </div>

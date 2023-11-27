@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import "../style.css";
 import Account from "../Account";
 import { useNavigate } from "react-router-dom";
-import { Alert, Button, Form, Input, Select } from "antd";
+import { Alert, Button, ConfigProvider, Form, Input, Select } from "antd";
 import { Option } from "antd/es/mentions";
 import axios from "axios";
 import { baseURL } from "../../Config";
 import { Token } from "../../Token";
+import {CaretLeftOutlined } from "@ant-design/icons";
 
 export default function CreateProvider(props) {
   document.title = "Tạo nhà cung cấp";
@@ -69,7 +70,19 @@ export default function CreateProvider(props) {
             closable
           />
         )}
-        <h2>Tạo nhà cung cấp</h2>
+        <ConfigProvider
+        theme={
+          {
+            components:{
+              Button:{
+                textHoverBg:"none"
+              }
+            }
+          }
+        }>
+          <Button type="text" onClick={e=>{navigate("/provider-table")}} size="large" style={{height:"fit-content"}}><h2><CaretLeftOutlined/> Thông tin phiếu thu</h2></Button>
+          
+        </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
       </div>
       <div

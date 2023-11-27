@@ -185,7 +185,8 @@ function PaymentTable(props) {
         <Space direction="vertical">
           <label>Người quản lý</label>
           <Select
-            style={{ marginTop: "10px", width: "10vw" }}
+            placeholder="Chọn người quản lý"
+            style={{ marginTop: "10px", width: "15vw" }}
             allowClear
             onClear={(e) => {
               setDataRequest({
@@ -221,6 +222,8 @@ function PaymentTable(props) {
         <Space direction="vertical">
           <label>Thời gian tạo</label>
           <DatePicker
+            style={{ marginTop: "10px", width: "15vw" }}
+            placeholder="YYYY-MM-DD"
             allowClear
             onChange={(e, s) => {
               setDataRequest({
@@ -239,6 +242,8 @@ function PaymentTable(props) {
           <label>Hình thức thanh toán</label>
           <Form.Item name="paymentType">
             <Select
+                        style={{ marginTop: "10px", width: "15vw" }}
+              placeholder="Chọn hình thức thanh toán"
               allowClear
               showSearch
               onChange={(e) => {
@@ -277,7 +282,8 @@ function PaymentTable(props) {
             <label>Trạng thái</label>
             <br></br>
             <Select
-              style={{ marginTop: "10px", width: "10vw" }}
+              style={{ marginTop: "10px", width: "15vw" }}
+              placeholder="Chọn trạng thái"
               allowClear
               onClear={(e) => {
                 setDataRequest({ ...dataRequest, status: null });

@@ -1,8 +1,9 @@
-import { Alert, Button, Card, Space, Spin, Tag } from "antd";
+import { Alert, Button, Card, ConfigProvider, Space, Spin, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import "../style.css";
 import Account from "../Account";
 import { useNavigate, useParams } from "react-router-dom";
+import {CaretLeftOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { baseURL } from "../../Config";
 import { Token } from "../../Token";
@@ -93,7 +94,19 @@ export default function CustomerInformation(props) {
             closable
           />
         )}
-        <h2>Thông tin khách hàng</h2>
+        <ConfigProvider
+        theme={
+          {
+            components:{
+              Button:{
+                textHoverBg:"none"
+              }
+            }
+          }
+        }>
+          <Button type="text" onClick={e=>{navigate("/payment-table")}} size="large" style={{height:"fit-content"}}><h2><CaretLeftOutlined/> Danh sách khách hàng</h2></Button>
+          
+        </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
       </div>
       {err && <ExceptionBox url="/main" msg=<h2>Có lỗi xảy ra</h2> />}
@@ -182,7 +195,7 @@ export default function CustomerInformation(props) {
                   : "Chưa kích hoạt"}
               </p>
               <p>Nhóm khách hàng</p>
-              <p>: {data.data.customer_type.content}</p>
+              <p>: {data.data.customer_type===null ? "Không xác định":data.data.customer_type.content}</p>
             </div>
             <div
                 style={{
@@ -190,7 +203,7 @@ export default function CustomerInformation(props) {
                   gridTemplateColumns: "20% 20%",
                 }}
               >
-                <Button type="primary" size="large" href={url}>
+                <Button type="primary" size="large" onClick={e=>(navigate(url))}>
                   Chỉnh sửa
                 </Button>
                 <Button type="link" size="large" onClick={handleDelete}>

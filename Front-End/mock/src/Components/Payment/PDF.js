@@ -66,10 +66,10 @@ import MyFont from '../font-times-new-roman.ttf'
                 Giá trị: {props.data.paid}
             </Text>
             <Text style={styles.text}>
-                Người nhận: {props.data.customer.name}
+                Người nhận: {props.data.customer===null ? "Không xác định":props.data.customer.name}
             </Text>
             <Text style={styles.text}>
-                Hình thức thanh toán: {props.data.paymentType.name}
+                Hình thức thanh toán: {props.data.paymentType===null ? "Không xác định":props.data.paymentType.name}
             </Text>
             <Text style=
             {{...styles.text,

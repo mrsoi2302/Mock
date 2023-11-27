@@ -1,9 +1,10 @@
 
-import { Alert, Button, DatePicker, Form, Input, Select, message } from "antd";
+import { Alert, Button, ConfigProvider, DatePicker, Form, Input, Select, message } from "antd";
 import { Option } from "antd/es/mentions";
 import "../Account"
 import React, { useEffect, useState } from "react";
 import Account from "../Account";
+import {CaretLeftOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { baseURL } from "../../Config";
 import { Token } from "../../Token";
@@ -61,7 +62,19 @@ export default function CreateCustomer(props){
             closable
           />
         )}
-        <h2>Tạo khách hàng</h2>
+        <ConfigProvider
+        theme={
+          {
+            components:{
+              Button:{
+                textHoverBg:"none"
+              }
+            }
+          }
+        }>
+          <Button type="text" onClick={e=>{navigate("/payment-table")}} size="large" style={{height:"fit-content"}}><h2><CaretLeftOutlined/> Danh sách khách hàng</h2></Button>
+          
+        </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
       </div>
       <div

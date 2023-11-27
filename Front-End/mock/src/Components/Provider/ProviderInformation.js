@@ -1,4 +1,4 @@
-import { Alert, Button, Card, Space, Spin, Tag } from "antd";
+import { Alert, Button, Card, ConfigProvider, Space, Spin, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import "../style.css";
 import Account from "../Account";
@@ -8,10 +8,13 @@ import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import ExceptionBox from "../ExceptionBox";
 import ReceiptList from "./ReceiptList";
+import {CaretLeftOutlined } from "@ant-design/icons";
+
 export default function ProviderInformation(props) {
   document.title = "Thông tin nhân viên";
   const navigate = useNavigate();
   const { code } = useParams();
+  const[receipts,setReceipts]=useState([]);
   const [data, setData] = useState({
     data: {},
     loading: true,
@@ -37,6 +40,17 @@ export default function ProviderInformation(props) {
   useEffect(() => {
     props.setOpenKeys("provider")
     props.setSelectedKeys("provider-list")
+    axios(
+      {
+        url:baseURL + "/receipt/receipt-list?code="+code,
+        method:"get",
+        headers: {
+          Authorization: Token,
+        },
+      }
+    ).then(res=>{
+      setReceipts(res.data)
+    })
     axios({
       url: baseURL + "/provider/information?code=" + code,
       method: "get",
@@ -71,7 +85,19 @@ export default function ProviderInformation(props) {
             closable
           />
         )}
-        <h2>Thông tin nhà cung cấp</h2>
+        <ConfigProvider
+        theme={
+          {
+            components:{
+              Button:{
+                textHoverBg:"none"
+              }
+            }
+          }
+        }>
+          <Button type="text" onClick={e=>{navigate("/provider-table")}} size="large" style={{height:"fit-content"}}><h2><CaretLeftOutlined/> Danh sách nhà cung cấp</h2></Button>
+          
+        </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
       </div>
       {err && <ExceptionBox url="/main" msg=<h2>Có lỗi xảy ra</h2> />}
@@ -151,7 +177,7 @@ export default function ProviderInformation(props) {
             </div>
             <br/>
             <div style={{margin:"0 auto 2% "}}>
-              <Button size="large" type="primary" href={url}>
+              <Button size="large" type="primary" onClick={e=>{navigate(url)}}>
                 Chỉnh sửa
               </Button>
               <Button size="large" type="link" onClick={handleDelete}>
@@ -159,7 +185,7 @@ export default function ProviderInformation(props) {
               </Button>
             </div>
           </Space>
-          <ReceiptList data={data.data.receipts} />
+          <ReceiptList data={receipts} />
         </div>
       )}
     </div>

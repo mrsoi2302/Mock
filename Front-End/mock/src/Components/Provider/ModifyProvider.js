@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import "../style.css";
 import Account from "../Account";
 import { useNavigate, useParams } from "react-router-dom";
-import { Alert, Button, Form, Input, Select } from "antd";
+import { Alert, Button, ConfigProvider, Form, Input, Select } from "antd";
 import { Option } from "antd/es/mentions";
 import axios from "axios";
 import { baseURL } from "../../Config";
 import { Token } from "../../Token";
+import {CaretLeftOutlined } from "@ant-design/icons";
 
 export default function ModifyProvider(props) {
   document.title = "Chỉnh sửa cung cấp";
@@ -97,7 +98,19 @@ export default function ModifyProvider(props) {
             closable
           />
         )}
-        <h2>Chỉnh sửa nhà cung cấp</h2>
+        <ConfigProvider
+        theme={
+          {
+            components:{
+              Button:{
+                textHoverBg:"none"
+              }
+            }
+          }
+        }>
+          <Button type="text" onClick={e=>{navigate("/provider/information/"+code)}} size="large" style={{height:"fit-content"}}><h2><CaretLeftOutlined/> Thông tin nhà cung cấp</h2></Button>
+          
+        </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
       </div>
       <div
@@ -166,7 +179,7 @@ export default function ModifyProvider(props) {
             />
           </Form.Item>
           <Form.Item
-            initialValue={data.provider_type.content}
+            initialValue={data.provider_type===null ? null:data.provider_type.content}
             name="provider_type"
             label="Nhóm khách hàng"
           >
