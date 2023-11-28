@@ -90,7 +90,9 @@ export default function ProviderInformation(props) {
           {
             components:{
               Button:{
-                textHoverBg:"none"
+                textHoverBg:"none",
+                colorBgTextActive:"none"
+
               }
             }
           }

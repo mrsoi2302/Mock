@@ -75,7 +75,9 @@ export default function CreateProvider(props) {
           {
             components:{
               Button:{
-                textHoverBg:"none"
+                textHoverBg:"none",
+                colorBgTextActive:"none"
+
               }
             }
           }

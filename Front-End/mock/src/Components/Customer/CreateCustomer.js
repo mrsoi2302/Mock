@@ -67,7 +67,9 @@ export default function CreateCustomer(props){
           {
             components:{
               Button:{
-                textHoverBg:"none"
+                textHoverBg:"none",
+                colorBgTextActive:"none"
+
               }
             }
           }

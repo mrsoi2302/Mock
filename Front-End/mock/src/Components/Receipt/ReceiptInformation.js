@@ -21,7 +21,7 @@ import { CaretLeftOutlined } from "@ant-design/icons";
 
 import PDF from "./PDF";
 export default function ReceiptInformation(props) {
-  document.title = "Thông tin phiếu chi";
+  document.title = "Thông tin phiếu thu";
   const navigate = useNavigate();
   const { code } = useParams();
 
@@ -89,6 +89,8 @@ export default function ReceiptInformation(props) {
             components: {
               Button: {
                 textHoverBg: "none",
+                colorBgTextActive:"none"
+
               },
             },
           }}

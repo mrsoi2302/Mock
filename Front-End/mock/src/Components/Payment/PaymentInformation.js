@@ -78,7 +78,9 @@ export default function PaymentInformation(props) {
           {
             components:{
               Button:{
-                textHoverBg:"none"
+                textHoverBg:"none",
+                colorBgTextActive:"none"
+
               }
             }
           }

@@ -124,7 +124,6 @@ export default function ModifyReceipt(props){
             setProvider(res.data);
         }).catch(err=>{message.error("Có lỗi khi lấy dữ liệu từ khách hàng")})
     }
-    console.log(error);
     return(
       <div className="content" style={{ paddingTop: "10px" }}>
       <div className="taskbar">
@@ -139,7 +138,9 @@ export default function ModifyReceipt(props){
           {
             components:{
               Button:{
-                textHoverBg:"none"
+                textHoverBg:"none",
+                colorBgTextActive:"none"
+
               }
             }
           }

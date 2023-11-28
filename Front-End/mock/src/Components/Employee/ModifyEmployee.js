@@ -1,4 +1,4 @@
-import { Alert, Button, Card, Form, Input, Select, Space, Spin } from "antd";
+import { Alert, Button, Card, ConfigProvider, Form, Input, Select, Space, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import "../style.css";
 import Account from "../Account";
@@ -8,6 +8,8 @@ import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import ExceptionBox from "../ExceptionBox";
 import { Option } from "antd/es/mentions";
+import {CaretLeftOutlined } from "@ant-design/icons";
+
 export default function ModifyEmployee(props) {
   document.title = "Chỉnh sửa nhân viên";
   const navigate = useNavigate();
@@ -76,7 +78,21 @@ export default function ModifyEmployee(props) {
             closable
           />
         )}
-        <h2>Cập nhật thông tin nhân viên</h2>
+        <ConfigProvider
+        theme={
+          {
+            components:{
+              Button:{
+                textHoverBg:"none",
+                colorBgTextActive:"none"
+
+              }
+            }
+          }
+        }>
+          <Button type="text" onClick={e=>{navigate("/employee/information/"+code)}} size="large" style={{height:"fit-content"}}><h2><CaretLeftOutlined/> Thông tin nhân viên</h2></Button>
+          
+        </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
       </div>
       {data.loading ? (

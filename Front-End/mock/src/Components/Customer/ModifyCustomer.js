@@ -105,7 +105,9 @@ export default function ModifyCustomer(props) {
           {
             components:{
               Button:{
-                textHoverBg:"none"
+                textHoverBg:"none",
+                colorBgTextActive:"none"
+
               }
             }
           }

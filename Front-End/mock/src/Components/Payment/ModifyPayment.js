@@ -152,7 +152,9 @@ export default function ModifyPayment(props) {
           {
             components:{
               Button:{
-                textHoverBg:"none"
+                textHoverBg:"none",
+                colorBgTextActive:"none"
+
               }
             }
           }

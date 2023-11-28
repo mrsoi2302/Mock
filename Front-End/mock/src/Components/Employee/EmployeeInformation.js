@@ -1,4 +1,4 @@
-import { Alert, Button, Card, Modal, Space, Spin } from "antd";
+import { Alert, Button, Card, ConfigProvider, Modal, Space, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import "../style.css";
 import Account from "../Account";
@@ -6,6 +6,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { baseURL } from "../../Config";
 import { Token } from "../../Token";
+import {CaretLeftOutlined } from "@ant-design/icons";
+
 import ExceptionBox from "../ExceptionBox";
 export default function EmployeeInformation(props) {
   document.title="Thông tin nhân viên"
@@ -70,7 +72,20 @@ export default function EmployeeInformation(props) {
             closable
           />
         )}
-        <h2>Thông tin nhân viên</h2>
+        <ConfigProvider
+        theme={
+          {
+            components:{
+              Button:{
+                textHoverBg:"none",
+                colorBgTextActive:"none"
+              }
+            }
+          }
+        }>
+          <Button type="text" onClick={e=>{navigate("/employee-table")}} size="large" style={{height:"fit-content"}}><h2><CaretLeftOutlined/> Danh sách nhân viên</h2></Button>
+          
+        </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
       </div>
       {err && <ExceptionBox url="/main" msg=<h2>Có lỗi xảy ra</h2> />}

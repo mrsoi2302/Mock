@@ -20,7 +20,6 @@ import ExceptionBox from "../ExceptionBox";
 import RowSelectionTable from "../RowSelectionTable";
 import Paginate from "../Paginate";
 import ImportFile from "../ImportFile";
-import SearchInput from "../SearchInput";
 import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import { Option } from "antd/es/mentions";
@@ -193,7 +192,7 @@ function CustomerTable(props) {
           jsonData.map(async (json) => {
             if (
               typeof json.customer_type != "undefined" &&
-              (json.status === "non-acitve" || json.status === "active")
+              (json.status === "non-active" || json.status === "active")
             ) {
               if (!check.includes(String(json.customer_type))) {
                 await axios({
@@ -219,7 +218,7 @@ function CustomerTable(props) {
                     message.error("Tạo nhóm thất bại");
                   });
               }
-              if (json.status != "non-acitve" && json.status != "active")
+              if (json.status !== "non-acitve" && json.status !== "active")
                 throw new Error();
               let { customer_type, ...newObj } = json;
               console.log(typeof json.customer_type === "undefined");
@@ -249,7 +248,9 @@ function CustomerTable(props) {
                   message.error("Tạo thất bại nhà cung cấp " + newObj.name);
                 });
               return newObj;
-            } else message.error("Đối tượng " + json.name + " không hợp lệ");
+            } else {
+              message.error("Đối tượng " + json.name + " không hợp lệ");
+            }
           });
           setCheckBox(true);
         } catch (err) {
@@ -545,9 +546,9 @@ function CustomerTable(props) {
             setFailed(0);
           }}
         >
-          <p>Số khách hàng đã thêm thành công:{success}</p>
-          <p>Số khách hàng thêm không thành công:{failed}</p>
-          <p>Số nhóm khách hàng đã bổ sung:{typeCreated}</p>
+          <p>Số khách hàng đã thêm thành công: {success>0 ? success+1:success}</p>
+          <p>Số khách hàng thêm không thành công: {failed>0 ? failed+1:failed}</p>
+          <p>Số nhóm khách hàng đã bổ sung: {typeCreated>0 ? failed+1:failed}</p>
         </Modal>
       )}
       {inputFile && (
@@ -563,7 +564,7 @@ function CustomerTable(props) {
               </a>
             </p>
             <p>Mã khách hàng không được chứa tiền tố "CTM"</p>
-            <p>Ngày sinh cần có định dạng YYYY/MM/DD</p>
+            <p>Ngày sinh cần có định dạng YYYY-MM-DD</p>
             <p>Nhóm khách hàng cần được thiết lập trước trong danh sách</p>
             <p>Chỉ có 2 trạng thái là "active" và "non-active"</p>
           </div>
@@ -577,6 +578,7 @@ function CustomerTable(props) {
             <Spin />
           ) : (
             <RowSelectionTable
+              quantity={selectedRowKeys.length}
               delete={handleButton}
               handlePrint={handlePrint}
               url="/create-customer"

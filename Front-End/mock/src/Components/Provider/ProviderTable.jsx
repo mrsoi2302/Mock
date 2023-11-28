@@ -463,9 +463,9 @@ function ProviderTable(props) {
       setTypeCreated(0)
       setFailed(0)
       setInputFile(false)}}>
-        <p>Số nhà cung cấp đã thêm thành công:{success}</p>
-        <p>Số nhà cung cấp thêm không thành công:{failed}</p>
-        <p>Số nhóm nhà cung cấp đã bổ sung:{typeCreated}</p>
+        <p>Số nhà cung cấp đã thêm thành công:{success>0 ? success+1:success}</p>
+        <p>Số nhà cung cấp thêm không thành công:{failed>0 ? failed+1:failed}</p>
+        <p>Số nhóm nhà cung cấp đã bổ sung:{typeCreated>0 ? typeCreated+1:typeCreated}</p>
 
       </Modal>}
       {err ? (
