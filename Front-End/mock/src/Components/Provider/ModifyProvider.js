@@ -26,7 +26,7 @@ export default function ModifyProvider(props) {
         url: baseURL + "/provider/information?code=" + code,
         method: "get",
         headers: {
-          Authorization: Token(),
+          Authorization: props.token,
         },
       })
         .then((res) => {
@@ -39,7 +39,7 @@ export default function ModifyProvider(props) {
             url: baseURL + "/employee/admin/list",
             method: "get",
             headers: {
-              Authorization: Token(),
+              Authorization: props.token,
             },
           })
             .then((res) => {
@@ -52,7 +52,7 @@ export default function ModifyProvider(props) {
       method: "post",
       url: baseURL + "/provider-type/list",
       headers: {
-        Authorization: Token(),
+        Authorization: props.token,
       },
       data:{
         value:value
@@ -71,7 +71,7 @@ export default function ModifyProvider(props) {
       url: baseURL + "/provider/admin",
       method: "put",
       headers: {
-        Authorization: Token(),
+        Authorization: props.token,
       },
       data: data,
     })

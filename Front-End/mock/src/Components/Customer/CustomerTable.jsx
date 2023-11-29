@@ -92,7 +92,7 @@ function CustomerTable(props) {
       method: "post",
       url: baseURL + "/customer-type/list",
       headers: {
-        Authorization: Token(),
+        Authorization: props.token,
       },
       data: {
         value: null,
@@ -115,7 +115,7 @@ function CustomerTable(props) {
         sort,
       method: "post",
       headers: {
-        Authorization: Token(),
+        Authorization: props.token,
       },
       data: {
         value: value,
@@ -142,7 +142,7 @@ function CustomerTable(props) {
       method: "post",
       url: baseURL + "/customer/count-list",
       headers: {
-        Authorization: Token(),
+        Authorization: props.token,
       },
       data: {
         value: value,
@@ -161,7 +161,7 @@ function CustomerTable(props) {
       url: baseURL + "/customer/admin",
       method: "delete",
       headers: {
-        Authorization: Token(),
+        Authorization: props.token,
       },
       data: selectedRowKeys,
     })
@@ -199,7 +199,7 @@ function CustomerTable(props) {
                   method: "post",
                   url: baseURL + "/customer-type/admin/create",
                   headers: {
-                    Authorization: Token(),
+                    Authorization: props.token,
                   },
                   data: {
                     content:
@@ -235,7 +235,7 @@ function CustomerTable(props) {
                 method: "post",
                 url: baseURL + "/customer/staff/create-one",
                 headers: {
-                  Authorization: Token(),
+                  Authorization: props.token,
                 },
                 data: newObj,
               })

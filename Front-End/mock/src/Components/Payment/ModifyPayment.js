@@ -41,7 +41,7 @@ export default function ModifyPayment(props) {
       url: baseURL + "/payment-group/list",
       method: "post",
       headers: {
-        Authorization:  Token(),
+        Authorization:  props.token,
       },
       data: {
         value: value,
@@ -57,7 +57,7 @@ export default function ModifyPayment(props) {
       url: baseURL + "/employee/admin/list",
       method: "get",
       headers: {
-        Authorization:  Token(),
+        Authorization:  props.token,
       },
     })
       .then((res) => {
@@ -70,7 +70,7 @@ export default function ModifyPayment(props) {
       url: baseURL + "/payment/information?code=" + code,
       method: "get",
       headers: {
-        Authorization:  Token(),
+        Authorization:  props.token,
       },
     })
       .then((res) => {
@@ -83,7 +83,7 @@ export default function ModifyPayment(props) {
       url: baseURL + "/customer/create-payment",
       method: "post",
       headers: {
-        Authorization:  Token(),
+        Authorization:  props.token,
       },
     })
       .then((res) => {
@@ -96,7 +96,7 @@ export default function ModifyPayment(props) {
       url: baseURL + "/payment-type/list",
       method: "post",
       headers: {
-        Authorization:  Token(),
+        Authorization:  props.token,
       },
       data: {
         value: null,
@@ -113,7 +113,7 @@ export default function ModifyPayment(props) {
       url: baseURL + "/payment-group/list",
       method: "post",
       headers: {
-        Authorization:  Token(),
+        Authorization:  props.token,
       },
       data: {
         value: value,
@@ -131,7 +131,7 @@ export default function ModifyPayment(props) {
       method: "put",
       url: baseURL + "/payment/admin",
       headers: {
-        Authorization:  Token(),
+        Authorization:  props.token,
       },
       data: data,
     })

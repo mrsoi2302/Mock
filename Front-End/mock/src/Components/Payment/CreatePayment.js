@@ -27,7 +27,7 @@ export default function CreatePayment(props){
               url:baseURL+"/customer/create-payment",
               method:"post",
               headers:{
-                  "Authorization": Token()
+                  "Authorization": props.token
               },
               data:{
               }
@@ -40,7 +40,7 @@ export default function CreatePayment(props){
                 url:baseURL+"/payment-type/list",
                 method:"post",
                 headers:{
-                    "Authorization": Token()
+                    "Authorization": props.token
                 },
                 data:{
                     value:null
@@ -55,7 +55,7 @@ export default function CreatePayment(props){
                 url:baseURL+"/payment-group/list",
                 method:"post",
                 headers:{
-                    "Authorization": Token()
+                    "Authorization": props.token
                 },
                 data:{
                     value:value
@@ -70,7 +70,7 @@ export default function CreatePayment(props){
                 method:"post",
                 url:baseURL+"/payment/staff/create-one",
                 headers:{
-                    "Authorization": Token()
+                    "Authorization": props.token
                 },
                 data:data
             }
@@ -84,7 +84,7 @@ export default function CreatePayment(props){
                 url:baseURL+"/customer/create-payment",
                 method:"post",
                 headers:{
-                    "Authorization": Token()
+                    "Authorization": props.token
                 },
                 data:{
                     id:arr[0]

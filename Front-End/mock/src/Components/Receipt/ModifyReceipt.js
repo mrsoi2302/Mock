@@ -33,7 +33,7 @@ export default function ModifyReceipt(props){
               url:baseURL+"/receipt-group/list",
               method:"post",
               headers:{
-                  "Authorization":Token()
+                  "Authorization":props.token
               },
               data:{
                   value:value
@@ -45,7 +45,7 @@ export default function ModifyReceipt(props){
             url: baseURL + "/employee/admin/list",
             method: "get",
             headers: {
-              Authorization: Token(),
+              Authorization: props.token,
             },
           })
             .then((res) => {
@@ -57,7 +57,7 @@ export default function ModifyReceipt(props){
             url: baseURL + "/receipt/information?code=" + code,
             method: "get",
             headers: {
-              Authorization: Token(),
+              Authorization: props.token,
             },
           })
             .then((res) => {
@@ -67,7 +67,7 @@ export default function ModifyReceipt(props){
                     url:baseURL+"/provider/create-receipt",
                     method:"post",
                     headers:{
-                        "Authorization":Token()
+                        "Authorization":props.token
                     },
                     data:{
                     }
@@ -81,7 +81,7 @@ export default function ModifyReceipt(props){
                 url:baseURL+"/payment-type/list",
                 method:"post",
                 headers:{
-                    "Authorization":Token()
+                    "Authorization":props.token
                 },
                 data:{
                     value:null
@@ -100,7 +100,7 @@ export default function ModifyReceipt(props){
                 method:"put",
                 url:baseURL+"/receipt/admin",
                 headers:{
-                    "Authorization":Token()
+                    "Authorization":props.token
                 },
                 data:data
             }
@@ -114,7 +114,7 @@ export default function ModifyReceipt(props){
                 url:baseURL+"/provider/create-payment",
                 method:"post",
                 headers:{
-                    "Authorization":Token()
+                    "Authorization":props.token
                 },
                 data:{
                     id:arr[0]

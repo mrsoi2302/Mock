@@ -23,12 +23,12 @@ import Paginate from "../Paginate";
 import ImportFile from "../ImportFile";
 import SearchInput from "../SearchInput";
 import { baseURL } from "../../Config";
-import {  Token} from "../../Token";
 import { Option } from "antd/es/mentions";
 import CreatePayment from "./CreatePayment";
 import { isDisabled } from "@testing-library/user-event/dist/utils";
 import RowSelectionTableForBill from "../RowSelectionTableForBill";
 import BillTypeModal from "../BillTypeModal";
+import { Token } from "../../Token";
 function PaymentTable(props) {
   document.title = "Danh sách phiếu chi";
   localStorage.setItem("open", "cash");
@@ -87,7 +87,7 @@ function PaymentTable(props) {
       method: "post",
       url: baseURL + "/payment-type/list",
       headers: {
-        Authorization:  Token(),
+        Authorization: props.token
       },
       data: {
         value: null,
@@ -106,7 +106,7 @@ function PaymentTable(props) {
         sort,
       method: "post",
       headers: {
-        Authorization:  Token(),
+        Authorization:  props.token,
       },
       data: {
         value: value,
@@ -132,7 +132,7 @@ function PaymentTable(props) {
       method: "post",
       url: baseURL + "/payment/count-list",
       headers: {
-        Authorization:  Token(),
+        Authorization:  props.token,
       },
       data: {
         value: value,
@@ -149,7 +149,7 @@ function PaymentTable(props) {
       url: baseURL + "/employee/admin/list",
       method: "get",
       headers: {
-        Authorization:  Token(),
+        Authorization:  props.token,
       },
     }).then((res) => {
       setEmployeeList(res.data);
@@ -160,7 +160,7 @@ function PaymentTable(props) {
       url: baseURL + "/payment/admin",
       method: "delete",
       headers: {
-        Authorization:  Token(),
+        Authorization:  props.token,
       },
       data: selectedRowKeys,
     })
@@ -381,7 +381,7 @@ function PaymentTable(props) {
       url: baseURL + "/payment-type/admin/create",
       method: "post",
       headers: {
-        Authorization:  Token(),
+        Authorization:  props.token,
       },
       data: {
         name: createType,

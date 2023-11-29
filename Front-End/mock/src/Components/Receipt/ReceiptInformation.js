@@ -36,7 +36,7 @@ export default function ReceiptInformation(props) {
       url: baseURL + "/receipt/admin",
       method: "delete",
       headers: {
-        Authorization: Token(),
+        Authorization: props.token,
       },
       data: [code],
     })
@@ -54,7 +54,7 @@ export default function ReceiptInformation(props) {
       url: baseURL + "/receipt/information?code=" + code,
       method: "get",
       headers: {
-        Authorization: Token(),
+        Authorization: props.token,
       },
     })
       .then((res) => {

@@ -31,6 +31,7 @@ import PasswordChange from './Components/PasswordChange';
 function App(){
   const [openKeys, setOpenKeys] = useState("");
   const [selectedKeys, setSelectedKeys] = useState("");
+  const [token,setToken]=("")
   return(
     <div>
       <BrowserRouter>
@@ -38,160 +39,188 @@ function App(){
         openKeys={openKeys}
         setOpenKeys={setOpenKeys}
         selectedKeys={selectedKeys}
+        token={token}
         setSelectedKeys={setSelectedKeys}
       />
         <Routes>
         <Route> 
-          <Route path='/' element={<Login/>}/>
+          <Route path='/' element={<Login
+            setToken={setToken}
+          />}/>
           <Route path='/main' element={<Main 
             openKeys={openKeys}
             setOpenKeys={setOpenKeys}
             setSelectedKeys={setSelectedKeys}
             selectedKeys={selectedKeys}
+            token={token}
           />}/> 
           <Route path='/history' element={<HistoryTable
             openKeys={openKeys}
             setOpenKeys={setOpenKeys}
             setSelectedKeys={setSelectedKeys}
             selectedKeys={selectedKeys}
+            token={token}
           />}/>
           <Route path='/employee-table' element={<EmployeeTable
             openKeys={openKeys}
             setOpenKeys={setOpenKeys}
             setSelectedKeys={setSelectedKeys}
             selectedKeys={selectedKeys}
+            token={token}
           />}/>
           <Route path='/create-employee' element={<CreateEmployee
             openKeys={openKeys}
             setOpenKeys={setOpenKeys}
             setSelectedKeys={setSelectedKeys}
             selectedKeys={selectedKeys}
+            token={token}
           />}/>
           <Route path='/employee/information/:code' element={<EmployeeInformation
             openKeys={openKeys}
             setOpenKeys={setOpenKeys}
             setSelectedKeys={setSelectedKeys}
             selectedKeys={selectedKeys}
+            token={token}
           />}/>
           <Route path='/employee/modify/:code' element={<ModifyEmployee
             openKeys={openKeys}
             setOpenKeys={setOpenKeys}
             setSelectedKeys={setSelectedKeys}
             selectedKeys={selectedKeys}
+            token={token}
           />}/>
           <Route path='/provider-table' element={<ProviderTable
             openKeys={openKeys}
             setOpenKeys={setOpenKeys}
             setSelectedKeys={setSelectedKeys}
             selectedKeys={selectedKeys}
+            token={token}
           />}/>
           <Route path='/create-provider' element={<CreateProvider
             openKeys={openKeys}
             setOpenKeys={setOpenKeys}
             setSelectedKeys={setSelectedKeys}
             selectedKeys={selectedKeys}
+            token={token}
           />}/>
           <Route path='/provider/information/:code' element={<ProviderInformation 
             openKeys={openKeys}
             setOpenKeys={setOpenKeys}
             setSelectedKeys={setSelectedKeys}
             selectedKeys={selectedKeys}
+            token={token}
           />}/>
           <Route path='/provider/modify/:code' element={<ModifyProvider
             openKeys={openKeys}
             setOpenKeys={setOpenKeys}
             setSelectedKeys={setSelectedKeys}
             selectedKeys={selectedKeys}
+            token={token}
           />}/>
           <Route path='/provider-type' element={<ProviderType
             openKeys={openKeys}
             setOpenKeys={setOpenKeys}
             setSelectedKeys={setSelectedKeys}
             selectedKeys={selectedKeys}
+            token={token}
           />}/>
           <Route path='/customer-table' element={<CustomerTable
             openKeys={openKeys}
             setOpenKeys={setOpenKeys}
             setSelectedKeys={setSelectedKeys}
             selectedKeys={selectedKeys}
+            token={token}
           />}/>
           <Route path='/create-customer' element={<CreateCustomer 
             openKeys={openKeys}
             setOpenKeys={setOpenKeys}
             setSelectedKeys={setSelectedKeys}
             selectedKeys={selectedKeys}
+            token={token}
           />}/>
           <Route path='/customer/information/:code' element={<CustomerInformation
             openKeys={openKeys}
             setOpenKeys={setOpenKeys}
             setSelectedKeys={setSelectedKeys}
             selectedKeys={selectedKeys}
+            token={token}
           />}/>
           <Route path='/customer/modify/:code' element={<ModifyCustomer
             openKeys={openKeys}
             setOpenKeys={setOpenKeys}
             setSelectedKeys={setSelectedKeys}
             selectedKeys={selectedKeys}
+            token={token}
           />}/>
           <Route path='/customer-type' element={<CustomerType
             openKeys={openKeys}
             setOpenKeys={setOpenKeys}
             setSelectedKeys={setSelectedKeys}
             selectedKeys={selectedKeys}
+            token={token}
           />}/>
           <Route path='/payment-table' element={<PaymentTable
             openKeys={openKeys}
             setOpenKeys={setOpenKeys}
             setSelectedKeys={setSelectedKeys}
             selectedKeys={selectedKeys}
+            token={token}
           />}/>
           <Route path='/payment/information/:code' element={<PaymentInformation
             openKeys={openKeys}
             setOpenKeys={setOpenKeys}
             setSelectedKeys={setSelectedKeys}
             selectedKeys={selectedKeys}
+            token={token}
           />}/>
           <Route path='/create-payment' element={<CreatePayment
             openKeys={openKeys}
             setOpenKeys={setOpenKeys}
             setSelectedKeys={setSelectedKeys}
             selectedKeys={selectedKeys}
+            token={token}
           />}/>
           <Route path='/payment/modify/:code' element={<ModifyPayment
             openKeys={openKeys}
             setOpenKeys={setOpenKeys}
             setSelectedKeys={setSelectedKeys}
             selectedKeys={selectedKeys}
+            token={token}
           />}/>  
           <Route path='/receipt-table' element={<ReceiptTable
             openKeys={openKeys}
             setOpenKeys={setOpenKeys}
             setSelectedKeys={setSelectedKeys}
             selectedKeys={selectedKeys}
+            token={token}
           />}/>
           <Route path='/receipt/information/:code' element={<ReceiptInformation
             openKeys={openKeys}
             setOpenKeys={setOpenKeys}
             setSelectedKeys={setSelectedKeys}
             selectedKeys={selectedKeys}
+            token={token}
           />}/>
           <Route path='/create-receipt' element={<CreateReceipt
             openKeys={openKeys}
             setOpenKeys={setOpenKeys}
             setSelectedKeys={setSelectedKeys}
             selectedKeys={selectedKeys}
+            token={token}
           />}/>
           <Route path='/receipt/modify/:code' element={<ModifyReceipt
             openKeys={openKeys}
             setOpenKeys={setOpenKeys}
             setSelectedKeys={setSelectedKeys}
             selectedKeys={selectedKeys}
+            token={token}
           />}/>  
           <Route path='/change-password' element={<PasswordChange
             openKeys={openKeys}
             setOpenKeys={setOpenKeys}
             setSelectedKeys={setSelectedKeys}
             selectedKeys={selectedKeys}
+            token={token}
           />}/>
           {/*<Route path='/provider-list' element={<ProviderList />}/>
           

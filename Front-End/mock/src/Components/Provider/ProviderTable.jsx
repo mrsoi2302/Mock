@@ -93,7 +93,7 @@ function ProviderTable(props) {
       method: "post",
       url: baseURL + "/provider-type/list",
       headers: {
-        Authorization: Token(),
+        Authorization: props.token,
       },
       data:{
         value:null
@@ -116,7 +116,7 @@ function ProviderTable(props) {
         sort,
       method: "post",
       headers: {
-        Authorization: Token(),
+        Authorization: props.token,
       },
       data: {
         value: value,
@@ -149,7 +149,7 @@ function ProviderTable(props) {
       method: "post",
       url: baseURL + "/provider/count-list",
       headers: {
-        Authorization: Token(),
+        Authorization: props.token,
       },
       data: {
         value: value,
@@ -174,7 +174,7 @@ function ProviderTable(props) {
       url: baseURL + "/provider/admin",
       method: "delete",
       headers: {
-        Authorization: Token(),
+        Authorization: props.token,
       },
       data: selectedRowKeys,
     })
@@ -221,7 +221,7 @@ function ProviderTable(props) {
                 method: "post",
                 url: baseURL + "/provider-type/admin/create",
                 headers: {
-                  Authorization: Token(),
+                  Authorization: props.token,
                 },
                 data:{
                   content:json.provider_type==="undefined" ? "":String(json.provider_type).trim()
@@ -247,7 +247,7 @@ function ProviderTable(props) {
                   method:"post",
                   url:baseURL+"/provider/staff/create-one",
                   headers:{
-                      "Authorization":Token()
+                      "Authorization":props.token
                   },
                   data:newObj
               }

@@ -28,7 +28,7 @@ export default function ModifyCustomer(props) {
         url: baseURL + "/customer/information?code=" + code,
         method: "get",
         headers: {
-          Authorization: Token(),
+          Authorization: props.token,
         },
       })
         .then((res) => {
@@ -41,7 +41,7 @@ export default function ModifyCustomer(props) {
             url: baseURL + "/employee/admin/list",
             method: "get",
             headers: {
-              Authorization: Token(),
+              Authorization: props.token,
             },
           })
             .then((res) => {
@@ -54,7 +54,7 @@ export default function ModifyCustomer(props) {
       method: "post",
       url: baseURL + "/customer-type/list",
       headers: {
-        Authorization: Token(),
+        Authorization: props.token,
       },
       data:{
         value:value
@@ -73,7 +73,7 @@ export default function ModifyCustomer(props) {
       url: baseURL + "/customer/admin",
       method: "put",
       headers: {
-        Authorization: Token(),
+        Authorization: props.token,
       },
       data: data,
     })

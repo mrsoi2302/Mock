@@ -74,7 +74,7 @@ export default function ProviderType(props) {
       method: "post",
       url: baseURL + "/provider-type/list",
       headers: {
-        Authorization: Token(),
+        Authorization: props.token,
       },
       data: {
         value: value,
@@ -90,7 +90,7 @@ export default function ProviderType(props) {
             },
           },
           headers: {
-            Authorization: Token(),
+            Authorization: props.token,
           },
         }).then((ress) => {
           temp.push({
@@ -112,7 +112,7 @@ export default function ProviderType(props) {
       method: "delete",
       url: baseURL + "/provider-type/admin?code=" + e.code,
       headers: {
-        Authorization: Token(),
+        Authorization: props.token,
       },
     })
       .then((res) => {
@@ -128,7 +128,7 @@ export default function ProviderType(props) {
       method: "post",
       url: baseURL + "/provider-type/admin/create",
       headers: {
-        Authorization: Token(),
+        Authorization: props.token,
       },
       data: create,
     })

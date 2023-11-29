@@ -192,8 +192,6 @@ export default function Main(props) {
         setErr(true);
       });
   }, []);
-  console.log(Token());
-
   return (
     <div className="content" style={{minHeight:"90vh"}}>
       {err && <ExceptionBox url="/" msg="Phiên đăng nhập của bạn đã hết hạn" />}

@@ -26,7 +26,7 @@ export default function ProviderInformation(props) {
       url: baseURL + "/provider/admin",
       method: "delete",
       headers: {
-        Authorization: Token(),
+        Authorization: props.token,
       },
       data: [code],
     })
@@ -45,7 +45,7 @@ export default function ProviderInformation(props) {
         url:baseURL + "/receipt/receipt-list?code="+code,
         method:"get",
         headers: {
-          Authorization: Token(),
+          Authorization: props.token,
         },
       }
     ).then(res=>{
@@ -55,7 +55,7 @@ export default function ProviderInformation(props) {
       url: baseURL + "/provider/information?code=" + code,
       method: "get",
       headers: {
-        Authorization: Token(),
+        Authorization: props.token,
       },
     })
       .then((res) => {

@@ -66,7 +66,7 @@ export default function CustomerType(props) {
       method: "post",
       url: baseURL + "/customer-type/list",
       headers: {
-        Authorization: Token(),
+        Authorization: props.token,
       },
       data: {
         value: value,
@@ -83,7 +83,7 @@ export default function CustomerType(props) {
               },
             },
             headers: {
-              Authorization: Token(),
+              Authorization: props.token,
             },
           }).then((ress) => {
             temp.push({
@@ -111,7 +111,7 @@ export default function CustomerType(props) {
       method: "delete",
       url: baseURL + "/customer-type/admin?code=" + e.code,
       headers: {
-        Authorization: Token(),
+        Authorization: props.token,
       },
     })
       .then((res) => {
@@ -126,7 +126,7 @@ export default function CustomerType(props) {
       method: "post",
       url: baseURL + "/customer-type/admin/create",
       headers: {
-        Authorization: Token(),
+        Authorization: props.token,
       },
       data: create,
     })

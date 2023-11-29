@@ -25,7 +25,7 @@ export default function CustomerInformation(props) {
       url: baseURL + "/customer/admin",
       method: "delete",
       headers: {
-        Authorization: Token(),
+        Authorization: props.token,
       },
       data: [code],
     })
@@ -43,7 +43,7 @@ export default function CustomerInformation(props) {
       url: baseURL + "/payment/list",
       method: "post",
       headers: {
-        Authorization: Token(),
+        Authorization: props.token,
       },
       data: {
         value: null,
@@ -64,7 +64,7 @@ export default function CustomerInformation(props) {
       url: baseURL + "/customer/information?code=" + code,
       method: "get",
       headers: {
-        Authorization: Token(),
+        Authorization: props.token,
       },
     })
       .then((res) => {

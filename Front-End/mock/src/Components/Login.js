@@ -4,7 +4,7 @@ import "./style.css";
 import { Button, Input } from "antd";
 import { useNavigate } from "react-router-dom";
 import { baseURL } from "../Config";
-export default function Login() {
+export default function Login(props) {
   const navigate = useNavigate();
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
@@ -14,7 +14,6 @@ export default function Login() {
     setToken(localStorage.getItem("jwt"));
     if (token != null) {
       navigate("/main");
-      console.log(token);
     }
   });
   const handleSubmit = () => {
@@ -27,6 +26,7 @@ export default function Login() {
       },
     })
       .then((res) => {
+        props.setToken("Bearer "+res.data)
         localStorage.setItem("jwt", res.data);
         localStorage.setItem("username",username)
         navigate("/main");

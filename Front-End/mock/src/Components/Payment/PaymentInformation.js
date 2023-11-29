@@ -27,7 +27,7 @@ export default function PaymentInformation(props) {
       url: baseURL + "/payment/admin",
       method: "delete",
       headers: {
-        Authorization:  Token(),
+        Authorization:  props.token,
       },
       data: [code],
     })
@@ -43,7 +43,7 @@ export default function PaymentInformation(props) {
       url: baseURL + "/payment/information?code=" + code,
       method: "get",
       headers: {
-        Authorization:  Token(),
+        Authorization:  props.token,
       },
     })
       .then((res) => {
