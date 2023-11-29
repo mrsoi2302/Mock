@@ -19,4 +19,6 @@ public interface ProviderTypeRepo extends JpaRepository<ProviderType,Long> {
     void deleteByCode(String code);
 
     ProviderType findByContent(String content);
+
+    ProviderType findByCode(String code);
 }

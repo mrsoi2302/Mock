@@ -70,7 +70,7 @@ public class ProviderService {
         }
     }
 
-    public List<Provider> findByProviderType(String code) {
+    public List<Provider> findByProviderType(ProviderType code) {
         return providerRepo.findAllByProviderType(code);
     }
 

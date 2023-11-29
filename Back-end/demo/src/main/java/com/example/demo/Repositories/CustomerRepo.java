@@ -76,8 +76,8 @@ public interface CustomerRepo extends JpaRepository<Customer,Long> {
     @Query("delete from Customer c where c.code in :list")
     void deleteAllByCode(List<String> list);
 
-    @Query("select c from Customer c where c.customer_type.code=:code")
-    List<Customer> findByType(String code);
+    @Query("select c from Customer c where c.customer_type=:code")
+    List<Customer> findByType(CustomerType code);
     @Query("select c from Customer c where (:manager is null or c.manager=:manager) and c.status='active'")
     List<Customer> findForPayment(@Param("manager") String manager);
     @Query("select c from Customer c where (:manager is null or c.manager=:manager) and c.code=:code")

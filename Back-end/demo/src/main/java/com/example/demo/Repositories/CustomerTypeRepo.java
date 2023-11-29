@@ -18,4 +18,6 @@ public interface CustomerTypeRepo extends JpaRepository<CustomerType,Long> {
     void deleteByCode(String code);
 
     CustomerType findByContent(String content);
+
+    CustomerType findByCode(String code);
 }

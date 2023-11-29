@@ -30,7 +30,14 @@ public class CustomerTypeService {
     }
 
     public void deleteByCode(String code) {
-        customerTypeRepo.deleteByCode(code);
+        CustomerType type=customerTypeRepo.findByCode(code);
+        List<Customer> customers=customerRepo.findByType(type);
+        for(Customer i:customers){
+            i.setCustomer_type(null);
+            customerRepo.save(i);
+        }
+        customerTypeRepo.delete(type);
+
     }
 
     public CustomerType findByContent(String content) {
