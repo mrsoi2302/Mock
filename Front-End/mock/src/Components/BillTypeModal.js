@@ -13,7 +13,6 @@ import Search from "antd/es/input/Search";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { baseURL } from "../Config";
-import { Token } from "../Token";
 
 export default function BillTypeModal(props) {
   const [value, setValue] = useState("");
@@ -29,7 +28,7 @@ export default function BillTypeModal(props) {
       url: baseURL + "/" + props.name + "-group/list",
       method: "post",
       headers: {
-        Authorization: Token,
+        Authorization: "Bearer "+localStorage.getItem("jwt"),
       },
       data: {
         value: value,
@@ -51,7 +50,7 @@ export default function BillTypeModal(props) {
       url: baseURL + "/" + props.name + "-group/staff/create",
       method: "post",
       headers: {
-        Authorization: Token,
+        Authorization: "Bearer "+localStorage.getItem("jwt"),
       },
       data: createData,
     })
@@ -80,7 +79,7 @@ export default function BillTypeModal(props) {
       url: baseURL + "/" + props.name + "-group/admin",
       method: "delete",
       headers: {
-        Authorization: Token,
+        Authorization: "Bearer "+localStorage.getItem("jwt"),
       },
       data: arr,
     })

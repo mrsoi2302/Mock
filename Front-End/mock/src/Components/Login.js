@@ -32,8 +32,8 @@ export default function Login(props) {
         navigate("/main");
       })
       .catch((err) => {
+        console.log(err);
         setFailed(true);
-        console.error(err);
       });
   };
   const keyDown=(e)=>{
