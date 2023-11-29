@@ -29,7 +29,7 @@ export default function ModifyEmployee(props) {
       url: baseURL + "/employee/admin/information?code=" + code,
       method: "get",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
     })
       .then((res) => {
@@ -48,7 +48,7 @@ export default function ModifyEmployee(props) {
       method: "put",
       url: baseURL + "/employee/admin",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: e,
     })

@@ -15,7 +15,7 @@ export default function Filter(props) {
   const items = props.items;
 
   return (
-    <Dropdown menu={{ items }} open={props.open} trigger={"click"}>
+    <Dropdown menu={{ items }} open={props.open} trigger={["click"]}>
       <ConfigProvider
         theme={{
           components: {

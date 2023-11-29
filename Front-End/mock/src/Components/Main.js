@@ -191,8 +191,8 @@ export default function Main(props) {
       .catch((err) => {
         setErr(true);
       });
-      const v=Token
   }, []);
+  console.log(Token());
 
   return (
     <div className="content" style={{minHeight:"90vh"}}>

@@ -42,6 +42,9 @@ export default function Login() {
   return (
     <div
       className={"container"}
+      style={{
+        overflowY:"hidden"
+      }}
     >
       <div className="login-box">
         <img

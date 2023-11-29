@@ -92,7 +92,7 @@ function CustomerTable(props) {
       method: "post",
       url: baseURL + "/customer-type/list",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: {
         value: null,
@@ -115,7 +115,7 @@ function CustomerTable(props) {
         sort,
       method: "post",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: {
         value: value,
@@ -142,7 +142,7 @@ function CustomerTable(props) {
       method: "post",
       url: baseURL + "/customer/count-list",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: {
         value: value,
@@ -161,7 +161,7 @@ function CustomerTable(props) {
       url: baseURL + "/customer/admin",
       method: "delete",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: selectedRowKeys,
     })
@@ -199,7 +199,7 @@ function CustomerTable(props) {
                   method: "post",
                   url: baseURL + "/customer-type/admin/create",
                   headers: {
-                    Authorization: Token,
+                    Authorization: Token(),
                   },
                   data: {
                     content:
@@ -235,7 +235,7 @@ function CustomerTable(props) {
                 method: "post",
                 url: baseURL + "/customer/staff/create-one",
                 headers: {
-                  Authorization: Token,
+                  Authorization: Token(),
                 },
                 data: newObj,
               })
@@ -283,7 +283,7 @@ function CustomerTable(props) {
           <label>Giới tính</label>
           <Select
           placeholder="Chọn giới tính"
-            style={{ marginTop: "10px", width: "15vw",textAlign:"center" }}
+            style={{ marginTop: "10px", width: "15vw" }}
             allowClear
             onSelect={(e) => {
               setDataRequest({
@@ -311,7 +311,7 @@ function CustomerTable(props) {
               placeholder="Ngày"
               min={1}
               max={31}
-              style={{ marginRight: "10px", marginTop: "10px", width: "100px",textAlign:"center" }}
+              style={{ marginRight: "10px", marginTop: "10px", width: "100px" }}
               onChange={(e) => {
                 setDataRequest({ ...dataRequest, birthday_day: e });
               }}
@@ -321,7 +321,7 @@ function CustomerTable(props) {
               placeholder="Tháng"
               min={1}
               max={12}
-              style={{ marginRight: "10px", marginTop: "10px", width: "100px",textAlign:"center" }}
+              style={{ marginRight: "10px", marginTop: "10px", width: "100px" }}
               onChange={(e) => {
                 setDataRequest({ ...dataRequest, birthday_month: e });
               }}
@@ -331,7 +331,7 @@ function CustomerTable(props) {
               placeholder="Năm"
               min={1900}
               max={currentTime.getFullYear()}
-              style={{ marginRight: "10px", marginTop: "10px", width: "100px",textAlign:"center" }}
+              style={{ marginRight: "10px", marginTop: "10px", width: "100px" }}
               onChange={(e) => {
                 setDataRequest({ ...dataRequest, birthday_year: e });
               }}
@@ -346,7 +346,7 @@ function CustomerTable(props) {
       label: (
         <Space direction="vertical">
           <label>Thời gian tạo</label>
-          <DatePicker onChange={onChange} style={{width:"15vw",textAlign:"center"}} placeholder="YYYY-MM-DD" />
+          <DatePicker onChange={onChange} style={{width:"15vw"}} placeholder="YYYY-MM-DD" />
         </Space>
       ),
       key: "3",
@@ -360,7 +360,6 @@ function CustomerTable(props) {
               placeholder="Chọn nhóm khách hàng"
               style={{
                 width:"15vw",
-                textAlign:"center"
               }}
               allowClear
               onSelect={(e) => {
@@ -389,7 +388,7 @@ function CustomerTable(props) {
             <br></br>
             <Select
             placeholder="Chọn trạng thái"
-              style={{ marginTop: "10px", width: "15vw",textAlign:"center" }}
+              style={{ marginTop: "10px", width: "15vw" }}
               allowClear
               onClear={(e) => {
                 setDataRequest({ ...dataRequest, status: null });
@@ -565,7 +564,6 @@ function CustomerTable(props) {
             </p>
             <p>Mã khách hàng không được chứa tiền tố "CTM"</p>
             <p>Ngày sinh cần có định dạng YYYY-MM-DD</p>
-            <p>Nhóm khách hàng cần được thiết lập trước trong danh sách</p>
             <p>Chỉ có 2 trạng thái là "active" và "non-active"</p>
           </div>
         />

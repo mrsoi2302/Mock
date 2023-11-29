@@ -30,7 +30,7 @@ export default function CreateEmployee(props) {
       url: baseURL + "/employee/admin/create-one",
       method: "post",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: e,
     })

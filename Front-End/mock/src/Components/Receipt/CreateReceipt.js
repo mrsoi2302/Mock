@@ -36,7 +36,7 @@ export default function CreateReceipt(props) {
       url: baseURL + "/provider/create-receipt",
       method: "post",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: {
       },
@@ -51,7 +51,7 @@ export default function CreateReceipt(props) {
       url: baseURL + "/payment-type/list",
       method: "post",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: {
         value: null,
@@ -69,7 +69,7 @@ export default function CreateReceipt(props) {
             url:baseURL+"/receipt-group/list",
             method:"post",
             headers:{
-                "Authorization":Token
+                "Authorization":Token()
             },
             data:{
                 value:value
@@ -83,7 +83,7 @@ export default function CreateReceipt(props) {
       method: "post",
       url: baseURL + "/receipt/staff/create-one",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: data,
     })

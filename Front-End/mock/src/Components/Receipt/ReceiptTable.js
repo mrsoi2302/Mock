@@ -82,7 +82,7 @@ function ReceiptTable(props) {
       method: "post",
       url: baseURL + "/payment-type/list",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: {
         value: null,
@@ -101,7 +101,7 @@ function ReceiptTable(props) {
         sort,
       method: "post",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: {
         value: value,
@@ -127,7 +127,7 @@ function ReceiptTable(props) {
       method: "post",
       url: baseURL + "/receipt/count-list",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: {
         value: value,
@@ -144,7 +144,7 @@ function ReceiptTable(props) {
       url: baseURL + "/employee/admin/list",
       method: "get",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
     }).then((res) => {
       setEmployeeList(res.data);
@@ -155,7 +155,7 @@ function ReceiptTable(props) {
       url: baseURL + "/receipt/admin",
       method: "delete",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: selectedRowKeys,
     })
@@ -375,7 +375,7 @@ function ReceiptTable(props) {
       url: baseURL + "/payment-type/admin/create",
       method: "post",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: {
         name: createType,

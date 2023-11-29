@@ -26,7 +26,7 @@ export default function CreateCustomer(props){
                 url:baseURL+"/customer-type/list",
                 method:"post",
                 headers:{
-                    "Authorization":Token
+                    "Authorization":Token()
                 },
                 data:{
                     value:value
@@ -41,7 +41,7 @@ export default function CreateCustomer(props){
                 method:"post",
                 url:baseURL+"/customer/staff/create-one",
                 headers:{
-                    "Authorization":Token
+                    "Authorization":Token()
                 },
                 data:data
             }

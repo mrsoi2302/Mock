@@ -66,7 +66,7 @@ export default function CustomerType(props) {
       method: "post",
       url: baseURL + "/customer-type/list",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: {
         value: value,
@@ -83,7 +83,7 @@ export default function CustomerType(props) {
               },
             },
             headers: {
-              Authorization: Token,
+              Authorization: Token(),
             },
           }).then((ress) => {
             temp.push({
@@ -111,7 +111,7 @@ export default function CustomerType(props) {
       method: "delete",
       url: baseURL + "/customer-type/admin?code=" + e.code,
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
     })
       .then((res) => {
@@ -126,7 +126,7 @@ export default function CustomerType(props) {
       method: "post",
       url: baseURL + "/customer-type/admin/create",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: create,
     })
@@ -164,8 +164,20 @@ export default function CustomerType(props) {
           <Space size="middle">
             <Button
               type="link"
+              style={
+                {
+                  color:"red"
+                }
+              }
               onClick={(e) => {
-                handleDelete(record);
+                Modal.confirm(
+                  {
+                    title:"Bạn muốn xóa nhóm khách hàng "+record.code+" ?",
+                    onOk(){
+                      handleDelete(record)
+                    }
+                  }
+                )
               }}
             >
               Xóa
@@ -267,6 +279,7 @@ export default function CustomerType(props) {
                 <Button
                   type="primary"
                   style={{
+                    marginLeft:"10px",
                     zIndex: 1000,
                   }}
                   onClick={(e) => {

@@ -93,7 +93,7 @@ function ProviderTable(props) {
       method: "post",
       url: baseURL + "/provider-type/list",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data:{
         value:null
@@ -116,7 +116,7 @@ function ProviderTable(props) {
         sort,
       method: "post",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: {
         value: value,
@@ -149,7 +149,7 @@ function ProviderTable(props) {
       method: "post",
       url: baseURL + "/provider/count-list",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: {
         value: value,
@@ -174,7 +174,7 @@ function ProviderTable(props) {
       url: baseURL + "/provider/admin",
       method: "delete",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: selectedRowKeys,
     })
@@ -221,7 +221,7 @@ function ProviderTable(props) {
                 method: "post",
                 url: baseURL + "/provider-type/admin/create",
                 headers: {
-                  Authorization: Token,
+                  Authorization: Token(),
                 },
                 data:{
                   content:json.provider_type==="undefined" ? "":String(json.provider_type).trim()
@@ -247,7 +247,7 @@ function ProviderTable(props) {
                   method:"post",
                   url:baseURL+"/provider/staff/create-one",
                   headers:{
-                      "Authorization":Token
+                      "Authorization":Token()
                   },
                   data:newObj
               }
@@ -310,7 +310,7 @@ function ProviderTable(props) {
           <label>Nhóm nhà cung cấp</label>
           <Select
             style={{ width:"15vw" }}
-            placeholder="Chọn trạng thái"
+            placeholder="Chọn nhóm"
             allowClear
             onSelect={(e) => {
               setProvider_type(e);
@@ -446,7 +446,7 @@ function ProviderTable(props) {
               </a>
             </p>
             <p>Mã nhà cung cấp không được chứa tiền tố "PRV"</p>
-            <p>Nhóm khách hàng phải là nhóm khách hàng đã được tạo</p>
+            <p>Chỉ có 2 trạng thái là "active" và "non-active"</p>
           </div>
         />
       )}

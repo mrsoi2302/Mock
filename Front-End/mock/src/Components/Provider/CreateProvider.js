@@ -24,7 +24,7 @@ export default function CreateProvider(props) {
       method: "post",
       url: baseURL + "/provider-type/list",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data:{
         value:value
@@ -43,7 +43,7 @@ export default function CreateProvider(props) {
       url: baseURL + "/provider/staff/create-one",
       method: "post",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: data,
     })

@@ -26,7 +26,7 @@ export default function ProviderInformation(props) {
       url: baseURL + "/provider/admin",
       method: "delete",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: [code],
     })
@@ -45,7 +45,7 @@ export default function ProviderInformation(props) {
         url:baseURL + "/receipt/receipt-list?code="+code,
         method:"get",
         headers: {
-          Authorization: Token,
+          Authorization: Token(),
         },
       }
     ).then(res=>{
@@ -55,7 +55,7 @@ export default function ProviderInformation(props) {
       url: baseURL + "/provider/information?code=" + code,
       method: "get",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
     })
       .then((res) => {
@@ -169,12 +169,9 @@ export default function ProviderInformation(props) {
               </p>
               <p>Trạng thái</p>
               <p>
-                :
-                <Tag color={data.data.status === "active" ? "green" : "red"}>
-                  {data.data.status === "active"
+                : {data.data.status === "active"
                     ? "Đã kích hoạt"
                     : "Chưa kích hoạt"}
-                </Tag>
               </p>
             </div>
             <br/>

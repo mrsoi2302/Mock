@@ -70,7 +70,7 @@ export default function EmployeeTable(props) {
       url:
         baseURL + "/employee/admin/list?page=" + (page - 1) + "&limit=" + limit,
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: {
         value: value,
@@ -98,7 +98,7 @@ export default function EmployeeTable(props) {
       method: "post",
       url: baseURL + "/employee/count-list",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: {
         value: value,
@@ -120,7 +120,7 @@ export default function EmployeeTable(props) {
       url: baseURL + "/employee/admin",
       method: "delete",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: selectedRowKeys,
     })

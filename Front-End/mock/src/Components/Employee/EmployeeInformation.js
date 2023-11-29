@@ -24,7 +24,7 @@ export default function EmployeeInformation(props) {
       url: baseURL + "/employee/admin",
       method: "delete",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: [code],
     })
@@ -42,7 +42,7 @@ export default function EmployeeInformation(props) {
       url: baseURL + "/employee/admin/information?code=" + code,
       method: "get",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
     })
       .then((res) => {

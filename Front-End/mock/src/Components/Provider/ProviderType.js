@@ -74,7 +74,7 @@ export default function ProviderType(props) {
       method: "post",
       url: baseURL + "/provider-type/list",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: {
         value: value,
@@ -90,7 +90,7 @@ export default function ProviderType(props) {
             },
           },
           headers: {
-            Authorization: Token,
+            Authorization: Token(),
           },
         }).then((ress) => {
           temp.push({
@@ -112,7 +112,7 @@ export default function ProviderType(props) {
       method: "delete",
       url: baseURL + "/provider-type/admin?code=" + e.code,
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
     })
       .then((res) => {
@@ -128,7 +128,7 @@ export default function ProviderType(props) {
       method: "post",
       url: baseURL + "/provider-type/admin/create",
       headers: {
-        Authorization: Token,
+        Authorization: Token(),
       },
       data: create,
     })
@@ -175,7 +175,6 @@ export default function ProviderType(props) {
                     onOk() {
                       handleDelete(record)
                     },
-
                     cancelText:"Hủy bỏ"
                   });
                 }}

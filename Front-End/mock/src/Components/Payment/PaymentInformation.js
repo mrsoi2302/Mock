@@ -5,7 +5,7 @@ import Account from "../Account";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { baseURL } from "../../Config";
-import { Token } from "../../Token";
+import {  Token } from "../../Token";
 import ExceptionBox from "../ExceptionBox";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import {CaretLeftOutlined } from "@ant-design/icons";
@@ -27,7 +27,7 @@ export default function PaymentInformation(props) {
       url: baseURL + "/payment/admin",
       method: "delete",
       headers: {
-        Authorization: Token,
+        Authorization:  Token(),
       },
       data: [code],
     })
@@ -43,7 +43,7 @@ export default function PaymentInformation(props) {
       url: baseURL + "/payment/information?code=" + code,
       method: "get",
       headers: {
-        Authorization: Token,
+        Authorization:  Token(),
       },
     })
       .then((res) => {
