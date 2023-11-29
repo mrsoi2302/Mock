@@ -31,7 +31,7 @@ import PasswordChange from './Components/PasswordChange';
 function App(){
   const [openKeys, setOpenKeys] = useState("");
   const [selectedKeys, setSelectedKeys] = useState("");
-  const [token,setToken]=("Bearer "+localStorage.getItem("jwt"))
+  const [token,setToken]=useState("Bearer "+localStorage.getItem("jwt"))
   return(
     <div>
       <BrowserRouter>
