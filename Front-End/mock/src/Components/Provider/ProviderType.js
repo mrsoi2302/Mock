@@ -7,7 +7,6 @@ import "../style.css";
 import Account from "../Account";
 import ExceptionBox from "../ExceptionBox";
 import Search from "antd/es/input/Search";
-import WarningModal from "../WarningModal";
 
 export default function ProviderType(props) {
   document.title = "Nhóm nhà cung cấp";
@@ -104,7 +103,6 @@ export default function ProviderType(props) {
           });
         });
       });
-      console.log(data);
     });
   }, [value, loading, index]);
   const handleDelete = (e) => {
@@ -122,7 +120,6 @@ export default function ProviderType(props) {
         message.error("Không thành công");
       });
   };
-  console.log(data.data);
   const createType = (e) => {
     axios({
       method: "post",
@@ -287,7 +284,6 @@ export default function ProviderType(props) {
                   }}
                   onClick={(e) => {
                     setOpenModal(true);
-                    console.log(openModal);
                   }}
                 >
                   Thêm mới

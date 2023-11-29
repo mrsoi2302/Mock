@@ -60,7 +60,6 @@ export default function ModifyProvider(props) {
     })
       .then((res) => {
         setDataOfType(res.data);
-        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -204,7 +203,6 @@ export default function ModifyProvider(props) {
                 filterOption={false}
                 onSearch={(e) => {
                   setValue(e);
-                  console.log(value);
                 }}
                 onSelect={(e) => {
                   setData({

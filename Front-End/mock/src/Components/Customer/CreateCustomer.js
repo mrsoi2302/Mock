@@ -231,7 +231,6 @@ export default function CreateCustomer(props) {
               filterOption={false}
               onSearch={(e) => {
                 setValue(e);
-                console.log(value);
               }}
               onSelect={(e) => {
                 setData({

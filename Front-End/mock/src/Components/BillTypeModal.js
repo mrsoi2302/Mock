@@ -15,35 +15,12 @@ import { baseURL } from "../Config";
 
 export default function BillTypeModal(props) {
   const [value, setValue] = useState("");
-  const [data, setData] = useState(props.groups);
   const [createData, setCreateData] = useState({
     name: " ",
   });
   const [createForm, setCreateForm] = useState(false);
   const [render, setRender] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  useEffect(() => {
-    axios({
-      url: baseURL + "/" + props.name + "-group/list",
-      method: "post",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-      data: {
-        value: value,
-      },
-    }).then((res) => {
-      let temp = [];
-      res.data.map((i) => {
-        let x = {
-          ...i,
-          key: i.code,
-        };
-        temp.push(x);
-      });
-      setData(temp);
-    });
-  }, [render]);
   const createType = () => {
     axios({
       url: baseURL + "/" + props.name + "-group/staff/create",
@@ -59,14 +36,13 @@ export default function BillTypeModal(props) {
         });
         setValue("");
         setCreateForm(false);
-        setRender(!render);
+        props.setIndex(!props.index);
       })
       .catch((err) => {
         message.error("Tạo không thành công");
       });
   };
   const onSelectChange = (newSelected) => {
-    console.log(newSelected);
     setSelectedRowKeys(newSelected);
   };
   const handleSelection = {
@@ -89,7 +65,6 @@ export default function BillTypeModal(props) {
         message.success("Xóa thành công");
       })
       .catch((err) => {
-        console.log(err);
         message.error("Xóa không thành công");
       });
   };
@@ -118,7 +93,6 @@ export default function BillTypeModal(props) {
       width: "10%",
     },
   ];
-  console.log(createData.name.trim().length);
   return (
     <Modal
       title={props.title}
@@ -233,7 +207,7 @@ export default function BillTypeModal(props) {
             rowSelection={handleSelection}
             pagination={false}
             columns={columns}
-            dataSource={data}
+            dataSource={props.groups}
             scroll={{ y: 500 }}
             locale={{
               emptyText: (

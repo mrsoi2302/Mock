@@ -187,7 +187,6 @@ export default function CustomerType(props) {
       },
     ];
   }
-  console.log(create.content.trim().length);
   return (
     <div className="content">
       <div className="taskbar">
@@ -284,7 +283,6 @@ export default function CustomerType(props) {
                   }}
                   onClick={(e) => {
                     setOpenModal(true);
-                    console.log(openModal);
                   }}
                 >
                   Thêm mới

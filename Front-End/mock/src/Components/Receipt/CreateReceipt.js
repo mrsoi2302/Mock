@@ -58,7 +58,6 @@ export default function CreateReceipt(props) {
     })
       .then((res) => {
         setDataOfType(res.data);
-        console.log(dataOfType);
       })
       .catch((err) => {
         message.error("Có lỗi khi lấy dữ liệu từ hình thức thanh toán");
@@ -303,7 +302,6 @@ export default function CreateReceipt(props) {
               }}
             >
               {dataOfType.map((i) => {
-                console.log(i);
                 if (dataOfType.length > 0)
                   return <Option value={i.id + "-" + i.name}>{i.name}</Option>;
               })}

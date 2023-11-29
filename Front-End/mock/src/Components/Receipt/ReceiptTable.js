@@ -149,7 +149,7 @@ function ReceiptTable(props) {
       },
     }).then((res) => {
       setEmployeeList(res.data);
-    });
+    }).catch(err=>{});
     axios({
       url: baseURL + "/receipt-group/list",
       method: "post",
@@ -188,11 +188,9 @@ function ReceiptTable(props) {
   };
   const onChangeClick = (pagination, filters, sorter, extra) => {
     setSort(sorter.columnKey + "-" + sorter.order);
-    console.log(sort);
   };
   const handleSubmit = (e) => {
     setIndex(!index);
-    console.log(dataRequest);
     setOpen(false);
   };
   let items = [
@@ -468,7 +466,6 @@ function ReceiptTable(props) {
                 open={openModal}
                 onCancel={(e) => {
                   setOpenModal(false);
-                  console.log(openModal);
                 }}
                 onOk={CreatePaymentType}
                 okButtonProps={{
@@ -489,6 +486,7 @@ function ReceiptTable(props) {
                 title="Các loại phiếu thu"
                 name="receipt"
                 setOpenBillModal={setOpenBillModal}
+                index={index}
                 setIndex={setIndex}
                 code="RCG"
                 groups={groups}

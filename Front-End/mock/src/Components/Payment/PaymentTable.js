@@ -55,6 +55,7 @@ function PaymentTable(props) {
   const [openModal, setOpenModal] = useState(false);
   const [createType, setCreateType] = useState("");
   const [openBillModal, setOpenBillModal] = useState(false);
+  const [groups,setGroups]=useState([])
   let columns = [
     {
       title: "Mã phiếu chi",
@@ -82,6 +83,26 @@ function PaymentTable(props) {
   useEffect(() => {
     props.setOpenKeys("cash");
     props.setSelectedKeys("payment-list");
+    axios({
+      url: baseURL + "/payment-group/list",
+      method: "post",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+      data: {
+        value: value,
+      },
+    }).then((res) => {
+      let temp = [];
+      res.data.map((i) => {
+        let x = {
+          ...i,
+          key: i.code,
+        };
+        temp.push(x);
+      });
+      setGroups(temp);
+    });
     let temp = [];
     axios({
       method: "post",
@@ -153,7 +174,7 @@ function PaymentTable(props) {
       },
     }).then((res) => {
       setEmployeeList(res.data);
-    });
+    }).catch(err=>{});
   }, [value, limit, page, inputFile, index, sort]);
   const handleButton = () => {
     axios({
@@ -172,11 +193,9 @@ function PaymentTable(props) {
   };
   const onChangeClick = (pagination, filters, sorter, extra) => {
     setSort(sorter.columnKey + "-" + sorter.order);
-    console.log(sort);
   };
   const handleSubmit = (e) => {
     setIndex(!index);
-    console.log(dataRequest);
     setOpen(false);
   };
   let items = [
@@ -304,9 +323,46 @@ function PaymentTable(props) {
       key: "4",
     },
     {
+      label: (
+        <Space direction="vertical">
+          <label>Loại phiếu chi</label>
+          <Select
+            placeholder="Chọn loại"
+            style={{ marginTop: "10px", width: "15vw" }}
+            allowClear
+            onClear={(e) => {
+              setDataRequest({
+                ...dataRequest,
+                paymentGroup:null
+              });
+            }}
+            onSelect={(e) => {
+              let arr = e.split("-");
+              setDataRequest({
+                ...dataRequest,
+                paymentGroup:{
+                  id:arr[0]
+                }
+              });
+            }}
+          >
+            {groups.map((i) => {
+              return (
+                <Option value={i.id + "-" + i.name}>
+                  {i.name}
+                </Option>
+              );
+            })}
+          </Select>
+        </Space>
+      ),
+      key: "10",
+    },
+    {
       label: <Button onClick={handleSubmit}>Lọc</Button>,
       key: "5",
     },
+    
   ];
   if (data.data.length > 0) {
     columns = [
@@ -396,7 +452,6 @@ function PaymentTable(props) {
         message.error("Tạo thất bại");
       });
   };
-  console.log(index);
   const handleSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
@@ -443,8 +498,11 @@ function PaymentTable(props) {
                 name="payment"
                 setOpenBillModal={setOpenBillModal}
                 code="PMG"
+                groups={groups}
+
               />
               <RowSelectionTableForBill
+                groups={groups}
                 delete={handleButton}
                 setOpenBillModal={setOpenBillModal}
                 setOpenModal={setOpenModal}

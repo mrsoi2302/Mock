@@ -70,10 +70,8 @@ export default function ModifyCustomer(props) {
     })
       .then((res) => {
         setDataOfType(res.data);
-        console.log(res.data);
       })
       .catch((err) => {
-        console.log(err);
       });
   }, [value]);
   const handleSubmit = () => {
@@ -267,7 +265,6 @@ export default function ModifyCustomer(props) {
                 filterOption={false}
                 onSearch={(e) => {
                   setValue(e);
-                  console.log(value);
                 }}
                 onSelect={(e) => {
                   setData({

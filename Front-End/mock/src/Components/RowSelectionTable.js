@@ -4,7 +4,7 @@ import SearchInput from "./SearchInput";
 import { useNavigate } from "react-router-dom";
 
 export default function RowSelectionTable(props) {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const url = props.url;
   return (
     <div>
@@ -18,51 +18,61 @@ export default function RowSelectionTable(props) {
           <Button
             type="primary"
             onClick={
-              e=>{
+              (e) => {
                 Modal.confirm({
-                    title: "Xác nhận xoá",
-                    content: "Bạn có chắc chắn muốn xoá "+props.quantity+" "+props.name+" không ?",
-                    onOk() {
-                      props.delete()
-                    },
+                  title: "Xác nhận xoá",
+                  content:
+                    "Bạn có chắc chắn muốn xoá " +
+                    props.quantity +
+                    " " +
+                    props.name +
+                    " không ?",
+                  onOk() {
+                    props.delete();
+                  },
 
-                    cancelText:"Hủy bỏ"
-                  });
+                  cancelText: "Hủy bỏ",
+                });
               }
               //props.delete
-              }
-            style={{  
-              backgroundColor:"red"
+            }
+            style={{
+              backgroundColor: "red",
             }}
           >
             Xóa
           </Button>
-        ):props.setInputFile != undefined ? <Button
-          type="link"
-          onClick={(e) => {
-            props.setInputFile(true);
-          }}
-          style={{
-            
-          }}
-        >
-          Nhập danh sách
-        </Button>:<div></div>}
+        ) : props.setInputFile != undefined ? (
+          <Button
+            type="link"
+            onClick={(e) => {
+              props.setInputFile(true);
+            }}
+            style={{}}
+          >
+            Nhập danh sách
+          </Button>
+        ) : (
+          <div></div>
+        )}
         {
-          props.handlePrint != undefined ? <Button
-          type="link"
-          onClick={props.handlePrint}
-          style={{
-            
-            marginLeft: "5px",
-          }}
-        >
-          In danh sách
-        </Button>:<div></div>
-          /* {} */}
-        
-        
-        <SearchInput 
+          props.handlePrint != undefined ? (
+            <Button
+              type="link"
+              onClick={props.handlePrint}
+              style={{
+                marginLeft: "5px",
+              }}
+            >
+              In danh sách
+            </Button>
+          ) : (
+            <div></div>
+          )
+          /* {} */
+        }
+
+        <SearchInput
           setValue={props.setValue}
           filter={props.filter}
           openFilter={props.openFilter}
@@ -70,9 +80,10 @@ export default function RowSelectionTable(props) {
         />
         <Button
           type="primary"
-          onClick={e=>{navigate(url)}}
+          onClick={(e) => {
+            navigate(url);
+          }}
           style={{
-            
             marginLeft: "5px",
           }}
         >

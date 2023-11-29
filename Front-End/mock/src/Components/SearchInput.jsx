@@ -17,6 +17,7 @@ function SearchInput(props) {
         items={props.filter}
         open={props.openFilter}
         setOpen={props.setOpenFilter}
+        groups={props.groups}
       />
       <Search
         placeholder="Tìm kiếm"

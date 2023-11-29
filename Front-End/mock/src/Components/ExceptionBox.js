@@ -5,18 +5,13 @@ const ExceptionBox = (props) => {
   const navigate = useNavigate();
   const handleOk = () => {
     if (props.url === "/") localStorage.clear();
-    localStorage.removeItem("open")
-    localStorage.removeItem("selected")
+    localStorage.removeItem("open");
+    localStorage.removeItem("selected");
     navigate(props.url);
   };
   return (
     <>
-      <Modal
-        title="Cảnh báo"
-        open={true}
-        onOk={handleOk}
-        onCancel={handleOk}
-      >
+      <Modal title="Cảnh báo" open={true} onOk={handleOk} onCancel={handleOk}>
         <p style={{ textAlign: "center" }}>{props.msg}</p>
       </Modal>
     </>

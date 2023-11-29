@@ -1,57 +1,61 @@
-import React from 'react';
-import { Button, Dropdown } from 'antd';
-import { useNavigate } from 'react-router-dom';
-function Account(props){
-  const navigate=useNavigate()
-  const handleLogOut=(e)=>{
-    localStorage.clear()
-    navigate("/")
-  }
+import React from "react";
+import { Button, Dropdown } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+function Account(props) {
+  const navigate = useNavigate();
+  const handleLogOut = (e) => {
+    localStorage.clear();
+    navigate("/");
+  };
   const items = [
     {
-      key: '2',
+      key: "2",
       label: (
-        <a target="_blank" rel="noopener noreferrer" href="/history">
+        <Link  to="/history">
           Lịch sử hoạt động
-        </a>
+        </Link>
       ),
     },
     {
-      key: '3',
+      key: "3",
       label: (
-        <a target="_blank" rel="noopener noreferrer" href="/change-password">
+        <Link  to="/change-password">
           Đổi mật khẩu
-        </a>
+        </Link>
       ),
     },
     {
-      key: '4',
+      key: "4",
       label: (
-        <a target="_blank" rel="noopener noreferrer" onClick={handleLogOut}>
+        <a  onClick={handleLogOut}>
           Đăng xuất
         </a>
       ),
     },
   ];
 
-  return(
-  <>
-    <Dropdown
-      menu={{
-        items,
-      }}
-      placement="bottom"
-      arrow
-    >
-      <Button
-      style={{marginRight:"20px",
-      backgroundColor:"whitesmoke",
-      border:"none",
-      fontSize:"large",
-      boxShadow:"none"}}
-      >Welcome, {localStorage.getItem("username")}</Button>
-    </Dropdown>
+  return (
+    <>
+      <Dropdown
+        menu={{
+          items,
+        }}
+        placement="bottom"
+        arrow
+      >
+        <Button
+          style={{
+            marginRight: "20px",
+            backgroundColor: "whitesmoke",
+            border: "none",
+            fontSize: "large",
+            boxShadow: "none",
+          }}
+        >
+          Welcome, {localStorage.getItem("username")}
+        </Button>
+      </Dropdown>
     </>
-  )
-};
+  );
+}
 export default Account;

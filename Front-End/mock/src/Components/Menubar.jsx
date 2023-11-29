@@ -13,19 +13,34 @@ function getItem(label, key, icon, children, type) {
 }
 const items = [
   getItem(<strong>Nhà cung cấp</strong>, "provider", null, [
-    getItem(<Link to="/provider-table">Danh sách nhà cung cấp</Link>, "provider-list"),
-    getItem(<Link to="/provider-type">Nhóm nhà cung cấp</Link>, "provider-type"),
+    getItem(
+      <Link to="/provider-table">Danh sách nhà cung cấp</Link>,
+      "provider-list"
+    ),
+    getItem(
+      <Link to="/provider-type">Nhóm nhà cung cấp</Link>,
+      "provider-type"
+    ),
   ]),
   getItem(<strong>Khách hàng</strong>, "customer", null, [
     getItem(<Link to="/customer-table">Danh sách</Link>, "customer-list"),
     getItem(<Link to="/customer-type">Nhóm khách hàng</Link>, "customer-type"),
   ]),
   getItem(<strong>Sổ quỹ</strong>, "cash", null, [
-    getItem(<Link to="/payment-table">Danh sách phiếu chi</Link>, "payment-list"),
-    getItem(<Link to="/receipt-table">Danh sách phiếu thu</Link>, "receipt-list"),
+    getItem(
+      <Link to="/payment-table">Danh sách phiếu chi</Link>,
+      "payment-list"
+    ),
+    getItem(
+      <Link to="/receipt-table">Danh sách phiếu thu</Link>,
+      "receipt-list"
+    ),
   ]),
   getItem(<strong>Quản lý nhân viên</strong>, "employee", null, [
-    getItem(<Link to="/employee-table">Danh sách nhân viên</Link>, "employee-list"),
+    getItem(
+      <Link to="/employee-table">Danh sách nhân viên</Link>,
+      "employee-list"
+    ),
     getItem(
       <Link to="/create-employee">Tạo nhân viên mới</Link>,
       "create-employee"
@@ -35,12 +50,12 @@ const items = [
 const rootSubmenuKeys = ["provider", "customer", "cash", "employee"];
 
 export default function Menubar(props) {
-  const[openKeys,setOpenKeys]=useState([])
-  const[selectedKeys,setSelectedKeys]=useState([])
-  useEffect(()=>{
-    setOpenKeys([props.openKeys])
-    setSelectedKeys(props.selectedKeys)
-  },[props.selectedKeys,props.openKeys])
+  const [openKeys, setOpenKeys] = useState([]);
+  const [selectedKeys, setSelectedKeys] = useState([]);
+  useEffect(() => {
+    setOpenKeys([props.openKeys]);
+    setSelectedKeys(props.selectedKeys);
+  }, [props.selectedKeys, props.openKeys]);
 
   // Get current location information
   const onOpenChange = (keys) => {
@@ -80,7 +95,7 @@ export default function Menubar(props) {
           style={{
             background: "inherit",
             color: "white",
-            textAlign:"left"
+            textAlign: "left",
           }}
           items={items}
         />

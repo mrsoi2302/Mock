@@ -10,8 +10,7 @@ import ExceptionBox from "./ExceptionBox";
 import SearchInput from "./SearchInput";
 import { Option } from "antd/es/mentions";
 import DefaultTable from "./DefaultTable";
-import { Token } from "../Token";
-function HistoryTable() {
+function HistoryTable(props) {
   document.title = "Lịch sử";
   localStorage.removeItem("selected");
   localStorage.removeItem("open");
@@ -62,7 +61,7 @@ function HistoryTable() {
       url: baseURL + "/history/count",
       method: "post",
       headers: {
-        Authorization: Token,
+        Authorization: props.token,
       },
       data: {
         employee_code: employee_code,
@@ -74,7 +73,6 @@ function HistoryTable() {
         setCount(res.data);
       })
       .catch((err) => {
-        console.log(err);
         setErr(true);
       });
     axios({
@@ -88,7 +86,7 @@ function HistoryTable() {
         sort,
       method: "post",
       headers: {
-        Authorization: Token,
+        Authorization: props.token,
       },
       data: {
         employee_code: employee_code,
@@ -105,7 +103,6 @@ function HistoryTable() {
         setData(update);
       })
       .catch((err) => {
-        console.log(err);
         setErr(true);
       });
   }, [page, limit, name, time, employee_code, sort]);
@@ -140,12 +137,16 @@ function HistoryTable() {
               showSearch
               allowClear
               onSelect={(e) => {
-                const arr=e.split("-")
+                const arr = e.split("-");
                 ename = arr[1];
               }}
             >
               {employee.map((item) => {
-                return <Option key={item.id+"-"+item.username}>{item.username}</Option>;
+                return (
+                  <Option key={item.id + "-" + item.username}>
+                    {item.username}
+                  </Option>
+                );
               })}
             </Select>
           </Form.Item>

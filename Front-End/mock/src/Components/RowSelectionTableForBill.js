@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function RowSelectionTableForBill(props) {
   const url = props.url;
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   return (
     <div>
       <div
@@ -16,66 +16,58 @@ export default function RowSelectionTableForBill(props) {
       >
         {props.selectedRowKeys.length > 0 ? (
           <Button
-            
             type="primary"
-            onClick={e=>{
-              Modal.confirm(
-                {
-                  title:"Bạn muốn xóa "+props.quantity+" "+props.name+" ?",
-                  onOk(){
-                    props.delete()
-                  }
-                }
-              )
+            onClick={(e) => {
+              Modal.confirm({
+                title:
+                  "Bạn muốn xóa " + props.quantity + " " + props.name + " ?",
+                onOk() {
+                  props.delete();
+                },
+              });
             }}
             style={{
-              
-              backgroundColor:"red"
+              backgroundColor: "red",
             }}
           >
             Xóa
           </Button>
-        ):<Button
-          
+        ) : (
+          <Button
+            type="primary"
+            onClick={(e) => {
+              props.setOpenBillModal(true);
+            }}
+            style={{}}
+          >
+            Thêm loại {props.name} mới
+          </Button>
+        )}
+        <Button
           type="primary"
           onClick={(e) => {
-            props.setOpenBillModal(true)
-            
+            props.setOpenModal(true);
           }}
           style={{
-            
-          }}
-        >
-          Thêm loại {props.name} mới
-        </Button>}
-          <Button
-            
-          type="primary"
-          onClick={e=>{props.setOpenModal(true)}}
-          style={{
-            
             marginLeft: "5px",
           }}
         >
           Thêm hình thức thanh toán
         </Button>
-        
-        
-        <SearchInput 
+
+        <SearchInput
           setValue={props.setValue}
           filter={props.filter}
           openFilter={props.openFilter}
           setOpenFilter={props.setOpenFilter}
-
+          groups={props.groups}
         />
         <Button
-          
           type="primary"
-          onClick={e=>{
-            navigate(url)
+          onClick={(e) => {
+            navigate(url);
           }}
           style={{
-            
             marginLeft: "5px",
           }}
         >
@@ -89,7 +81,6 @@ export default function RowSelectionTableForBill(props) {
         dataSource={props.data}
         style={{ width: "100%", zIndex: "1", marginTop: "10px" }}
         onChange={props.onChange}
-        
       />
     </div>
   );

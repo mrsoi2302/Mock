@@ -319,7 +319,6 @@ export default function CreatePayment(props) {
               }}
             >
               {dataOfType.map((i) => {
-                console.log(i);
                 if (dataOfType.length > 0)
                   return <Option value={i.id + "-" + i.name}>{i.name}</Option>;
               })}

@@ -142,7 +142,6 @@ function ProviderTable(props) {
         });
       })
       .catch((err) => {
-        console.log(err);
         setErr(true);
       });
     axios({
@@ -200,7 +199,6 @@ function ProviderTable(props) {
     edate = dateString;
   };
   const handleSubmit = (e) => {
-    console.log(edate);
     setCreated_date(edate);
     // console.log(created_date);
     setStatus(estatus);
@@ -219,14 +217,12 @@ function ProviderTable(props) {
             header: 2,
             range: 1,
           });
-          console.log(jsonData);
           // Xử lý dữ liệu, ví dụ: log ra console
           let check = [];
           dataOfType.map((i) => {
             check.push(i.content);
           });
           jsonData.map(async (json) => {
-            console.log(2);
             if (
               typeof json.provider_type != "undefined" &&
               (json.status === "non-acitve" || json.status === "active")
@@ -294,7 +290,6 @@ function ProviderTable(props) {
   };
   const onChangeClick = (pagination, filters, sorter, extra) => {
     setSort(sorter.columnKey + "-" + sorter.order);
-    console.log(sort);
   };
 
   let items = [

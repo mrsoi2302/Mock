@@ -103,7 +103,6 @@ export default function ModifyPayment(props) {
     })
       .then((res) => {
         setDataOfType(res.data);
-        console.log(dataOfType);
       })
       .catch((err) => {
         message.error("Có lỗi khi lấy dữ liệu từ hình thức thanh toán");
@@ -141,7 +140,6 @@ export default function ModifyPayment(props) {
         message.error("Cập nhật thất bại");
       });
   };
-  console.log(data.code);
   return (
     <div className="content" style={{ paddingTop: "10px" }}>
       <div className="taskbar">

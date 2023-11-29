@@ -21,8 +21,8 @@ const tailLayout = {
 
 export default function Information() {
   document.title = "Thông tin nhân viên";
-  localStorage.removeItem("selected")
-    localStorage.removeItem("open")
+  localStorage.removeItem("selected");
+  localStorage.removeItem("open");
   const [form] = Form.useForm();
 
   const [data, setData] = useState(null); // Khởi tạo data ban đầu là null
@@ -35,7 +35,7 @@ export default function Information() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     form
       .validateFields()
       .then(() => {
@@ -62,7 +62,6 @@ export default function Information() {
   };
 
   useEffect(() => {
-    
     axios({
       url: "http://localhost:8080/information",
       method: "GET",
@@ -93,70 +92,93 @@ export default function Information() {
         <Account name={localStorage.getItem("name")} />
       </div>
       <div className="inside">
-        {data!= null && <Form
-          {...layout}
-          form={form}
-          style={{
-            maxWidth: 600,
-            margin: "10px",
-          }}
-        >
-          <Form.Item name="code" label="Mã" rules={[{ required: true }]} initialValue={data.code}>
-            <Input  disabled={true} readOnly />
-          </Form.Item>
-          <Form.Item name="name" label="Họ và tên" rules={[{ required: true }]} initialValue={data.name}>
-            <Input
-                onChange={e=>{
-                setName(e.target.value)
-                }}
+        {data != null && (
+          <Form
+            {...layout}
+            form={form}
+            style={{
+              maxWidth: 600,
+              margin: "10px",
+            }}
+          >
+            <Form.Item
+              name="code"
+              label="Mã"
+              rules={[{ required: true }]}
+              initialValue={data.code}
+            >
+              <Input disabled={true} readOnly />
+            </Form.Item>
+            <Form.Item
               name="name"
-              disabled={!adjust}
-              
-            />
-          </Form.Item>
-          <Form.Item
-        name="username"
-        label="Tên đăng nhập"
-        rules={[
-          {
-            required: true,
-            message:"Tên đăng nhập không hợp lệ"
-          },
-        ]}
-        initialValue={data.username}
-      >
-        <Input
-        disabled={true}
-          onChange={(e)=>{
-            setUsername(e.target.value);
-          }}
-        />
-      </Form.Item>
-          <Form.Item name="role" label="Công nợ" required rules={[{ required: true }]} initialValue={data.role}>
-            <Input value={role} disabled={true} readOnly />
-          </Form.Item>
-          <Form.Item {...tailLayout}>
-            {!adjust && (
-              <Button onClick={() => setAdjust(!adjust)} style={{ margin: "10px" }}>
-                Chỉnh sửa
-              </Button>
-            )}
-            {adjust && (
-              <>
+              label="Họ và tên"
+              rules={[{ required: true }]}
+              initialValue={data.name}
+            >
+              <Input
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+                name="name"
+                disabled={!adjust}
+              />
+            </Form.Item>
+            <Form.Item
+              name="username"
+              label="Tên đăng nhập"
+              rules={[
+                {
+                  required: true,
+                  message: "Tên đăng nhập không hợp lệ",
+                },
+              ]}
+              initialValue={data.username}
+            >
+              <Input
+                disabled={true}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                }}
+              />
+            </Form.Item>
+            <Form.Item
+              name="role"
+              label="Công nợ"
+              required
+              rules={[{ required: true }]}
+              initialValue={data.role}
+            >
+              <Input value={role} disabled={true} readOnly />
+            </Form.Item>
+            <Form.Item {...tailLayout}>
+              {!adjust && (
                 <Button
+                  onClick={() => setAdjust(!adjust)}
                   style={{ margin: "10px" }}
-                  onClick={handleSubmit}
-                  htmlType="submit"
                 >
-                  Xác nhận
+                  Chỉnh sửa
                 </Button>
-                <Button onClick={() => setAdjust(!adjust)} style={{ margin: "10px" }}>
-                  Hủy
-                </Button>
-              </>
-            )}
-          </Form.Item>
-        </Form>}
+              )}
+              {adjust && (
+                <>
+                  <Button
+                    style={{ margin: "10px" }}
+                    onClick={handleSubmit}
+                    htmlType="submit"
+                  >
+                    Xác nhận
+                  </Button>
+                  <Button
+                    onClick={() => setAdjust(!adjust)}
+                    style={{ margin: "10px" }}
+                  >
+                    Hủy
+                  </Button>
+                </>
+              )}
+            </Form.Item>
+          </Form>
+        )}
       </div>
     </div>
   );

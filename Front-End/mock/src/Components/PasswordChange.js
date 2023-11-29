@@ -19,15 +19,13 @@ const tailLayout = {
   },
 };
 
-export default function PasswordChange(){
-    document.title = "Đổi mật khẩu";
-    localStorage.removeItem("selected")
-    localStorage.removeItem("open")
+export default function PasswordChange(props) {
+  document.title = "Đổi mật khẩu";
   const [form] = Form.useForm();
-    const [oldPassword,setOldPassword]=useState("")
-    const [newPassword,setNewPassword]=useState("")
-    const [confirmPassword,setConfirmPassword]=useState("")
-    const navigate=useNavigate();
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
   const handleSubmit = (e) => {
     form
       .validateFields()
@@ -36,16 +34,16 @@ export default function PasswordChange(){
           url: "http://localhost:8080/change-password",
           method: "POST",
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("jwt"),
+            Authorization: props.token,
           },
-          data:{
-            value:oldPassword,
-            t:newPassword
-          }
+          data: {
+            value: oldPassword,
+            t: newPassword,
+          },
         })
           .then((res) => {
-            message.success("Đổi mật khẩu thành công")
-            navigate("/main")
+            message.success("Đổi mật khẩu thành công");
+            navigate("/main");
           })
           .catch((err) => message.error("Sai mật khẩu hiện tại"));
       })
@@ -53,16 +51,14 @@ export default function PasswordChange(){
         console.log("Validation Failed:", errorInfo);
       });
   };
-  useEffect(()=>{
-    localStorage.removeItem("selected")
-    localStorage.removeItem("open")
-  },[])
-  
+  useEffect(() => {
+    props.setOpenKeys("")
+    props.setSelectedKeys("")
+  }, []);
 
   return (
     <div className="content">
       <div className="taskbar">
-       
         <h2>Đổi mật khẩu</h2>
         <Account name={localStorage.getItem("name")} />
       </div>
@@ -90,12 +86,12 @@ export default function PasswordChange(){
                 required: true,
               },
             ]}
-            style={{width:"50%"}}
+            style={{ width: "50%" }}
           >
             <Input
               type="password"
               onChange={(e) => {
-                setOldPassword(e.target.value)
+                setOldPassword(e.target.value);
               }}
             />
           </Form.Item>
@@ -107,12 +103,12 @@ export default function PasswordChange(){
                 required: true,
               },
             ]}
-            style={{width:"50%"}}
+            style={{ width: "50%" }}
           >
             <Input
               type="password"
               onChange={(e) => {
-                setNewPassword(e.target.value)
+                setNewPassword(e.target.value);
               }}
             />
           </Form.Item>
@@ -121,29 +117,24 @@ export default function PasswordChange(){
             label="Nhập lại"
             rules={[
               {
-                pattern:newPassword,
-                required:true,
-                message:"Mật khẩu chưa giống"
+                pattern: newPassword,
+                required: true,
+                message: "Mật khẩu chưa giống",
               },
-
             ]}
-            style={{width:"50%"}}
+            style={{ width: "50%" }}
           >
             <Input
               type="password"
               onChange={(e) => {
-                console.log( confirmPassword != newPassword);
+                console.log(confirmPassword != newPassword);
 
-                setConfirmPassword(e.target.value)
+                setConfirmPassword(e.target.value);
               }}
             />
           </Form.Item>
           <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              style={{ margin: "10px" }}
-            >
+            <Button type="primary" htmlType="submit" style={{ margin: "10px" }}>
               Tiếp tục
             </Button>
           </Form.Item>

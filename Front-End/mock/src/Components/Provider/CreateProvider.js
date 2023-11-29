@@ -32,10 +32,8 @@ export default function CreateProvider(props) {
     })
       .then((res) => {
         setDataOfType(res.data);
-        console.log(res.data);
       })
       .catch((err) => {
-        console.log(err);
       });
   }, [value]);
   const handleSubmit = () => {
@@ -167,7 +165,6 @@ export default function CreateProvider(props) {
               filterOption={false}
               onSearch={(e) => {
                 setValue(e);
-                console.log(value);
               }}
               onSelect={(e) => {
                 setData({

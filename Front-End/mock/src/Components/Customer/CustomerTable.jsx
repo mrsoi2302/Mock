@@ -102,7 +102,6 @@ function CustomerTable(props) {
         setDataOfType(res.data);
       })
       .catch((err) => {
-        console.log(err);
       });
     axios({
       url:
@@ -135,7 +134,6 @@ function CustomerTable(props) {
         });
       })
       .catch((err) => {
-        console.log(err);
         setErr(true);
       });
     axios({
@@ -221,7 +219,6 @@ function CustomerTable(props) {
               if (json.status !== "non-acitve" && json.status !== "active")
                 throw new Error();
               let { customer_type, ...newObj } = json;
-              console.log(typeof json.customer_type === "undefined");
               newObj = {
                 ...newObj,
                 customer_type: {
@@ -262,7 +259,6 @@ function CustomerTable(props) {
   };
   const onChangeClick = (pagination, filters, sorter, extra) => {
     setSort(sorter.columnKey + "-" + sorter.order);
-    console.log(sort);
   };
   const onChange = (date, dateString) => {
     setDataRequest({
@@ -273,7 +269,6 @@ function CustomerTable(props) {
   const currentTime = new Date();
   const handleSubmit = (e) => {
     setIndex(!index);
-    console.log(dataRequest);
     setOpen(false);
   };
   let items = [

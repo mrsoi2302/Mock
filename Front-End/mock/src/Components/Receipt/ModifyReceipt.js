@@ -98,7 +98,6 @@ export default function ModifyReceipt(props) {
     })
       .then((res) => {
         setDataOfType(res.data);
-        console.log(dataOfType);
       })
       .catch((err) => {
         message.error("Có lỗi khi lấy dữ liệu từ hình thức thanh toán");
