@@ -8,13 +8,13 @@ import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import ExceptionBox from "../ExceptionBox";
 import ReceiptList from "./ReceiptList";
-import {CaretLeftOutlined } from "@ant-design/icons";
+import { CaretLeftOutlined } from "@ant-design/icons";
 
 export default function ProviderInformation(props) {
   document.title = "Thông tin nhân viên";
   const navigate = useNavigate();
   const { code } = useParams();
-  const[receipts,setReceipts]=useState([]);
+  const [receipts, setReceipts] = useState([]);
   const [data, setData] = useState({
     data: {},
     loading: true,
@@ -38,19 +38,17 @@ export default function ProviderInformation(props) {
       });
   };
   useEffect(() => {
-    props.setOpenKeys("provider")
-    props.setSelectedKeys("provider-list")
-    axios(
-      {
-        url:baseURL + "/receipt/receipt-list?code="+code,
-        method:"get",
-        headers: {
-          Authorization: props.token,
-        },
-      }
-    ).then(res=>{
-      setReceipts(res.data)
-    })
+    props.setOpenKeys("provider");
+    props.setSelectedKeys("provider-list");
+    axios({
+      url: baseURL + "/receipt/receipt-list?code=" + code,
+      method: "get",
+      headers: {
+        Authorization: props.token,
+      },
+    }).then((res) => {
+      setReceipts(res.data);
+    });
     axios({
       url: baseURL + "/provider/information?code=" + code,
       method: "get",
@@ -86,19 +84,27 @@ export default function ProviderInformation(props) {
           />
         )}
         <ConfigProvider
-        theme={
-          {
-            components:{
-              Button:{
-                textHoverBg:"none",
-                colorBgTextActive:"none"
-
-              }
-            }
-          }
-        }>
-          <Button type="text" onClick={e=>{navigate("/provider-table")}} size="large" style={{height:"fit-content"}}><h2><CaretLeftOutlined/> Danh sách nhà cung cấp</h2></Button>
-          
+          theme={{
+            components: {
+              Button: {
+                textHoverBg: "none",
+                colorBgTextActive: "none",
+              },
+            },
+          }}
+        >
+          <Button
+            type="text"
+            onClick={(e) => {
+              navigate("/provider-table");
+            }}
+            size="large"
+            style={{ height: "fit-content" }}
+          >
+            <h2>
+              <CaretLeftOutlined /> Danh sách nhà cung cấp
+            </h2>
+          </Button>
         </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
       </div>
@@ -106,7 +112,7 @@ export default function ProviderInformation(props) {
       {data.loading ? (
         <Spin />
       ) : (
-        <div className="inside" >
+        <div className="inside">
           <Space
             direction="vertical"
             style={{
@@ -156,7 +162,12 @@ export default function ProviderInformation(props) {
               <p>Email</p>
               <p>: {data.data.email}</p>
               <p>Nhóm khách hàng</p>
-              <p>: {data.data.provider_type===null ? "Không xác định":data.data.provider_type.content}</p>
+              <p>
+                :{" "}
+                {data.data.provider_type === null
+                  ? "Không xác định"
+                  : data.data.provider_type.content}
+              </p>
               <p>Ngày tạo</p>
               <p>: {data.data.created_date.substring(0, 10)}</p>
               <p>Tổng giao dịch</p>
@@ -169,20 +180,34 @@ export default function ProviderInformation(props) {
               </p>
               <p>Trạng thái</p>
               <p>
-                : {data.data.status === "active"
-                    ? "Đã kích hoạt"
-                    : "Chưa kích hoạt"}
+                :{" "}
+                {data.data.status === "active"
+                  ? "Đã kích hoạt"
+                  : "Chưa kích hoạt"}
               </p>
             </div>
-            <br/>
-            <div style={{
-                  display: "grid",
-                  gridTemplateColumns: "20% 20%",
-                }}>
-              <Button size="large" type="primary" onClick={e=>{navigate(url)}}>
+            <br />
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "20% 20%",
+              }}
+            >
+              <Button
+                size="large"
+                type="primary"
+                onClick={(e) => {
+                  navigate(url);
+                }}
+              >
                 Chỉnh sửa
               </Button>
-              <Button size="large" type="link" onClick={handleDelete}>
+              <Button
+                size="large"
+                type="link"
+                onClick={handleDelete}
+                style={{ color: "red" }}
+              >
                 Xóa
               </Button>
             </div>

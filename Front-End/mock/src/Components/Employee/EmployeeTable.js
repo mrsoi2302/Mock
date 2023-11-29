@@ -62,8 +62,8 @@ export default function EmployeeTable(props) {
     },
   ];
   useEffect(() => {
-    props.setOpenKeys("employee")
-    props.setSelectedKeys("employee-list")
+    props.setOpenKeys("employee");
+    props.setSelectedKeys("employee-list");
     let temp = [];
     axios({
       method: "post",
@@ -197,7 +197,7 @@ export default function EmployeeTable(props) {
               </Tag>
             ) : (
               <Tag color="green" key={tag}>
-                Người dùng  
+                Người dùng
               </Tag>
             )}
           </>
@@ -228,7 +228,7 @@ export default function EmployeeTable(props) {
         <h2>Danh sách nhân viên</h2>
         <Account name={localStorage.getItem("name")} />
       </div>
-      
+
       {err ? (
         <ExceptionBox url="/main" msg=<h2>Có lỗi xảy ra</h2> />
       ) : (
@@ -237,12 +237,11 @@ export default function EmployeeTable(props) {
             <Spin />
           ) : (
             <RowSelectionTable
-                            delete={handleButton}
-
-            setValue={setValue}
-        filter={items}
-        openFilter={open}
-        setOpenFilter={setOpen}
+              delete={handleButton}
+              setValue={setValue}
+              filter={items}
+              openFilter={open}
+              setOpenFilter={setOpen}
               handlePrint={handlePrint}
               url="/create-employee"
               name="nhân viên"

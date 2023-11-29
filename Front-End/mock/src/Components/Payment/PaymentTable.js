@@ -54,7 +54,7 @@ function PaymentTable(props) {
   const [employeeList, setEmployeeList] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [createType, setCreateType] = useState("");
-  const [openBillModal,setOpenBillModal] = useState(false)
+  const [openBillModal, setOpenBillModal] = useState(false);
   let columns = [
     {
       title: "Mã phiếu chi",
@@ -80,14 +80,14 @@ function PaymentTable(props) {
     },
   ];
   useEffect(() => {
-    props.setOpenKeys("cash")
-      props.setSelectedKeys("payment-list")
+    props.setOpenKeys("cash");
+    props.setSelectedKeys("payment-list");
     let temp = [];
     axios({
       method: "post",
       url: baseURL + "/payment-type/list",
       headers: {
-        Authorization: props.token
+        Authorization: props.token,
       },
       data: {
         value: null,
@@ -106,7 +106,7 @@ function PaymentTable(props) {
         sort,
       method: "post",
       headers: {
-        Authorization:  props.token,
+        Authorization: props.token,
       },
       data: {
         value: value,
@@ -132,7 +132,7 @@ function PaymentTable(props) {
       method: "post",
       url: baseURL + "/payment/count-list",
       headers: {
-        Authorization:  props.token,
+        Authorization: props.token,
       },
       data: {
         value: value,
@@ -149,7 +149,7 @@ function PaymentTable(props) {
       url: baseURL + "/employee/admin/list",
       method: "get",
       headers: {
-        Authorization:  props.token,
+        Authorization: props.token,
       },
     }).then((res) => {
       setEmployeeList(res.data);
@@ -160,7 +160,7 @@ function PaymentTable(props) {
       url: baseURL + "/payment/admin",
       method: "delete",
       headers: {
-        Authorization:  props.token,
+        Authorization: props.token,
       },
       data: selectedRowKeys,
     })
@@ -242,7 +242,7 @@ function PaymentTable(props) {
           <label>Hình thức thanh toán</label>
           <Form.Item name="paymentType">
             <Select
-                        style={{ marginTop: "10px", width: "15vw" }}
+              style={{ marginTop: "10px", width: "15vw" }}
               placeholder="Chọn hình thức thanh toán"
               allowClear
               showSearch
@@ -329,15 +329,17 @@ function PaymentTable(props) {
         key: "customer-name",
         render: (_, record) => (
           <Space size="middle">
-            {record.customer===null ? <p>Không xác định</p>
-            :
-            <a
-              onClick={(e) =>
-                navigate("/customer/information/" + record.customer.code)
-              }
-            >
-              {record.customer.name + "-" + record.customer.code}
-            </a>}
+            {record.customer === null ? (
+              <p>Không xác định</p>
+            ) : (
+              <a
+                onClick={(e) =>
+                  navigate("/customer/information/" + record.customer.code)
+                }
+              >
+                {record.customer.name + "-" + record.customer.code}
+              </a>
+            )}
           </Space>
         ),
       },
@@ -345,7 +347,7 @@ function PaymentTable(props) {
         title: "Giá trị",
         dataIndex: "paid",
         key: "paid",
-        sorter:true
+        sorter: true,
       },
       {
         title: "Ngày tạo",
@@ -381,7 +383,7 @@ function PaymentTable(props) {
       url: baseURL + "/payment-type/admin/create",
       method: "post",
       headers: {
-        Authorization:  props.token,
+        Authorization: props.token,
       },
       data: {
         name: createType,

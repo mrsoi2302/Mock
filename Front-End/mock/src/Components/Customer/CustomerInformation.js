@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import "../style.css";
 import Account from "../Account";
 import { useNavigate, useParams } from "react-router-dom";
-import {CaretLeftOutlined } from "@ant-design/icons";
+import { CaretLeftOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { baseURL } from "../../Config";
 import { Token } from "../../Token";
@@ -37,8 +37,8 @@ export default function CustomerInformation(props) {
       });
   };
   useEffect(() => {
-    props.setOpenKeys("customer")
-    props.setSelectedKeys("customer-list")
+    props.setOpenKeys("customer");
+    props.setSelectedKeys("customer-list");
     axios({
       url: baseURL + "/payment/list",
       method: "post",
@@ -95,19 +95,27 @@ export default function CustomerInformation(props) {
           />
         )}
         <ConfigProvider
-        theme={
-          {
-            components:{
-              Button:{
-                textHoverBg:"none",
-                colorBgTextActive:"none"
-
-              }
-            }
-          }
-        }>
-          <Button type="text" onClick={e=>{navigate("/payment-table")}} size="large" style={{height:"fit-content"}}><h2><CaretLeftOutlined/> Danh sách khách hàng</h2></Button>
-          
+          theme={{
+            components: {
+              Button: {
+                textHoverBg: "none",
+                colorBgTextActive: "none",
+              },
+            },
+          }}
+        >
+          <Button
+            type="text"
+            onClick={(e) => {
+              navigate("/payment-table");
+            }}
+            size="large"
+            style={{ height: "fit-content" }}
+          >
+            <h2>
+              <CaretLeftOutlined /> Danh sách khách hàng
+            </h2>
+          </Button>
         </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
       </div>
@@ -115,7 +123,10 @@ export default function CustomerInformation(props) {
       {data.loading ? (
         <Spin />
       ) : (
-        <div className="inside" style={{ display: "block",textAlign:"left",margin:"0 auto" }}>
+        <div
+          className="inside"
+          style={{ display: "block", textAlign: "left", margin: "0 auto" }}
+        >
           <Space
             direction="vertical"
             style={{
@@ -124,7 +135,7 @@ export default function CustomerInformation(props) {
               borderRadius: "10px",
               padding: "15px",
               display: "flex",
-              margin:"0% auto"
+              margin: "0% auto",
             }}
           >
             <div
@@ -185,9 +196,9 @@ export default function CustomerInformation(props) {
 
               <p>Người quản lý</p>
               <p>
-              <a href={"/employee/information/" + data.data.manager_code}>
-                : {data.data.manager}
-              </a>
+                <a href={"/employee/information/" + data.data.manager_code}>
+                  : {data.data.manager}
+                </a>
               </p>
               <p>Trạng thái</p>
               <p>
@@ -197,21 +208,35 @@ export default function CustomerInformation(props) {
                   : "Chưa kích hoạt"}
               </p>
               <p>Nhóm khách hàng</p>
-              <p>: {data.data.customer_type===null ? "Không xác định":data.data.customer_type.content}</p>
+              <p>
+                :{" "}
+                {data.data.customer_type === null
+                  ? "Không xác định"
+                  : data.data.customer_type.content}
+              </p>
             </div>
             <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "20% 20%",
-                }}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "20% 20%",
+              }}
+            >
+              <Button
+                type="primary"
+                size="large"
+                onClick={(e) => navigate(url)}
               >
-                <Button type="primary" size="large" onClick={e=>(navigate(url))}>
-                  Chỉnh sửa
-                </Button>
-                <Button type="link" size="large" onClick={handleDelete}>
-                  Xóa
-                </Button>
-              </div>
+                Chỉnh sửa
+              </Button>
+              <Button
+                type="link"
+                size="large"
+                onClick={handleDelete}
+                style={{ color: "red" }}
+              >
+                Xóa
+              </Button>
+            </div>
           </Space>
           <PaymentList data={payments} />
         </div>

@@ -49,7 +49,8 @@ function ReceiptTable(props) {
   const [employeeList, setEmployeeList] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [createType, setCreateType] = useState("");
-  const [openBillModal,setOpenBillModal]=useState(false)
+  const [openBillModal, setOpenBillModal] = useState(false);
+  const [groups, setGroups] = useState([]);
   let columns = [
     {
       title: "Mã phiếu thu",
@@ -75,8 +76,8 @@ function ReceiptTable(props) {
     },
   ];
   useEffect(() => {
-    props.setOpenKeys("cash")
-    props.setSelectedKeys("receipt-list")
+    props.setOpenKeys("cash");
+    props.setSelectedKeys("receipt-list");
     let temp = [];
     axios({
       method: "post",
@@ -149,6 +150,26 @@ function ReceiptTable(props) {
     }).then((res) => {
       setEmployeeList(res.data);
     });
+    axios({
+      url: baseURL + "/receipt-group/list",
+      method: "post",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+      data: {
+        value: value,
+      },
+    }).then((res) => {
+      let temp = [];
+      res.data.map((i) => {
+        let x = {
+          ...i,
+          key: i.code,
+        };
+        temp.push(x);
+      });
+      setGroups(temp);
+    });
   }, [value, limit, page, inputFile, index, sort]);
   const handleButton = () => {
     axios({
@@ -218,8 +239,8 @@ function ReceiptTable(props) {
         <Space direction="vertical">
           <label>Thời gian tạo</label>
           <DatePicker
-          placeholder="YYYY-MM-DD"
-          style={{ marginTop: "10px", width: "15vw" }}
+            placeholder="YYYY-MM-DD"
+            style={{ marginTop: "10px", width: "15vw" }}
             allowClear
             onChange={(e, s) => {
               setDataRequest({
@@ -238,8 +259,8 @@ function ReceiptTable(props) {
           <label>Hình thức thanh toán</label>
           <Form.Item name="receiptType">
             <Select
-            placeholder="Chọn hình thức thanh toán"
-            style={{ marginTop: "10px", width: "15vw" }}
+              placeholder="Chọn hình thức thanh toán"
+              style={{ marginTop: "10px", width: "15vw" }}
               allowClear
               showSearch
               onChange={(e) => {
@@ -278,7 +299,7 @@ function ReceiptTable(props) {
             <label>Trạng thái</label>
             <br></br>
             <Select
-            placeholder="Chọn trạng thái"
+              placeholder="Chọn trạng thái"
               style={{ marginTop: "10px", width: "15vw" }}
               allowClear
               onClear={(e) => {
@@ -298,6 +319,39 @@ function ReceiptTable(props) {
         </Space>
       ),
       key: "4",
+    },
+    {
+      label: (
+        <Space direction="vertical">
+          <label>Nhóm phiếu thu</label>
+          <Select
+            placeholder="Chọn nhóm"
+            style={{ marginTop: "10px", width: "15vw" }}
+            allowClear
+            showSearch
+            onClear={(e) => {
+              setDataRequest({
+                ...dataRequest,
+                receiptGroup: null,
+              });
+            }}
+            onSelect={(e) => {
+              let arr = e.split("-");
+              setDataRequest({
+                ...dataRequest,
+                receiptGroup: {
+                  id: arr[0],
+                },
+              });
+            }}
+          >
+            {groups.map((i) => {
+              return <Option value={i.id + "-" + i.name}>{i.name}</Option>;
+            })}
+          </Select>
+        </Space>
+      ),
+      key: "10",
     },
     {
       label: <Button onClick={handleSubmit}>Lọc</Button>,
@@ -325,13 +379,17 @@ function ReceiptTable(props) {
         key: "provider-name",
         render: (_, record) => (
           <Space size="middle">
-            {record.provider===null ? <p>Không xác định</p>:<a
-              onClick={(e) =>
-                navigate("/provider/information/" + record.provider.code)
-              }
-            >
-              {record.provider.name + "-" + record.provider.code}
-            </a>}
+            {record.provider === null ? (
+              <p>Không xác định</p>
+            ) : (
+              <a
+                onClick={(e) =>
+                  navigate("/provider/information/" + record.provider.code)
+                }
+              >
+                {record.provider.name + "-" + record.provider.code}
+              </a>
+            )}
           </Space>
         ),
       },
@@ -339,7 +397,7 @@ function ReceiptTable(props) {
         title: "Giá trị",
         dataIndex: "revenue",
         key: "revenue",
-        sorter:true,
+        sorter: true,
       },
       {
         title: "Ngày tạo",
@@ -433,10 +491,11 @@ function ReceiptTable(props) {
                 setOpenBillModal={setOpenBillModal}
                 setIndex={setIndex}
                 code="RCG"
+                groups={groups}
               />
               <RowSelectionTableForBill
-                              delete={handleButton}
-
+                groups={groups}
+                delete={handleButton}
                 setOpenBillModal={setOpenBillModal}
                 setOpenModal={setOpenModal}
                 setValue={setValue}

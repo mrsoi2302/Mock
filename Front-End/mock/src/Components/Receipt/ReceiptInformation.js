@@ -89,8 +89,7 @@ export default function ReceiptInformation(props) {
             components: {
               Button: {
                 textHoverBg: "none",
-                colorBgTextActive:"none"
-
+                colorBgTextActive: "none",
               },
             },
           }}

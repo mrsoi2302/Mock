@@ -22,8 +22,8 @@ public class ReceiptService {
     public List<Receipt> findAll(String manager){
         return receiptRepo.findAllByMananger(manager);
     }
-    public List<Receipt> list(String value, String manager, Date createdDate, PaymentType paymentType, String status, Pageable pageable) {
-        List<Receipt> list =receiptRepo.list(value,manager,createdDate,paymentType,status,pageable);
+    public List<Receipt> list(String value, String manager, Date createdDate, PaymentType paymentType, String status,ReceiptGroup receiptGroup, Pageable pageable) {
+        List<Receipt> list =receiptRepo.list(value,manager,createdDate,paymentType,status,receiptGroup,pageable);
             for (Receipt i : list) {
                 if(i.getProvider()!=null){
                     Provider provider = providerRepo.findByCode(i.getProvider().getCode());
@@ -33,8 +33,8 @@ public class ReceiptService {
             }
         return list;
     }
-    public Long countList(String value, String manager, Date createdDate, PaymentType paymentType, String status){
-        return receiptRepo.countList(value,manager,createdDate,paymentType,status);
+    public Long countList(String value, String manager, Date createdDate, PaymentType paymentType, String status, ReceiptGroup receiptGroup){
+        return receiptRepo.countList(value,manager,createdDate,paymentType,status,receiptGroup);
     }
 
     public Receipt findByCode(String code) {

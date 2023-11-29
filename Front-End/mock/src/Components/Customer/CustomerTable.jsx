@@ -54,7 +54,7 @@ function CustomerTable(props) {
     {
       title: "Mã khách hàng",
       dataIndex: "code",
-      key: "code",  
+      key: "code",
       width: "15%",
     },
     {
@@ -85,8 +85,8 @@ function CustomerTable(props) {
     },
   ];
   useEffect(() => {
-    props.setOpenKeys("customer")
-    props.setSelectedKeys("customer-list")
+    props.setOpenKeys("customer");
+    props.setSelectedKeys("customer-list");
     let temp = [];
     axios({
       method: "post",
@@ -282,7 +282,7 @@ function CustomerTable(props) {
         <Space direction="vertical">
           <label>Giới tính</label>
           <Select
-          placeholder="Chọn giới tính"
+            placeholder="Chọn giới tính"
             style={{ marginTop: "10px", width: "15vw" }}
             allowClear
             onSelect={(e) => {
@@ -305,9 +305,8 @@ function CustomerTable(props) {
         <>
           <label>Ngày tháng năm sinh</label>
           <br></br>
-          <Space >
+          <Space>
             <InputNumber
-
               placeholder="Ngày"
               min={1}
               max={31}
@@ -317,7 +316,6 @@ function CustomerTable(props) {
               }}
             />
             <InputNumber
-
               placeholder="Tháng"
               min={1}
               max={12}
@@ -327,7 +325,6 @@ function CustomerTable(props) {
               }}
             />
             <InputNumber
-
               placeholder="Năm"
               min={1900}
               max={currentTime.getFullYear()}
@@ -346,7 +343,11 @@ function CustomerTable(props) {
       label: (
         <Space direction="vertical">
           <label>Thời gian tạo</label>
-          <DatePicker onChange={onChange} style={{width:"15vw"}} placeholder="YYYY-MM-DD" />
+          <DatePicker
+            onChange={onChange}
+            style={{ width: "15vw" }}
+            placeholder="YYYY-MM-DD"
+          />
         </Space>
       ),
       key: "3",
@@ -359,7 +360,7 @@ function CustomerTable(props) {
             <Select
               placeholder="Chọn nhóm khách hàng"
               style={{
-                width:"15vw",
+                width: "15vw",
               }}
               allowClear
               onSelect={(e) => {
@@ -387,7 +388,7 @@ function CustomerTable(props) {
             <label>Trạng thái</label>
             <br></br>
             <Select
-            placeholder="Chọn trạng thái"
+              placeholder="Chọn trạng thái"
               style={{ marginTop: "10px", width: "15vw" }}
               allowClear
               onClear={(e) => {
@@ -531,23 +532,32 @@ function CustomerTable(props) {
         <Modal
           open={checkBox}
           onCancel={(e) => {
-            setInputFile(!inputFile)
+            setInputFile(!inputFile);
             setCheckBox(!checkBox);
             setSuccess(0);
             setTypeCreated(0);
             setFailed(0);
           }}
           onOk={(e) => {
-            setInputFile(!inputFile)
+            setInputFile(!inputFile);
             setCheckBox(!checkBox);
             setSuccess(0);
             setTypeCreated(0);
             setFailed(0);
           }}
         >
-          <p>Số khách hàng đã thêm thành công: {success>0 ? success+1:success}</p>
-          <p>Số khách hàng thêm không thành công: {failed>0 ? failed+1:failed}</p>
-          <p>Số nhóm khách hàng đã bổ sung: {typeCreated>0 ? failed+1:failed}</p>
+          <p>
+            Số khách hàng đã thêm thành công:{" "}
+            {success > 0 ? success + 1 : success}
+          </p>
+          <p>
+            Số khách hàng thêm không thành công:{" "}
+            {failed > 0 ? failed + 1 : failed}
+          </p>
+          <p>
+            Số nhóm khách hàng đã bổ sung:{" "}
+            {typeCreated > 0 ? failed + 1 : failed}
+          </p>
         </Modal>
       )}
       {inputFile && (

@@ -7,28 +7,28 @@ import { Option } from "antd/es/mentions";
 import axios from "axios";
 import { baseURL } from "../../Config";
 import { Token } from "../../Token";
-import {CaretLeftOutlined } from "@ant-design/icons";
+import { CaretLeftOutlined } from "@ant-design/icons";
 
 export default function CreateProvider(props) {
   document.title = "Tạo nhà cung cấp";
-  const [data,setData]=useState()
+  const [data, setData] = useState();
   const navigate = useNavigate();
   const [error, setError] = useState(false);
   const [form] = Form.useForm();
   const [dataOfType, setDataOfType] = useState([]);
-  const [value,setValue]=useState("");
+  const [value, setValue] = useState("");
   useEffect(() => {
-    props.setOpenKeys("provider")
-    props.setSelectedKeys("provider-list")
+    props.setOpenKeys("provider");
+    props.setSelectedKeys("provider-list");
     axios({
       method: "post",
       url: baseURL + "/provider-type/list",
       headers: {
         Authorization: props.token,
       },
-      data:{
-        value:value
-      }
+      data: {
+        value: value,
+      },
     })
       .then((res) => {
         setDataOfType(res.data);
@@ -55,7 +55,7 @@ export default function CreateProvider(props) {
       });
   };
   return (
-    <div className="content" style={{paddingTop:"10px"}}>
+    <div className="content" style={{ paddingTop: "10px" }}>
       <div className="taskbar">
         {error && (
           <Alert
@@ -71,25 +71,39 @@ export default function CreateProvider(props) {
           />
         )}
         <ConfigProvider
-        theme={
-          {
-            components:{
-              Button:{
-                textHoverBg:"none",
-                colorBgTextActive:"none"
-
-              }
-            }
-          }
-        }>
-          <Button type="text" onClick={e=>{navigate("/provider-table")}} size="large" style={{height:"fit-content"}}><h2><CaretLeftOutlined/> Thông tin phiếu thu</h2></Button>
-          
+          theme={{
+            components: {
+              Button: {
+                textHoverBg: "none",
+                colorBgTextActive: "none",
+              },
+            },
+          }}
+        >
+          <Button
+            type="text"
+            onClick={(e) => {
+              navigate("/provider-table");
+            }}
+            size="large"
+            style={{ height: "fit-content" }}
+          >
+            <h2>
+              <CaretLeftOutlined /> Thông tin phiếu thu
+            </h2>
+          </Button>
         </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
       </div>
       <div
-        style={{ backgroundColor: "white", display: "block",margin:"3% 5%",textAlign:"left",borderRadius:"10px",padding:"1% 2% 5vh"
- }}
+        style={{
+          backgroundColor: "white",
+          display: "block",
+          margin: "3% 5%",
+          textAlign: "left",
+          borderRadius: "10px",
+          padding: "1% 2% 5vh",
+        }}
       >
         <h2 style={{ paddingLeft: "10px" }}>Thông tin chung</h2>
         <hr style={{ borderTop: "1px solid whitesmoke" }} />
@@ -100,7 +114,7 @@ export default function CreateProvider(props) {
           layout="vertical"
           style={{
             maxWidth: "100%",
-            margin:"3% 5%",
+            margin: "3% 5%",
           }}
         >
           <Form.Item
@@ -109,19 +123,16 @@ export default function CreateProvider(props) {
             rules={[
               {
                 required: true,
-                message:"Vùng này không được để trống"
-
+                message: "Vùng này không được để trống",
               },
             ]}
           >
             <Input
               onChange={(e) => {
-                setData(
-                  {
-                    ...data,
-                    name:e.target.value
-                  }
-                )
+                setData({
+                  ...data,
+                  name: e.target.value,
+                });
               }}
             />
           </Form.Item>
@@ -142,41 +153,35 @@ export default function CreateProvider(props) {
           >
             <Input
               onChange={(e) => {
-                setData(
-                  {
-                    ...data,
-                    code:e.target.value
-                  }
-                )
+                setData({
+                  ...data,
+                  code: e.target.value,
+                });
               }}
             />
           </Form.Item>
-          <Form.Item
-            name="provider_type"
-            label="Nhóm khách hàng"
-          >
+          <Form.Item name="provider_type" label="Nhóm khách hàng">
             <Select
               showSearch
               placeholder="Chọn nhóm khách hàng"
               filterOption={false}
-              onSearch={e=>{
-                setValue(e)
-                console.log(value)
+              onSearch={(e) => {
+                setValue(e);
+                console.log(value);
               }}
               onSelect={(e) => {
-                setData(
-                  {
-                    ...data,
-                    provider_type:{
-                      id:e
-                    }
-                  }
-                )
+                setData({
+                  ...data,
+                  provider_type: {
+                    id: e,
+                  },
+                });
               }}
               style={{ paddingLeft: "10px" }}
             >
-              {dataOfType.map(i=>{
-                if(dataOfType.length>0) return <Option value={i.id}>{i.content}</Option>
+              {dataOfType.map((i) => {
+                if (dataOfType.length > 0)
+                  return <Option value={i.id}>{i.content}</Option>;
               })}
             </Select>
           </Form.Item>
@@ -185,7 +190,7 @@ export default function CreateProvider(props) {
             label="Email"
             rules={[
               {
-                pattern:/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
                 required: true,
                 message: "Email không hợp lệ",
               },
@@ -195,8 +200,8 @@ export default function CreateProvider(props) {
               onChange={(e) => {
                 setData({
                   ...data,
-                  email:e.target.value
-                })
+                  email: e.target.value,
+                });
               }}
             />
           </Form.Item>
@@ -206,7 +211,7 @@ export default function CreateProvider(props) {
             rules={[
               {
                 pattern: /^\d+$/,
-                required:true,
+                required: true,
                 message: "Số điện thoại không hợp lệ",
               },
             ]}
@@ -219,8 +224,8 @@ export default function CreateProvider(props) {
               onChange={(e) => {
                 setData({
                   ...data,
-                  contact:e.target.value
-                })
+                  contact: e.target.value,
+                });
               }}
             />
           </Form.Item>
@@ -230,23 +235,20 @@ export default function CreateProvider(props) {
             rules={[
               {
                 required: true,
-                message:"Vùng này không được để trống"
-
+                message: "Vùng này không được để trống",
               },
             ]}
           >
             <Select
               placeholder="Chọn trạng thái"
-              onSearch={e=>{
-                setValue(e)
+              onSearch={(e) => {
+                setValue(e);
               }}
               onSelect={(e) => {
-                setData(
-                  {
-                    ...data,
-                    status:e
-                  }
-                )
+                setData({
+                  ...data,
+                  status: e,
+                });
               }}
               style={{ paddingLeft: "10px" }}
             >

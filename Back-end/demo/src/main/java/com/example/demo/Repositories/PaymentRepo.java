@@ -28,12 +28,16 @@ public interface PaymentRepo extends JpaRepository<Payment,Long> {
             "and" +
             "(:type is null or p.paymentType=:type)" +
             "and " +
-            "(:status is null or p.status=:status)")
+            "(:status is null or p.status=:status)" +
+            "and" +
+            "(:group is null or p.paymentGroup=:group)")
     List<Payment> list(@Param("value") String value,
                        @Param("manager") String manager,
                        @Param("date") Date createdDate,
                        @Param("type") PaymentType paymentType,
-                       @Param(("status")) String status, Pageable pageable);
+                       @Param(("status")) String status,
+                       @Param("group") PaymentGroup paymentGroup,
+                       Pageable pageable);
 
     Payment findByCode(String code);
     @Modifying
@@ -56,12 +60,15 @@ public interface PaymentRepo extends JpaRepository<Payment,Long> {
             "and" +
             "(:type is null or p.paymentType=:type)" +
             "and " +
-            "(:status is null or p.status=:status)")
+            "(:status is null or p.status=:status)" +
+            "and" +
+            "(:group is null or p.paymentGroup=:group)")
     Long countList(@Param("value") String value,
                    @Param("manager") String manager,
                    @Param("date") Date createdDate,
                    @Param("type") PaymentType paymentType,
-                   @Param("status") String status);
+                   @Param("status") String status,
+                   @Param("group") PaymentGroup paymentGroup);
     @Query("select p from Payment p where :manager is null or p.manager=:manager")
     List<Payment> findAllByMananger(String manager);
     @Query("select p from Payment p where(:manager is null or p.manager=:manager) and p.code=:code")

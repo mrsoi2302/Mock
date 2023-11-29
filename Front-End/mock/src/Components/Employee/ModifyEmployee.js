@@ -1,4 +1,14 @@
-import { Alert, Button, Card, ConfigProvider, Form, Input, Select, Space, Spin } from "antd";
+import {
+  Alert,
+  Button,
+  Card,
+  ConfigProvider,
+  Form,
+  Input,
+  Select,
+  Space,
+  Spin,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import "../style.css";
 import Account from "../Account";
@@ -8,7 +18,7 @@ import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import ExceptionBox from "../ExceptionBox";
 import { Option } from "antd/es/mentions";
-import {CaretLeftOutlined } from "@ant-design/icons";
+import { CaretLeftOutlined } from "@ant-design/icons";
 
 export default function ModifyEmployee(props) {
   document.title = "Chỉnh sửa nhân viên";
@@ -23,8 +33,8 @@ export default function ModifyEmployee(props) {
   });
   const [err, setErr] = useState(false);
   useEffect(() => {
-    props.setOpenKeys("employee")
-    props.setSelectedKeys("employee-list")
+    props.setOpenKeys("employee");
+    props.setSelectedKeys("employee-list");
     axios({
       url: baseURL + "/employee/admin/information?code=" + code,
       method: "get",
@@ -60,7 +70,7 @@ export default function ModifyEmployee(props) {
       });
   };
   return (
-    <div className="content" style={{paddingTop:"10px"}}>
+    <div className="content" style={{ paddingTop: "10px" }}>
       <div className="taskbar">
         {err && (
           <Alert
@@ -79,19 +89,27 @@ export default function ModifyEmployee(props) {
           />
         )}
         <ConfigProvider
-        theme={
-          {
-            components:{
-              Button:{
-                textHoverBg:"none",
-                colorBgTextActive:"none"
-
-              }
-            }
-          }
-        }>
-          <Button type="text" onClick={e=>{navigate("/employee/information/"+code)}} size="large" style={{height:"fit-content"}}><h2><CaretLeftOutlined/> Thông tin nhân viên</h2></Button>
-          
+          theme={{
+            components: {
+              Button: {
+                textHoverBg: "none",
+                colorBgTextActive: "none",
+              },
+            },
+          }}
+        >
+          <Button
+            type="text"
+            onClick={(e) => {
+              navigate("/employee/information/" + code);
+            }}
+            size="large"
+            style={{ height: "fit-content" }}
+          >
+            <h2>
+              <CaretLeftOutlined /> Thông tin nhân viên
+            </h2>
+          </Button>
         </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
       </div>
@@ -100,8 +118,15 @@ export default function ModifyEmployee(props) {
       ) : (
         <div
           className="inside"
-          style={{ backgroundColor: "white", display: "block",margin:"3% 5%",textAlign:"left",borderRadius:"10px",padding:"1% 2% 5vh"
- }}        >
+          style={{
+            backgroundColor: "white",
+            display: "block",
+            margin: "3% 5%",
+            textAlign: "left",
+            borderRadius: "10px",
+            padding: "1% 2% 5vh",
+          }}
+        >
           <h2 style={{ paddingLeft: "10px" }}>Thông tin chung</h2>
           <hr style={{ borderTop: "1px solid whitesmoke" }} />
 
@@ -121,8 +146,7 @@ export default function ModifyEmployee(props) {
               rules={[
                 {
                   required: true,
-                  message:"Vùng này không được để trống"
-
+                  message: "Vùng này không được để trống",
                 },
               ]}
             >
@@ -161,8 +185,7 @@ export default function ModifyEmployee(props) {
               rules={[
                 {
                   required: true,
-                  message:"Vùng này không được để trống"
-
+                  message: "Vùng này không được để trống",
                 },
               ]}
               style={{}}
@@ -196,30 +219,31 @@ export default function ModifyEmployee(props) {
                 },
               ]}
             >
-              <Input 
-              onChange={e=>{
-                setData({
+              <Input
+                onChange={(e) => {
+                  setData({
                     ...data.data,
                     data: {
                       ...data.data,
                       username: e.target.value,
                     },
                   });
-              }} />
+                }}
+              />
             </Form.Item>
-            <Form.Item
-              name="password"
-              label="Mật khẩu"
-            >
-              <Input type="password" onChange={e=>{
-                setData({
+            <Form.Item name="password" label="Mật khẩu">
+              <Input
+                type="password"
+                onChange={(e) => {
+                  setData({
                     ...data.data,
                     data: {
                       ...data.data,
                       password: e.target.value,
                     },
                   });
-              }} />
+                }}
+              />
             </Form.Item>
             <Form.Item>
               <Button

@@ -65,6 +65,7 @@ public class PaymentController {
                 value.getT().getCreated_date(),
                 value.getT().getPaymentType(),
                 value.getT().getStatus(),
+                value.getT().getPaymentGroup(),
                 PageRequest.of(page,limit,sortObject));
     }
     @PostMapping("/count-list")
@@ -80,7 +81,8 @@ public class PaymentController {
                 value.getT().getManager(),
                 value.getT().getCreated_date(),
                 value.getT().getPaymentType(),
-                value.getT().getStatus());
+                value.getT().getStatus(),
+                value.getT().getPaymentGroup());
     }
     @GetMapping("/count-trade")
     Long count(){

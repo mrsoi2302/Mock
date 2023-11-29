@@ -26,9 +26,9 @@ export default function Login(props) {
       },
     })
       .then((res) => {
-        props.setToken("Bearer "+res.data)
+        props.setToken("Bearer " + res.data);
         localStorage.setItem("jwt", res.data);
-        localStorage.setItem("username",username)
+        localStorage.setItem("username", username);
         navigate("/main");
       })
       .catch((err) => {
@@ -36,14 +36,14 @@ export default function Login(props) {
         setFailed(true);
       });
   };
-  const keyDown=(e)=>{
-    if(e.key==="Enter") handleSubmit();
-  }
+  const keyDown = (e) => {
+    if (e.key === "Enter") handleSubmit();
+  };
   return (
     <div
       className={"container"}
       style={{
-        overflowY:"hidden"
+        overflowY: "hidden",
       }}
     >
       <div className="login-box">

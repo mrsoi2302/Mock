@@ -1,55 +1,71 @@
-
-import { Alert, Button, ConfigProvider, DatePicker, Form, Input, Select, message } from "antd";
+import {
+  Alert,
+  Button,
+  ConfigProvider,
+  DatePicker,
+  Form,
+  Input,
+  Select,
+  message,
+} from "antd";
 import { Option } from "antd/es/mentions";
-import "../Account"
+import "../Account";
 import React, { useEffect, useState } from "react";
 import Account from "../Account";
-import {CaretLeftOutlined } from "@ant-design/icons";
+import { CaretLeftOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import { useNavigate } from "react-router-dom";
 
-export default function CreateCustomer(props){
-    document.title="Tạo khách hàng mới"
-    const navigate=useNavigate()
-    const [data,setData]=useState({});
-    const [value,setValue]=useState()
-    const [error,setError]=useState(false)
-    const [dataOfType,setDataOfType]=useState([]);
-    const [form] = Form.useForm();
-    useEffect(()=>{
-      props.setOpenKeys("customer")
-      props.setSelectedKeys("customer-list")
-        axios(
-            {
-                url:baseURL+"/customer-type/list",
-                method:"post",
-                headers:{
-                    "Authorization":props.token
-                },
-                data:{
-                    value:value
-                }
-            }
-        ).then(res=>{setDataOfType(res.data)})
-        .catch(err=>{message.error("Có lỗi")})
-    },[value])
-    const handleSubmit=()=>{
-        axios(
-            {
-                method:"post",
-                url:baseURL+"/customer/staff/create-one",
-                headers:{
-                    "Authorization":props.token
-                },
-                data:data
-            }
-        ).then(res=>{navigate("/customer-table")})
-        .catch(err=>{message.error("Tạo thất bại")})
-    }
-    return(
-<div className="content" style={{paddingTop:"10px"}}>      <div className="taskbar">
+export default function CreateCustomer(props) {
+  document.title = "Tạo khách hàng mới";
+  const navigate = useNavigate();
+  const [data, setData] = useState({});
+  const [value, setValue] = useState();
+  const [error, setError] = useState(false);
+  const [dataOfType, setDataOfType] = useState([]);
+  const [form] = Form.useForm();
+  useEffect(() => {
+    props.setOpenKeys("customer");
+    props.setSelectedKeys("customer-list");
+    axios({
+      url: baseURL + "/customer-type/list",
+      method: "post",
+      headers: {
+        Authorization: props.token,
+      },
+      data: {
+        value: value,
+      },
+    })
+      .then((res) => {
+        setDataOfType(res.data);
+      })
+      .catch((err) => {
+        message.error("Có lỗi");
+      });
+  }, [value]);
+  const handleSubmit = () => {
+    axios({
+      method: "post",
+      url: baseURL + "/customer/staff/create-one",
+      headers: {
+        Authorization: props.token,
+      },
+      data: data,
+    })
+      .then((res) => {
+        navigate("/customer-table");
+      })
+      .catch((err) => {
+        message.error("Tạo thất bại");
+      });
+  };
+  return (
+    <div className="content" style={{ paddingTop: "10px" }}>
+      {" "}
+      <div className="taskbar">
         {error && (
           <Alert
             message="Tạo thất bại"
@@ -63,27 +79,43 @@ export default function CreateCustomer(props){
           />
         )}
         <ConfigProvider
-        theme={
-          {
-            components:{
-              Button:{
-                textHoverBg:"none",
-                colorBgTextActive:"none"
-
-              }
-            }
-          }
-        }>
-          <Button type="text" onClick={e=>{navigate("/payment-table")}} size="large" style={{height:"fit-content"}}><h2><CaretLeftOutlined/> Danh sách khách hàng</h2></Button>
-          
+          theme={{
+            components: {
+              Button: {
+                textHoverBg: "none",
+                colorBgTextActive: "none",
+              },
+            },
+          }}
+        >
+          <Button
+            type="text"
+            onClick={(e) => {
+              navigate("/payment-table");
+            }}
+            size="large"
+            style={{ height: "fit-content" }}
+          >
+            <h2>
+              <CaretLeftOutlined /> Danh sách khách hàng
+            </h2>
+          </Button>
         </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
       </div>
       <div
-        style={{ backgroundColor: "white", display: "block",margin:"3% 5%",textAlign:"left",borderRadius:"10px",padding:"1% 2% 5vh"
- }}
+        style={{
+          backgroundColor: "white",
+          display: "block",
+          margin: "3% 5%",
+          textAlign: "left",
+          borderRadius: "10px",
+          padding: "1% 2% 5vh",
+        }}
       >
-        <h2 style={{ paddingLeft: "10px",textAlign:"left" }}>Thông tin chung</h2>
+        <h2 style={{ paddingLeft: "10px", textAlign: "left" }}>
+          Thông tin chung
+        </h2>
         <hr style={{ borderTop: "1px solid whitesmoke" }} />
 
         <Form
@@ -93,7 +125,7 @@ export default function CreateCustomer(props){
           style={{
             maxWidth: "100%",
             margin: "10px",
-            textAlign:"left"
+            textAlign: "left",
           }}
         >
           <Form.Item
@@ -102,24 +134,17 @@ export default function CreateCustomer(props){
             rules={[
               {
                 required: true,
-                message:"Vùng này không được để trống"
-
+                message: "Vùng này không được để trống",
               },
             ]}
-            style={
-                {width:"50%",
-                float:"left",
-                marginRight:"10px"}
-            }
+            style={{ width: "50%", float: "left", marginRight: "10px" }}
           >
             <Input
               onChange={(e) => {
-                setData(
-                  {
-                    ...data,
-                    name:e.target.value
-                  }
-                )
+                setData({
+                  ...data,
+                  name: e.target.value,
+                });
               }}
             />
           </Form.Item>
@@ -129,18 +154,16 @@ export default function CreateCustomer(props){
             rules={[
               {
                 required: true,
-                message:"Vùng này không được để trống"
-
+                message: "Vùng này không được để trống",
               },
             ]}
-            style={
-                {float:"left",
-                marginRight:"10px"}
-            }
+            style={{ float: "left", marginRight: "10px" }}
           >
-            <DatePicker onChange={(e,s)=>{
-                setData({...data,birthday:s})
-                }}/>
+            <DatePicker
+              onChange={(e, s) => {
+                setData({ ...data, birthday: s });
+              }}
+            />
           </Form.Item>
           <Form.Item
             name="gender"
@@ -148,23 +171,20 @@ export default function CreateCustomer(props){
             rules={[
               {
                 required: true,
-                message:"Vùng này không được để trống"
-
+                message: "Vùng này không được để trống",
               },
             ]}
           >
             <Select
               placeholder="Chọn giới tính"
-              onSearch={e=>{
-                setValue(e)
+              onSearch={(e) => {
+                setValue(e);
               }}
               onSelect={(e) => {
-                setData(
-                  {
-                    ...data,
-                    gender:e
-                  }
-                )
+                setData({
+                  ...data,
+                  gender: e,
+                });
               }}
             >
               <Option value="Nam">Nam</Option>
@@ -188,12 +208,10 @@ export default function CreateCustomer(props){
           >
             <Input
               onChange={(e) => {
-                setData(
-                  {
-                    ...data,
-                    code:e.target.value
-                  }
-                )
+                setData({
+                  ...data,
+                  code: e.target.value,
+                });
               }}
             />
           </Form.Item>
@@ -202,9 +220,8 @@ export default function CreateCustomer(props){
             label="Nhóm khách hàng"
             rules={[
               {
-                required:true,
-                message:"Vùng này không được để trống"
-
+                required: true,
+                message: "Vùng này không được để trống",
               },
             ]}
           >
@@ -212,24 +229,23 @@ export default function CreateCustomer(props){
               showSearch
               placeholder="Chọn nhóm khách hàng"
               filterOption={false}
-              onSearch={e=>{
-                setValue(e)
-                console.log(value)
+              onSearch={(e) => {
+                setValue(e);
+                console.log(value);
               }}
               onSelect={(e) => {
-                setData(
-                  {
-                    ...data,
-                    customer_type:{
-                      id:e
-                    }
-                  }
-                )
+                setData({
+                  ...data,
+                  customer_type: {
+                    id: e,
+                  },
+                });
               }}
               style={{ paddingLeft: "10px" }}
             >
-              {dataOfType.map(i=>{
-                if(dataOfType.length>0) return <Option value={i.id}>{i.content}</Option>
+              {dataOfType.map((i) => {
+                if (dataOfType.length > 0)
+                  return <Option value={i.id}>{i.content}</Option>;
               })}
             </Select>
           </Form.Item>
@@ -238,7 +254,7 @@ export default function CreateCustomer(props){
             label="Email"
             rules={[
               {
-                pattern:/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
                 required: true,
                 message: "Email không hợp lệ",
               },
@@ -248,8 +264,8 @@ export default function CreateCustomer(props){
               onChange={(e) => {
                 setData({
                   ...data,
-                  email:e.target.value
-                })
+                  email: e.target.value,
+                });
               }}
             />
           </Form.Item>
@@ -259,7 +275,7 @@ export default function CreateCustomer(props){
             rules={[
               {
                 pattern: /^\d+$/,
-                required:true,
+                required: true,
                 message: "Số điện thoại không hợp lệ",
               },
             ]}
@@ -272,8 +288,8 @@ export default function CreateCustomer(props){
               onChange={(e) => {
                 setData({
                   ...data,
-                  contact:e.target.value
-                })
+                  contact: e.target.value,
+                });
               }}
             />
           </Form.Item>
@@ -283,23 +299,20 @@ export default function CreateCustomer(props){
             rules={[
               {
                 required: true,
-                message:"Vùng này không được để trống"
-
+                message: "Vùng này không được để trống",
               },
             ]}
           >
             <Select
               placeholder="Chọn trạng thái"
-              onSearch={e=>{
-                setValue(e)
+              onSearch={(e) => {
+                setValue(e);
               }}
               onSelect={(e) => {
-                setData(
-                  {
-                    ...data,
-                    status:e
-                  }
-                )
+                setData({
+                  ...data,
+                  status: e,
+                });
               }}
               style={{ paddingLeft: "10px" }}
             >
@@ -321,5 +334,5 @@ export default function CreateCustomer(props){
         </Form>
       </div>
     </div>
-    )
+  );
 }

@@ -56,7 +56,7 @@ public class ReceiptController {
         sortParams[1]=sortParams[1].equals("ascend")? "asc":"desc";
         Sort.Direction sortOrder=sortParams[1].equals("asc")? Sort.Direction.ASC: Sort.Direction.DESC;
         Sort sortObject=Sort.by(sortOrder,sortParams[0]);
-        return receiptService.list(value.getValue(),value.getT().getManager(),value.getT().getCreated_date(),value.getT().getPayment_type(),value.getT().getStatus(), PageRequest.of(page,limit,sortObject));
+        return receiptService.list(value.getValue(),value.getT().getManager(),value.getT().getCreated_date(),value.getT().getPayment_type(),value.getT().getStatus(),value.getT().getReceiptGroup(),PageRequest.of(page,limit,sortObject));
     }
     @PostMapping("/count-list")
     Long countList(@RequestBody Value<Receipt> value,HttpServletRequest request){
@@ -67,7 +67,7 @@ public class ReceiptController {
             value.getT().setManager(t.getUsername());
             value.getT().setManager_code(t.getCode());
         }
-        return receiptService.countList(value.getValue(),value.getT().getManager(), value.getT().getCreated_date(),value.getT().getPayment_type(),value.getT().getStatus());
+        return receiptService.countList(value.getValue(),value.getT().getManager(), value.getT().getCreated_date(),value.getT().getPayment_type(),value.getT().getStatus(),value.getT().getReceiptGroup());
     }
     @GetMapping("information")
     Receipt information(@RequestParam String code,HttpServletRequest request){

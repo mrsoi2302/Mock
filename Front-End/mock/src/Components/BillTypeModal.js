@@ -8,17 +8,16 @@ import {
   Table,
   message,
 } from "antd";
-import { CloseCircleOutlined ,PlusCircleOutlined } from "@ant-design/icons";
-import Search from "antd/es/input/Search";
+import { CloseCircleOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { baseURL } from "../Config";
 
 export default function BillTypeModal(props) {
   const [value, setValue] = useState("");
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(props.groups);
   const [createData, setCreateData] = useState({
-    name:" "
+    name: " ",
   });
   const [createForm, setCreateForm] = useState(false);
   const [render, setRender] = useState(false);
@@ -28,36 +27,36 @@ export default function BillTypeModal(props) {
       url: baseURL + "/" + props.name + "-group/list",
       method: "post",
       headers: {
-        Authorization: "Bearer "+localStorage.getItem("jwt"),
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
       data: {
         value: value,
       },
     }).then((res) => {
-      let temp=[]
-      res.data.map(i=>{
-        let x={
-            ...i,
-            key:i.code
-        }
+      let temp = [];
+      res.data.map((i) => {
+        let x = {
+          ...i,
+          key: i.code,
+        };
         temp.push(x);
-      })
-      setData(temp)
+      });
+      setData(temp);
     });
-  }, [value, render]);
+  }, [render]);
   const createType = () => {
     axios({
       url: baseURL + "/" + props.name + "-group/staff/create",
       method: "post",
       headers: {
-        Authorization: "Bearer "+localStorage.getItem("jwt"),
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
       data: createData,
     })
       .then((res) => {
         setCreateData({
-          name:" "
-        })
+          name: " ",
+        });
         setValue("");
         setCreateForm(false);
         setRender(!render);
@@ -79,20 +78,20 @@ export default function BillTypeModal(props) {
       url: baseURL + "/" + props.name + "-group/admin",
       method: "delete",
       headers: {
-        Authorization: "Bearer "+localStorage.getItem("jwt"),
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
       data: arr,
     })
       .then((res) => {
         setSelectedRowKeys([]);
         setRender(!render);
-        props.setIndex(!props.index)
-        message.success("Xóa thành công")
+        props.setIndex(!props.index);
+        message.success("Xóa thành công");
       })
-      .catch(err=>{
+      .catch((err) => {
         console.log(err);
-        message.error("Xóa không thành công")
-      })
+        message.error("Xóa không thành công");
+      });
   };
   const columns = [
     {
@@ -127,22 +126,30 @@ export default function BillTypeModal(props) {
       onOk={(e) => {
         !createForm ? props.setOpenBillModal(false) : createType();
       }}
-      onCancel={(e)=>{
+      onCancel={(e) => {
         !createForm ? props.setOpenBillModal(false) : setCreateForm(false);
       }}
       footer={[
-        selectedRowKeys.length>0 && <Button onClick={e=>{deleteType(selectedRowKeys)}} type="primary" style={{
-            marginRight:"50%",
-            backgroundColor:"red"
-        }}>
-          Xóa
-        </Button>,
+        selectedRowKeys.length > 0 && (
+          <Button
+            onClick={(e) => {
+              deleteType(selectedRowKeys);
+            }}
+            type="primary"
+            style={{
+              marginRight: "50%",
+              backgroundColor: "red",
+            }}
+          >
+            Xóa
+          </Button>
+        ),
         <Button
           key="submit"
           type="primary"
-          disabled={createForm && createData.name.trim().length===0}
+          disabled={createForm && createData.name.trim().length === 0}
           onClick={(e) => {
-            createForm ? createType():props.setOpenBillModal(false)
+            createForm ? createType() : props.setOpenBillModal(false);
           }}
         >
           Ok
@@ -205,16 +212,22 @@ export default function BillTypeModal(props) {
         </Form>
       ) : (
         <div>
-        <Space.Compact
-        style={{width:"100%"}}>
-          <Input 
-            placeholder="Tìm kiếm"
-            onChange={(e) => {
-              setValue(e.target.value);
-            }}
-            enterButton
-          />
-           <Button type="primary" onClick={e=>{setCreateForm(true)}}><PlusCircleOutlined size={"10px"}/></Button>
+          <Space.Compact style={{ width: "100%" }}>
+            <Input
+              placeholder="Tìm kiếm"
+              onChange={(e) => {
+                setValue(e.target.value);
+              }}
+              enterButton
+            />
+            <Button
+              type="primary"
+              onClick={(e) => {
+                setCreateForm(true);
+              }}
+            >
+              <PlusCircleOutlined size={"10px"} />
+            </Button>
           </Space.Compact>
           <Table
             rowSelection={handleSelection}

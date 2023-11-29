@@ -16,30 +16,29 @@ import axios from "axios";
 import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import { useNavigate } from "react-router-dom";
-import {CaretLeftOutlined } from "@ant-design/icons";
+import { CaretLeftOutlined } from "@ant-design/icons";
 
 export default function CreateReceipt(props) {
   document.title = "Tạo phiếu thu mới";
-  
+
   const navigate = useNavigate();
   const [data, setData] = useState({});
   const [value, setValue] = useState();
   const [error, setError] = useState(false);
   const [dataOfType, setDataOfType] = useState([]);
-  const [receiptGroup,setReceiptGroup]=useState([])
+  const [receiptGroup, setReceiptGroup] = useState([]);
   const [provider, setProvider] = useState([]);
   const [form] = Form.useForm();
   useEffect(() => {
-    props.setOpenKeys("cash")
-    props.setSelectedKeys("receipt-list")
+    props.setOpenKeys("cash");
+    props.setSelectedKeys("receipt-list");
     axios({
       url: baseURL + "/provider/create-receipt",
       method: "post",
       headers: {
         Authorization: props.token,
       },
-      data: {
-      },
+      data: {},
     })
       .then((res) => {
         setProvider(res.data);
@@ -64,19 +63,22 @@ export default function CreateReceipt(props) {
       .catch((err) => {
         message.error("Có lỗi khi lấy dữ liệu từ hình thức thanh toán");
       });
-      axios(
-        {
-            url:baseURL+"/receipt-group/list",
-            method:"post",
-            headers:{
-                "Authorization":props.token
-            },
-            data:{
-                value:value
-            }
-        }
-    ).then(res=>{setReceiptGroup(res.data)})
-    .catch(err=>{message.error("Có lỗi khi lấy dữ liệu nhóm phiếu thu")})
+    axios({
+      url: baseURL + "/receipt-group/list",
+      method: "post",
+      headers: {
+        Authorization: props.token,
+      },
+      data: {
+        value: value,
+      },
+    })
+      .then((res) => {
+        setReceiptGroup(res.data);
+      })
+      .catch((err) => {
+        message.error("Có lỗi khi lấy dữ liệu nhóm phiếu thu");
+      });
   }, [value]);
   const handleSubmit = () => {
     axios({
@@ -94,9 +96,11 @@ export default function CreateReceipt(props) {
         message.error("Tạo thất bại");
       });
   };
-  
+
   return (
-<div className="content" style={{paddingTop:"10px"}}>      <div className="taskbar">
+    <div className="content" style={{ paddingTop: "10px" }}>
+      {" "}
+      <div className="taskbar">
         {error && (
           <Alert
             message="Tạo thất bại"
@@ -110,24 +114,39 @@ export default function CreateReceipt(props) {
           />
         )}
         <ConfigProvider
-        theme={
-          {
-            components:{
-              Button:{
-                textHoverBg:"none",
-                colorBgTextActive:"none"
-
-              }
-            }
-          }
-        }>
-          <Button type="text" onClick={e=>{navigate("/receipt-table")}} size="large" style={{height:"fit-content"}}><h2><CaretLeftOutlined/> Danh sách phiếu thu</h2></Button>
-          
-        </ConfigProvider>        <Account name={localStorage.getItem("name")} />
+          theme={{
+            components: {
+              Button: {
+                textHoverBg: "none",
+                colorBgTextActive: "none",
+              },
+            },
+          }}
+        >
+          <Button
+            type="text"
+            onClick={(e) => {
+              navigate("/receipt-table");
+            }}
+            size="large"
+            style={{ height: "fit-content" }}
+          >
+            <h2>
+              <CaretLeftOutlined /> Danh sách phiếu thu
+            </h2>
+          </Button>
+        </ConfigProvider>{" "}
+        <Account name={localStorage.getItem("name")} />
       </div>
       <div
-        style={{ backgroundColor: "white", display: "block",margin:"3% 5%",textAlign:"left",borderRadius:"10px",padding:"1% 2% 5vh"
- }}
+        style={{
+          backgroundColor: "white",
+          display: "block",
+          margin: "3% 5%",
+          textAlign: "left",
+          borderRadius: "10px",
+          padding: "1% 2% 5vh",
+        }}
       >
         <h2 style={{ paddingLeft: "10px" }}>Thông tin chung</h2>
         <hr style={{ borderTop: "1px solid whitesmoke" }} />
@@ -152,7 +171,7 @@ export default function CreateReceipt(props) {
             ]}
             style={{
               width: "47%",
-              float:"left"
+              float: "left",
             }}
           >
             <Input
@@ -169,7 +188,7 @@ export default function CreateReceipt(props) {
             label="Nhà cung cấp thanh toán"
             rules={[
               {
-                message:"Vùng này không được để trống",
+                message: "Vùng này không được để trống",
                 required: true,
               },
             ]}
@@ -183,7 +202,7 @@ export default function CreateReceipt(props) {
                   provider: {
                     id: arr[0],
                     code: arr[2],
-                    name:arr[1]
+                    name: arr[1],
                   },
                 });
               }}
@@ -191,47 +210,46 @@ export default function CreateReceipt(props) {
               style={{ paddingLeft: "10px" }}
             >
               {provider.map((i) => {
-                  return (
-                    <Option value={i.id + "-" + i.name + "-" + i.code}>
-                      {i.name + "-" + i.code}
-                    </Option>
-                  );
+                return (
+                  <Option value={i.id + "-" + i.name + "-" + i.code}>
+                    {i.name + "-" + i.code}
+                  </Option>
+                );
               })}
             </Select>
           </Form.Item>
           <Form.Item
             name="receiptGroup"
             label="Loại phiếu thu"
-            style={{float:"left",width:"47%"}}
+            style={{ float: "left", width: "47%" }}
           >
             <Select
               showSearch
               allowClear
-              onClear={
-                e=>{
-                setData(
-                  {...data,
-                  receiptGroup:null
-                  }
-                )
-              }
-              }
-              placeholder="Chọn loại phiếu thu"              
-              onSelect={e=>{
-                const arr=e.split("-")
-                setData(
-                  {...data,
-                  receiptGroup:{
-                    id:arr[0]
-                  }}
-                )
+              onClear={(e) => {
+                setData({ ...data, receiptGroup: null });
               }}
-              style={{ 
-                float:"left"
-                }}
+              placeholder="Chọn loại phiếu thu"
+              onSelect={(e) => {
+                const arr = e.split("-");
+                setData({
+                  ...data,
+                  receiptGroup: {
+                    id: arr[0],
+                  },
+                });
+              }}
+              style={{
+                float: "left",
+              }}
             >
-              {receiptGroup.map(i=>{
-                if(receiptGroup.length>0) return <Option value={i.id+"-"+i.code+"-"+i.name}>{i.name+"-"+i.code}</Option>
+              {receiptGroup.map((i) => {
+                if (receiptGroup.length > 0)
+                  return (
+                    <Option value={i.id + "-" + i.code + "-" + i.name}>
+                      {i.name + "-" + i.code}
+                    </Option>
+                  );
               })}
             </Select>
           </Form.Item>
@@ -241,8 +259,7 @@ export default function CreateReceipt(props) {
             rules={[
               {
                 required: true,
-                message:"Vùng này không được để trống",
-
+                message: "Vùng này không được để trống",
               },
             ]}
           >
@@ -254,7 +271,7 @@ export default function CreateReceipt(props) {
                   status: e,
                 });
               }}
-              style={{ width: "100%",paddingLeft:"10px" }}
+              style={{ width: "100%", paddingLeft: "10px" }}
             >
               <Option value="paid">Đã thanh toán</Option>
               <Option value="unpaid"> Chưa thanh toán</Option>
@@ -265,7 +282,7 @@ export default function CreateReceipt(props) {
             label="Hình thức thanh toán"
             rules={[
               {
-                message:"Vùng này không được để trống",
+                message: "Vùng này không được để trống",
                 required: true,
               },
             ]}
@@ -300,7 +317,7 @@ export default function CreateReceipt(props) {
             rules={[
               {
                 required: true,
-                message:"Vùng này không được để trống",
+                message: "Vùng này không được để trống",
               },
             ]}
           >
@@ -323,7 +340,12 @@ export default function CreateReceipt(props) {
             />
           </Form.Item>
           <Form.Item>
-            <Button type="primary" style={{ margin: "10px" }} htmlType="submit"               size="large">
+            <Button
+              type="primary"
+              style={{ margin: "10px" }}
+              htmlType="submit"
+              size="large"
+            >
               Tạo mới
             </Button>
           </Form.Item>

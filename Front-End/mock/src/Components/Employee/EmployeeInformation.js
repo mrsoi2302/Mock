@@ -6,11 +6,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { baseURL } from "../../Config";
 import { Token } from "../../Token";
-import {CaretLeftOutlined } from "@ant-design/icons";
+import { CaretLeftOutlined } from "@ant-design/icons";
 
 import ExceptionBox from "../ExceptionBox";
 export default function EmployeeInformation(props) {
-  document.title="Thông tin nhân viên"
+  document.title = "Thông tin nhân viên";
   const navigate = useNavigate();
   const { code } = useParams();
   const [data, setData] = useState({
@@ -36,8 +36,8 @@ export default function EmployeeInformation(props) {
       });
   };
   useEffect(() => {
-    props.setOpenKeys("employee")
-    props.setSelectedKeys("employee-list")
+    props.setOpenKeys("employee");
+    props.setSelectedKeys("employee-list");
     axios({
       url: baseURL + "/employee/admin/information?code=" + code,
       method: "get",
@@ -73,18 +73,27 @@ export default function EmployeeInformation(props) {
           />
         )}
         <ConfigProvider
-        theme={
-          {
-            components:{
-              Button:{
-                textHoverBg:"none",
-                colorBgTextActive:"none"
-              }
-            }
-          }
-        }>
-          <Button type="text" onClick={e=>{navigate("/employee-table")}} size="large" style={{height:"fit-content"}}><h2><CaretLeftOutlined/> Danh sách nhân viên</h2></Button>
-          
+          theme={{
+            components: {
+              Button: {
+                textHoverBg: "none",
+                colorBgTextActive: "none",
+              },
+            },
+          }}
+        >
+          <Button
+            type="text"
+            onClick={(e) => {
+              navigate("/employee-table");
+            }}
+            size="large"
+            style={{ height: "fit-content" }}
+          >
+            <h2>
+              <CaretLeftOutlined /> Danh sách nhân viên
+            </h2>
+          </Button>
         </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
       </div>
@@ -92,7 +101,7 @@ export default function EmployeeInformation(props) {
       {data.loading ? (
         <Spin />
       ) : (
-        <div className="inside" style={{ display: "block",textAlign:"left" }}>
+        <div className="inside" style={{ display: "block", textAlign: "left" }}>
           <Space
             direction="vertical"
             style={{
@@ -101,8 +110,8 @@ export default function EmployeeInformation(props) {
               borderRadius: "10px",
               padding: "15px",
               display: "flex",
-              margin:"0 auto",
-              textAlign:"left"
+              margin: "0 auto",
+              textAlign: "left",
             }}
           >
             <div
@@ -132,40 +141,46 @@ export default function EmployeeInformation(props) {
                 gridTemplateColumns: "25% 25% 25% 25%",
               }}
             >
-              
-                <p>Họ và tên</p>
-                <p>: {data.data.name}</p>
-                <p>Mã nhân viên</p>
-                <p>: {data.data.code}</p>
-                <p>Tên đăng nhập</p>
-                <p>: {data.data.username}</p>
-                <p>Vai trò</p>
-                <p>
-                  : {data.data.role === "STAFF" ? "Nhân viên" : "Người dùng"}
-                </p>
+              <p>Họ và tên</p>
+              <p>: {data.data.name}</p>
+              <p>Mã nhân viên</p>
+              <p>: {data.data.code}</p>
+              <p>Tên đăng nhập</p>
+              <p>: {data.data.username}</p>
+              <p>Vai trò</p>
+              <p>: {data.data.role === "STAFF" ? "Nhân viên" : "Người dùng"}</p>
             </div>
             <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "20% 20%",
+              style={{
+                display: "grid",
+                gridTemplateColumns: "20% 20%",
+              }}
+            >
+              <Button
+                type="primary"
+                onClick={(e) => {
+                  navigate(url);
                 }}
+                size="large"
               >
-                <Button type="primary" onClick={e=>{navigate(url)}} size="large">
-                  Chỉnh sửa
-                </Button>
-                <Button type="link" style={{color:"red"}} onClick={e=>{
-                  Modal.confirm(
-                    {
-                      title:"Bạn muốn xóa nhân viên "+code+"?",
-                      onOk(){
-                        handleDelete()
-                      }
-                    }
-                  )
-                }} size="large">
-                  Xóa
-                </Button>
-              </div>
+                Chỉnh sửa
+              </Button>
+              <Button
+                type="link"
+                style={{ color: "red" }}
+                onClick={(e) => {
+                  Modal.confirm({
+                    title: "Bạn muốn xóa nhân viên " + code + "?",
+                    onOk() {
+                      handleDelete();
+                    },
+                  });
+                }}
+                size="large"
+              >
+                Xóa
+              </Button>
+            </div>
           </Space>
         </div>
       )}

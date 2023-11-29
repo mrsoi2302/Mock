@@ -18,8 +18,7 @@ import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import { useNavigate, useParams } from "react-router-dom";
 import ExceptionBox from "../ExceptionBox";
-import {CaretLeftOutlined } from "@ant-design/icons";
-
+import { CaretLeftOutlined } from "@ant-design/icons";
 
 export default function ModifyPayment(props) {
   document.title = "Chỉnh sửa phiếu chi";
@@ -35,13 +34,13 @@ export default function ModifyPayment(props) {
   const [paymentGroup, setPaymentGroup] = useState([]);
   const [form] = Form.useForm();
   useEffect(() => {
-    props.setOpenKeys("cash")
-    props.setSelectedKeys("payment-list")
+    props.setOpenKeys("cash");
+    props.setSelectedKeys("payment-list");
     axios({
       url: baseURL + "/payment-group/list",
       method: "post",
       headers: {
-        Authorization:  props.token,
+        Authorization: props.token,
       },
       data: {
         value: value,
@@ -57,7 +56,7 @@ export default function ModifyPayment(props) {
       url: baseURL + "/employee/admin/list",
       method: "get",
       headers: {
-        Authorization:  props.token,
+        Authorization: props.token,
       },
     })
       .then((res) => {
@@ -70,7 +69,7 @@ export default function ModifyPayment(props) {
       url: baseURL + "/payment/information?code=" + code,
       method: "get",
       headers: {
-        Authorization:  props.token,
+        Authorization: props.token,
       },
     })
       .then((res) => {
@@ -83,7 +82,7 @@ export default function ModifyPayment(props) {
       url: baseURL + "/customer/create-payment",
       method: "post",
       headers: {
-        Authorization:  props.token,
+        Authorization: props.token,
       },
     })
       .then((res) => {
@@ -96,7 +95,7 @@ export default function ModifyPayment(props) {
       url: baseURL + "/payment-type/list",
       method: "post",
       headers: {
-        Authorization:  props.token,
+        Authorization: props.token,
       },
       data: {
         value: null,
@@ -113,7 +112,7 @@ export default function ModifyPayment(props) {
       url: baseURL + "/payment-group/list",
       method: "post",
       headers: {
-        Authorization:  props.token,
+        Authorization: props.token,
       },
       data: {
         value: value,
@@ -131,7 +130,7 @@ export default function ModifyPayment(props) {
       method: "put",
       url: baseURL + "/payment/admin",
       headers: {
-        Authorization:  props.token,
+        Authorization: props.token,
       },
       data: data,
     })
@@ -148,20 +147,29 @@ export default function ModifyPayment(props) {
       <div className="taskbar">
         {error && <ExceptionBox msg="Sửa thất bại" url="/main" />}
         <ConfigProvider
-        theme={
-          {
-            components:{
-              Button:{
-                textHoverBg:"none",
-                colorBgTextActive:"none"
-
-              }
-            }
-          }
-        }>
-          <Button type="text" onClick={e=>{navigate("/payment/information/"+code)}} size="large" style={{height:"fit-content"}}><h2><CaretLeftOutlined/> Thông tin phiếu chi</h2></Button>
-          
-        </ConfigProvider>        <Account name={localStorage.getItem("name")} />
+          theme={{
+            components: {
+              Button: {
+                textHoverBg: "none",
+                colorBgTextActive: "none",
+              },
+            },
+          }}
+        >
+          <Button
+            type="text"
+            onClick={(e) => {
+              navigate("/payment/information/" + code);
+            }}
+            size="large"
+            style={{ height: "fit-content" }}
+          >
+            <h2>
+              <CaretLeftOutlined /> Thông tin phiếu chi
+            </h2>
+          </Button>
+        </ConfigProvider>{" "}
+        <Account name={localStorage.getItem("name")} />
       </div>
       <div
         className="inside"
@@ -212,18 +220,21 @@ export default function ModifyPayment(props) {
             </Form.Item>
             <Form.Item
               name="paymentGroup"
-              initialValue={data.paymentGroup===null ? null : data.paymentGroup.name}
+              initialValue={
+                data.paymentGroup === null ? null : data.paymentGroup.name
+              }
               label="Nhóm phiếu chi"
               style={{ float: "left", width: "47%" }}
             >
               <Select
                 showSearch
                 allowClear
-                onClear={e=>{
-                setData({
+                onClear={(e) => {
+                  setData({
                     ...data,
                     paymentGroup: null,
-                  });}}
+                  });
+                }}
                 placeholder="Chọn loại phiếu thu"
                 onSelect={(e) => {
                   const arr = e.split("-");
@@ -249,7 +260,11 @@ export default function ModifyPayment(props) {
               </Select>
             </Form.Item>
             <Form.Item
-              initialValue={data.customer===null ? null:data.customer.name + "-" + data.customer.code}
+              initialValue={
+                data.customer === null
+                  ? null
+                  : data.customer.name + "-" + data.customer.code
+              }
               name="customer"
               label="Khách hàng nhận"
             >
@@ -279,14 +294,15 @@ export default function ModifyPayment(props) {
               </Select>
             </Form.Item>
             <Form.Item
-              initialValue={data.paymentType===null ? null:data.paymentType.name}
+              initialValue={
+                data.paymentType === null ? null : data.paymentType.name
+              }
               name="payment_type"
               label="Hình thức thanh toán"
               rules={[
                 {
                   required: true,
-                  message:"Vùng này không được để trống",
-
+                  message: "Vùng này không được để trống",
                 },
               ]}
               style={{ width: "47%", float: "left" }}
@@ -321,7 +337,7 @@ export default function ModifyPayment(props) {
               rules={[
                 {
                   required: true,
-                  message:"Vùng này không được để trống"
+                  message: "Vùng này không được để trống",
                 },
               ]}
             >
@@ -352,7 +368,7 @@ export default function ModifyPayment(props) {
               rules={[
                 {
                   required: true,
-                  message:"Vùng này không được để trống",
+                  message: "Vùng này không được để trống",
                 },
               ]}
               style={{ width: "47%", float: "left" }}
@@ -377,8 +393,7 @@ export default function ModifyPayment(props) {
               rules={[
                 {
                   required: true,
-                  message:"Vùng này không được để trống",
-
+                  message: "Vùng này không được để trống",
                 },
               ]}
             >

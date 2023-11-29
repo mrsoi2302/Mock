@@ -171,11 +171,14 @@ export default function ProviderType(props) {
                 onClick={(e) => {
                   Modal.confirm({
                     title: "Xác nhận xoá",
-                    content: "Bạn có chắc chắn muốn xoá nhóm nhà cung cấp "+record.code+" không?",
+                    content:
+                      "Bạn có chắc chắn muốn xoá nhóm nhà cung cấp " +
+                      record.code +
+                      " không?",
                     onOk() {
-                      handleDelete(record)
+                      handleDelete(record);
                     },
-                    cancelText:"Hủy bỏ"
+                    cancelText: "Hủy bỏ",
                   });
                 }}
               >
@@ -279,7 +282,7 @@ export default function ProviderType(props) {
                 <Button
                   type="primary"
                   style={{
-                    marginLeft:"10px",
+                    marginLeft: "10px",
                     zIndex: 1000,
                   }}
                   onClick={(e) => {

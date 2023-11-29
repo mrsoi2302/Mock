@@ -1,17 +1,26 @@
-import { Alert, Button, Card, ConfigProvider, Modal, Space, Spin, Tag } from "antd";
+import {
+  Alert,
+  Button,
+  Card,
+  ConfigProvider,
+  Modal,
+  Space,
+  Spin,
+  Tag,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import "../style.css";
 import Account from "../Account";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { baseURL } from "../../Config";
-import {  Token } from "../../Token";
+import { Token } from "../../Token";
 import ExceptionBox from "../ExceptionBox";
 import { PDFDownloadLink } from "@react-pdf/renderer";
-import {CaretLeftOutlined } from "@ant-design/icons";
-import PDF from './PDF';
+import { CaretLeftOutlined } from "@ant-design/icons";
+import PDF from "./PDF";
 export default function PaymentInformation(props) {
-  document.title="Thông tin phiếu chi"
+  document.title = "Thông tin phiếu chi";
   const navigate = useNavigate();
   const { code } = useParams();
   const [data, setData] = useState({
@@ -21,13 +30,13 @@ export default function PaymentInformation(props) {
   const [err, setErr] = useState(false);
 
   const handleDelete = () => {
-    props.setOpenKeys("cash")
-      props.setSelectedKeys("payment-list")
+    props.setOpenKeys("cash");
+    props.setSelectedKeys("payment-list");
     axios({
       url: baseURL + "/payment/admin",
       method: "delete",
       headers: {
-        Authorization:  props.token,
+        Authorization: props.token,
       },
       data: [code],
     })
@@ -43,7 +52,7 @@ export default function PaymentInformation(props) {
       url: baseURL + "/payment/information?code=" + code,
       method: "get",
       headers: {
-        Authorization:  props.token,
+        Authorization: props.token,
       },
     })
       .then((res) => {
@@ -74,19 +83,27 @@ export default function PaymentInformation(props) {
           />
         )}
         <ConfigProvider
-        theme={
-          {
-            components:{
-              Button:{
-                textHoverBg:"none",
-                colorBgTextActive:"none"
-
-              }
-            }
-          }
-        }>
-          <Button type="text" onClick={e=>{navigate("/payment-table")}} size="large" style={{height:"fit-content"}}><h2><CaretLeftOutlined/> Danh sách phiếu chi</h2></Button>
-          
+          theme={{
+            components: {
+              Button: {
+                textHoverBg: "none",
+                colorBgTextActive: "none",
+              },
+            },
+          }}
+        >
+          <Button
+            type="text"
+            onClick={(e) => {
+              navigate("/payment-table");
+            }}
+            size="large"
+            style={{ height: "fit-content" }}
+          >
+            <h2>
+              <CaretLeftOutlined /> Danh sách phiếu chi
+            </h2>
+          </Button>
         </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
       </div>
@@ -103,72 +120,125 @@ export default function PaymentInformation(props) {
               borderRadius: "10px",
               padding: "15px",
               display: "flex",
-              margin:"0 auto",
-              textAlign:"left"
+              margin: "0 auto",
+              textAlign: "left",
             }}
           >
-            
-              <h2>Thông tin khách hàng</h2>
+            <h2>Thông tin khách hàng</h2>
             <div
               style={{
                 display: "grid",
                 gridTemplateColumns: "20% 30% 20% 30%",
               }}
             >
-                <p>Mã phiếu chi</p>
-                <p>: {data.data.code}</p>
+              <p>Mã phiếu chi</p>
+              <p>: {data.data.code}</p>
 
-                <p>Ngày tạo</p>
-                <p>: {Object.keys(data.data).length>0 ? data.data.created_date.substring(0,10)+" "+data.data.created_date.substring(11,19):"Không xác định"}</p>
+              <p>Ngày tạo</p>
+              <p>
+                :{" "}
+                {Object.keys(data.data).length > 0
+                  ? data.data.created_date.substring(0, 10) +
+                    " " +
+                    data.data.created_date.substring(11, 19)
+                  : "Không xác định"}
+              </p>
 
-                <p>Giá trị</p>
-                <p>: {data.data.paid}</p>
+              <p>Giá trị</p>
+              <p>: {data.data.paid}</p>
 
-                <p>Hình thức thanh toán</p>
-                
-                <p>: {data.data.paymentType===null ? "Không xác định":data.data.paymentType.name}</p>
-                <p>Người quản lý</p>
-                <p>
-                    : <Link to={"/employee/information/  "+data.data.manager_code}>{data.data.manager}</Link>
+              <p>Hình thức thanh toán</p>
 
-                </p>
-                <p>Người nhận</p>
-                <p>: {data.data.customer===null ? "Không xác định": <Link to={"/customer/information/"+data.data.customer.code}> {data.data.customer.name}</Link> }</p>
-                <p>Loại phiếu thu</p>
-                <p>: {data.data.paymentGroup===null ? "Không xác định":data.data.paymentGroup.name}</p>
-                <p>Trạng thái</p>
-                <p>: {data.data.status === "paid" ? "Đã thanh toán" : "Chưa thanh toán"}
-                </p>
+              <p>
+                :{" "}
+                {data.data.paymentType === null
+                  ? "Không xác định"
+                  : data.data.paymentType.name}
+              </p>
+              <p>Người quản lý</p>
+              <p>
+                :{" "}
+                <Link to={"/employee/information/  " + data.data.manager_code}>
+                  {data.data.manager}
+                </Link>
+              </p>
+              <p>Người nhận</p>
+              <p>
+                :{" "}
+                {data.data.customer === null ? (
+                  "Không xác định"
+                ) : (
+                  <Link to={"/customer/information/" + data.data.customer.code}>
+                    {" "}
+                    {data.data.customer.name}
+                  </Link>
+                )}
+              </p>
+              <p>Loại phiếu thu</p>
+              <p>
+                :{" "}
+                {data.data.paymentGroup === null
+                  ? "Không xác định"
+                  : data.data.paymentGroup.name}
+              </p>
+              <p>Trạng thái</p>
+              <p>
+                :{" "}
+                {data.data.status === "paid"
+                  ? "Đã thanh toán"
+                  : "Chưa thanh toán"}
+              </p>
             </div>
             <div
+              style={{
+                display: "grid",
+              }}
+            >
+              <div
                 style={{
                   display: "grid",
-                    }}
+                  gridTemplateColumns: "20% 20% 20%",
+                }}
               >
-              <div style={{
-                display:"grid",
-                gridTemplateColumns:"20% 20% 20%"
-              }}>
-              <PDFDownloadLink document={<PDF data={data.data}/>} fileName='receipt'>
-                    <Button type="primary" size="large" style={{width:"90%",marginLeft:"10%"}}>In</Button>
-            </PDFDownloadLink>
-                <Button type="primary" size="large" onClick={e=>{navigate(url)}} style={{width:"90%",marginLeft:"10%"}}>
+                <PDFDownloadLink
+                  document={<PDF data={data.data} />}
+                  fileName="receipt"
+                >
+                  <Button
+                    type="primary"
+                    size="large"
+                    style={{ width: "90%", marginLeft: "10%" }}
+                  >
+                    In
+                  </Button>
+                </PDFDownloadLink>
+                <Button
+                  type="primary"
+                  size="large"
+                  onClick={(e) => {
+                    navigate(url);
+                  }}
+                  style={{ width: "90%", marginLeft: "10%" }}
+                >
                   Chỉnh sửa
                 </Button>
-                <Button type="link" size="large" style={{color:"red",width:"90%",marginLeft:"10%"}} onClick={e=>{
-                  Modal.confirm(
-                    {
-                      content:"Bạn muốn xóa phiếu chi "+code+" ?",
-                      onOk(){
+                <Button
+                  type="link"
+                  size="large"
+                  style={{ color: "red", width: "90%", marginLeft: "10%" }}
+                  onClick={(e) => {
+                    Modal.confirm({
+                      content: "Bạn muốn xóa phiếu chi " + code + " ?",
+                      onOk() {
                         handleDelete();
-                      }
-                    }
-                  )
-                }}>
+                      },
+                    });
+                  }}
+                >
                   Xóa
                 </Button>
               </div>
-              </div>
+            </div>
           </Space>
         </div>
       )}

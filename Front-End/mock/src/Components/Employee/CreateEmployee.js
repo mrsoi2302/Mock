@@ -7,7 +7,7 @@ import { Option } from "antd/es/mentions";
 import axios from "axios";
 import { baseURL } from "../../Config";
 import { Token } from "../../Token";
-import {CaretLeftOutlined } from "@ant-design/icons";
+import { CaretLeftOutlined } from "@ant-design/icons";
 
 export default function CreateEmployee(props) {
   document.title = "Tạo mới nhân viên";
@@ -20,12 +20,11 @@ export default function CreateEmployee(props) {
   const [error, setError] = useState(false);
   const [form] = Form.useForm();
   useEffect(() => {
-    props.setOpenKeys("employee")
-    props.setSelectedKeys("create-employee")
+    props.setOpenKeys("employee");
+    props.setSelectedKeys("create-employee");
   }, []);
   const handleSubmit = (e) => {
-    form
-    .validateFields()
+    form.validateFields();
     axios({
       url: baseURL + "/employee/admin/create-one",
       method: "post",
@@ -42,7 +41,7 @@ export default function CreateEmployee(props) {
       });
   };
   return (
-    <div className="content" style={{paddingTop:"10px"}}>
+    <div className="content" style={{ paddingTop: "10px" }}>
       <div className="taskbar">
         {error && (
           <Alert
@@ -58,25 +57,39 @@ export default function CreateEmployee(props) {
           />
         )}
         <ConfigProvider
-        theme={
-          {
-            components:{
-              Button:{
-                textHoverBg:"none",
-                colorBgTextActive:"none"
-
-              }
-            }
-          }
-        }>
-          <Button type="text" onClick={e=>{navigate("/employee-table")}} size="large" style={{height:"fit-content"}}><h2><CaretLeftOutlined/> Danh sách nhân viên</h2></Button>
-          
+          theme={{
+            components: {
+              Button: {
+                textHoverBg: "none",
+                colorBgTextActive: "none",
+              },
+            },
+          }}
+        >
+          <Button
+            type="text"
+            onClick={(e) => {
+              navigate("/employee-table");
+            }}
+            size="large"
+            style={{ height: "fit-content" }}
+          >
+            <h2>
+              <CaretLeftOutlined /> Danh sách nhân viên
+            </h2>
+          </Button>
         </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
       </div>
       <div
-        style={{ backgroundColor: "white", display: "block",margin:"3% 5%",textAlign:"left",borderRadius:"10px",padding:"1% 2% 5vh"
- }}
+        style={{
+          backgroundColor: "white",
+          display: "block",
+          margin: "3% 5%",
+          textAlign: "left",
+          borderRadius: "10px",
+          padding: "1% 2% 5vh",
+        }}
       >
         <h2 style={{ paddingLeft: "10px" }}>Thông tin chung</h2>
         <hr style={{ borderTop: "1px solid whitesmoke" }} />
@@ -96,8 +109,7 @@ export default function CreateEmployee(props) {
             rules={[
               {
                 required: true,
-                message:"Vùng này không được để trống"
-
+                message: "Vùng này không được để trống",
               },
             ]}
           >
@@ -134,8 +146,7 @@ export default function CreateEmployee(props) {
             rules={[
               {
                 required: true,
-                message:"Vùng này không được để trống"
-
+                message: "Vùng này không được để trống",
               },
             ]}
             style={{}}
@@ -192,7 +203,6 @@ export default function CreateEmployee(props) {
               htmlType="submit"
               style={{ margin: "10px" }}
               size="large"
-
             >
               Tạo mới
             </Button>

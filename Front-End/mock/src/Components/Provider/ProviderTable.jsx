@@ -52,10 +52,10 @@ function ProviderTable(props) {
   const [index, setIndex] = useState(false);
   const [dataOfType, setDataOfType] = useState([]);
   const [provider_type, setProvider_type] = useState();
-  const [success,setSuccess]=useState(0)
-  const [failed,setFailed]=useState(0)
-  const [typeCreated,setTypeCreated]=useState(0)
-  const [checkBox,setCheckBox]=useState(false)
+  const [success, setSuccess] = useState(0);
+  const [failed, setFailed] = useState(0);
+  const [typeCreated, setTypeCreated] = useState(0);
+  const [checkBox, setCheckBox] = useState(false);
   let columns = [
     {
       title: "Mã nhà cung cấp",
@@ -86,8 +86,8 @@ function ProviderTable(props) {
     },
   ];
   useEffect(() => {
-    props.setOpenKeys("provider")
-    props.setSelectedKeys("provider-list")
+    props.setOpenKeys("provider");
+    props.setSelectedKeys("provider-list");
     let temp = [];
     axios({
       method: "post",
@@ -95,8 +95,8 @@ function ProviderTable(props) {
       headers: {
         Authorization: props.token,
       },
-      data:{
-        value:null
+      data: {
+        value: null,
       },
     })
       .then((res) => {
@@ -168,7 +168,18 @@ function ProviderTable(props) {
       .catch((err) => {
         setErr(true);
       });
-  }, [status,created_date,value, loading, inputFile,provider_type,index,sort,page,limit]);
+  }, [
+    status,
+    created_date,
+    value,
+    loading,
+    inputFile,
+    provider_type,
+    index,
+    sort,
+    page,
+    limit,
+  ]);
   const handleButton = () => {
     axios({
       url: baseURL + "/provider/admin",
@@ -178,14 +189,15 @@ function ProviderTable(props) {
       },
       data: selectedRowKeys,
     })
-      .then((res)=>{
-        setIndex(!index)
-        setSelectedRowKeys([])})
+      .then((res) => {
+        setIndex(!index);
+        setSelectedRowKeys([]);
+      })
       .catch((err) => setErr(true));
   };
   let edate, estatus;
   const onChange = (date, dateString) => {
-    edate=dateString
+    edate = dateString;
   };
   const handleSubmit = (e) => {
     console.log(edate);
@@ -205,64 +217,75 @@ function ProviderTable(props) {
           const sheet = workbook.Sheets[workbook.SheetNames[0]];
           const jsonData = XLSX.utils.sheet_to_json(sheet, {
             header: 2,
-            range:1
+            range: 1,
           });
           console.log(jsonData);
           // Xử lý dữ liệu, ví dụ: log ra console
-          let check=[]
-          dataOfType.map(i=>{
-            check.push(i.content)
-          })
-          jsonData.map(async(json) => {
+          let check = [];
+          dataOfType.map((i) => {
+            check.push(i.content);
+          });
+          jsonData.map(async (json) => {
             console.log(2);
-            if(typeof json.provider_type!="undefined"&&(json.status === "non-acitve" || json.status === "active")){
-            if (!check.includes(String(json.provider_type))){
+            if (
+              typeof json.provider_type != "undefined" &&
+              (json.status === "non-acitve" || json.status === "active")
+            ) {
+              if (!check.includes(String(json.provider_type))) {
+                await axios({
+                  method: "post",
+                  url: baseURL + "/provider-type/admin/create",
+                  headers: {
+                    Authorization: props.token,
+                  },
+                  data: {
+                    content:
+                      json.provider_type === "undefined"
+                        ? ""
+                        : String(json.provider_type).trim(),
+                  },
+                })
+                  .then((res) => {
+                    message.success(
+                      "Đã tạo thêm nhóm nhà cung cấp " + json.provider_type
+                    );
+                    setTypeCreated(typeCreated + 1);
+                  })
+                  .catch((err) => {
+                    message.error("Tạo nhóm thất bại");
+                  });
+              }
+              let { provider_type, ...newObj } = json;
+              newObj = {
+                ...newObj,
+                provider_type: {
+                  content:
+                    json.provider_type === undefined
+                      ? ""
+                      : String(json.provider_type).trim(),
+                },
+              };
               await axios({
                 method: "post",
-                url: baseURL + "/provider-type/admin/create",
+                url: baseURL + "/provider/staff/create-one",
                 headers: {
                   Authorization: props.token,
                 },
-                data:{
-                  content:json.provider_type==="undefined" ? "":String(json.provider_type).trim()
-                },
+                data: newObj,
               })
                 .then((res) => {
-                  message.success("Đã tạo thêm nhóm nhà cung cấp "+json.provider_type)
-                  setTypeCreated(typeCreated+1);
+                  setSuccess(success + 1);
+                  message.success("Tạo thành công nhà cung cấp " + newObj.name);
                 })
                 .catch((err) => {
-                  message.error("Tạo nhóm thất bại");
+                  setFailed(failed + 1);
+                  message.error("Tạo thất bại nhà cung cấp " + newObj.name);
                 });
-            }
-            let { provider_type, ...newObj } = json;
-            newObj = {
-              ...newObj,
-              provider_type: {
-                content: json.provider_type===undefined ? "":String(json.provider_type).trim()
-              },
-            };
-            await axios(
-              {
-                  method:"post",
-                  url:baseURL+"/provider/staff/create-one",
-                  headers:{
-                      "Authorization":props.token
-                  },
-                  data:newObj
-              }
-          ).then(res=>{
-            setSuccess(success+1)
-            message.success("Tạo thành công nhà cung cấp "+newObj.name)
-          }).catch(err=>{
-            setFailed(failed+1)
-            message.error("Tạo thất bại nhà cung cấp "+newObj.name)
-          })
-            return newObj}
-            else message.error("Đối tượng "+json.name+" không hợp lệ")
+              return newObj;
+            } else message.error("Đối tượng " + json.name + " không hợp lệ");
           });
-          setCheckBox(true)
-        }catch (err) {
+          setCheckBox(true);
+        } catch (err) {
           message.error("File không hợp lệ");
         }
       };
@@ -273,24 +296,27 @@ function ProviderTable(props) {
     setSort(sorter.columnKey + "-" + sorter.order);
     console.log(sort);
   };
-  
+
   let items = [
     {
       label: (
         <Space direction="vertical">
           <label>Thời gian tạo</label>
-          <DatePicker onChange={onChange} placeholder="YYYY-MM-DD" style={{width:"15vw"}}/>
+          <DatePicker
+            onChange={onChange}
+            placeholder="YYYY-MM-DD"
+            style={{ width: "15vw" }}
+          />
         </Space>
       ),
       key: "1",
     },
     {
       label: (
-        <Space direction="vertical"
-        >
+        <Space direction="vertical">
           <label>Trạng thái</label>
           <Select
-            style={{width:"15vw" }}
+            style={{ width: "15vw" }}
             placeholder="Chọn trạng thái"
             allowClear
             onSelect={(e) => {
@@ -306,10 +332,10 @@ function ProviderTable(props) {
     },
     {
       label: (
-        <Space direction="vertical" >
+        <Space direction="vertical">
           <label>Nhóm nhà cung cấp</label>
           <Select
-            style={{ width:"15vw" }}
+            style={{ width: "15vw" }}
             placeholder="Chọn nhóm"
             allowClear
             onSelect={(e) => {
@@ -367,7 +393,7 @@ function ProviderTable(props) {
         title: "Tổng giao dịch",
         dataIndex: "total",
         key: "total",
-        sorter:true
+        sorter: true,
       },
       {
         title: "Trang thái",
@@ -450,24 +476,38 @@ function ProviderTable(props) {
           </div>
         />
       )}
-      {checkBox && 
-      <Modal
-      open={checkBox}
-      onCancel={e=>{setCheckBox(!checkBox)
-      setSuccess(0)
-      setTypeCreated(0)
-      setFailed(0)
-      setInputFile(false)}}
-      onOk={e=>{setCheckBox(!checkBox)
-        setSuccess(0)
-      setTypeCreated(0)
-      setFailed(0)
-      setInputFile(false)}}>
-        <p>Số nhà cung cấp đã thêm thành công:{success>0 ? success+1:success}</p>
-        <p>Số nhà cung cấp thêm không thành công:{failed>0 ? failed+1:failed}</p>
-        <p>Số nhóm nhà cung cấp đã bổ sung:{typeCreated>0 ? typeCreated+1:typeCreated}</p>
-
-      </Modal>}
+      {checkBox && (
+        <Modal
+          open={checkBox}
+          onCancel={(e) => {
+            setCheckBox(!checkBox);
+            setSuccess(0);
+            setTypeCreated(0);
+            setFailed(0);
+            setInputFile(false);
+          }}
+          onOk={(e) => {
+            setCheckBox(!checkBox);
+            setSuccess(0);
+            setTypeCreated(0);
+            setFailed(0);
+            setInputFile(false);
+          }}
+        >
+          <p>
+            Số nhà cung cấp đã thêm thành công:
+            {success > 0 ? success + 1 : success}
+          </p>
+          <p>
+            Số nhà cung cấp thêm không thành công:
+            {failed > 0 ? failed + 1 : failed}
+          </p>
+          <p>
+            Số nhóm nhà cung cấp đã bổ sung:
+            {typeCreated > 0 ? typeCreated + 1 : typeCreated}
+          </p>
+        </Modal>
+      )}
       {err ? (
         <ExceptionBox url="/main" msg=<h2>Có lỗi xảy ra</h2> />
       ) : (
@@ -476,7 +516,7 @@ function ProviderTable(props) {
             <Spin />
           ) : (
             <RowSelectionTable
-                            delete={handleButton}
+              delete={handleButton}
               quantity={selectedRowKeys.length}
               handlePrint={handlePrint}
               url="/create-provider"

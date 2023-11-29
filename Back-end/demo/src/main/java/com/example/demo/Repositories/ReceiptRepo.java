@@ -28,12 +28,15 @@ public interface ReceiptRepo extends JpaRepository<Receipt,Long> {
             "and" +
             "(:type is null or r.payment_type=:type)" +
             "and " +
-            "(:status is null or r.status=:status)")
+            "(:status is null or r.status=:status)" +
+            "and " +
+            "(:group is null or r.receiptGroup=:group)")
     List<Receipt> list(@Param("value") String value,
                        @Param("manager")String manager,
                        @Param("date") Date createdDate,
                        @Param("type") PaymentType paymentType,
                        @Param("status") String status,
+                       @Param("group") ReceiptGroup group,
                        Pageable pageable);
     @Query("select count(r) from Receipt r where " +
             "(:value is null or r.code like concat('%',:value,'%'))" +
@@ -44,12 +47,15 @@ public interface ReceiptRepo extends JpaRepository<Receipt,Long> {
             "and" +
             "(:type is null or r.payment_type=:type)" +
             "and " +
-            "(:status is null or r.status=:status)")
+            "(:status is null or r.status=:status) " +
+            "and " +
+            "(:group is null  or r.receiptGroup=:group)")
     Long countList(@Param("value") String value,
                    @Param("manager") String manager,
                    @Param("date") Date createdDate,
                    @Param("type") PaymentType paymentType,
-                   @Param("status") String status);
+                   @Param("status") String status,
+                   @Param("group") ReceiptGroup receiptGroup);
     Receipt findByCode(String code);
     @Modifying
     @Query("delete from Receipt r where r.code in :list")

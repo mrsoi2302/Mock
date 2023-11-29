@@ -26,15 +26,16 @@ export default function Main(props) {
   });
   const [err, setErr] = useState(false);
   document.title = "Trang chủ";
-  useEffect( () => {
-    props.setOpenKeys("")
-    props.setSelectedKeys("")
-    let x=0,y=0
+  useEffect(() => {
+    props.setOpenKeys("");
+    props.setSelectedKeys("");
+    let x = 0,
+      y = 0;
     axios({
       url: baseURL + "/receipt/count-trade",
       method: "get",
       headers: {
-        Authorization:"Bearer "+localStorage.getItem("jwt"),
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
     })
       .then((ress) => {
@@ -42,7 +43,7 @@ export default function Main(props) {
           url: baseURL + "/payment/count-trade",
           method: "get",
           headers: {
-            Authorization:"Bearer "+localStorage.getItem("jwt"),
+            Authorization: "Bearer " + localStorage.getItem("jwt"),
           },
         })
           .then((res) => {
@@ -50,9 +51,9 @@ export default function Main(props) {
               data: ress.data + res.data,
               loading: false,
             });
-            console.log(trading)
+            console.log(trading);
           })
-          
+
           .catch((err) => {
             setErr(true);
           });
@@ -64,7 +65,7 @@ export default function Main(props) {
       url: baseURL + "/receipt/count-list",
       method: "post",
       headers: {
-        Authorization:"Bearer "+localStorage.getItem("jwt"),
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
       data: {
         value: null,
@@ -78,7 +79,7 @@ export default function Main(props) {
           url: baseURL + "/payment/count-list",
           method: "post",
           headers: {
-            Authorization:"Bearer "+localStorage.getItem("jwt"),
+            Authorization: "Bearer " + localStorage.getItem("jwt"),
           },
           data: {
             value: null,
@@ -100,19 +101,18 @@ export default function Main(props) {
       .catch((err) => {
         setErr(true);
       });
-    
+
     axios({
       url: baseURL + "/provider/count-list",
       method: "post",
       headers: {
-        Authorization:"Bearer "+localStorage.getItem("jwt"),
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
       data: {
         value: null,
         t: {
           status: "non-active",
-          provider_type:{
-          }
+          provider_type: {},
         },
       },
     })
@@ -121,21 +121,21 @@ export default function Main(props) {
           url: baseURL + "/customer/count-list",
           method: "post",
           headers: {
-            Authorization:"Bearer "+localStorage.getItem("jwt"),
+            Authorization: "Bearer " + localStorage.getItem("jwt"),
           },
           data: {
             value: null,
             t: {
               status: "non-active",
-            }, 
+            },
           },
         })
           .then((ress) => {
             setUnactive({
-              data:ress.data+res.data,
-              loading:false
-            })
-            console.log(ress.data+res.data);
+              data: ress.data + res.data,
+              loading: false,
+            });
+            console.log(ress.data + res.data);
           })
           .catch((err) => {
             setErr(true);
@@ -146,7 +146,7 @@ export default function Main(props) {
       });
     var date = new Date(),
       month = "" + (date.getMonth() + 1),
-      day = "" + (date.getDate()),
+      day = "" + date.getDate(),
       year = date.getFullYear();
     if (month.length < 2) month = "0" + month;
     if (day.length < 2) day = "0" + day;
@@ -155,7 +155,7 @@ export default function Main(props) {
       url: baseURL + "/payment/count-list",
       method: "post",
       headers: {
-        Authorization:"Bearer "+localStorage.getItem("jwt"),
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
       data: {
         value: null,
@@ -169,7 +169,7 @@ export default function Main(props) {
           url: baseURL + "/receipt/count-list",
           method: "post",
           headers: {
-            Authorization:"Bearer "+localStorage.getItem("jwt"),
+            Authorization: "Bearer " + localStorage.getItem("jwt"),
           },
           data: {
             value: null,
@@ -180,7 +180,7 @@ export default function Main(props) {
         })
           .then((ress) => {
             setBillToday({
-              data:ress.data + res.data,
+              data: ress.data + res.data,
               loading: false,
             });
           })
@@ -193,24 +193,30 @@ export default function Main(props) {
       });
   }, []);
   return (
-    <div className="content" style={{minHeight:"90vh"}}>
+    <div className="content" style={{ minHeight: "90vh" }}>
       {err && <ExceptionBox url="/" msg="Phiên đăng nhập của bạn đã hết hạn" />}
       <div className="taskbar">
         <h2>Tổng quan</h2>
         <Account name={localStorage.getItem("name")} />
       </div>
-      <div className="inside"
-      style={{
-        display:"grid",
-        gridTemplateColumns:"repeat(4,25%)",
-        paddingTop:"5%",
-        paddingBottom:"5%"
-      }}>
+      <div
+        className="inside"
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(4,25%)",
+          paddingTop: "5%",
+          paddingBottom: "5%",
+        }}
+      >
         <div className="grid">
           <img src="https://i.pinimg.com/originals/af/87/58/af875899c939bc45c1e41827173a6444.png" />
           <div style={{ color: "rgba(255,184,228,255)" }}>
             <p>Tổng giao dịch</p>
-            {trading.loading ? <Spin /> : <h3>{trading.data===''? 0:trading.data}</h3>}
+            {trading.loading ? (
+              <Spin />
+            ) : (
+              <h3>{trading.data === "" ? 0 : trading.data}</h3>
+            )}
           </div>
         </div>
         <div className="grid">
@@ -235,19 +241,19 @@ export default function Main(props) {
           </div>
         </div>
         <div className="socialMedia">
-        <a href="https://www.facebook.com/mrsoi2302">
-          <img src="https://www.facebook.com/images/fb_icon_325x325.png" />
-        </a>
-        <a href="https://www.instagram.com/mrsoi2003/">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/1200px-Instagram_logo_2022.svg.png" />
-        </a>
-        <a href="https://discord.com/channels/695440979209093181/829724046320599180">
-          <img src="https://play-lh.googleusercontent.com/0oO5sAneb9lJP6l8c6DH4aj6f85qNpplQVHmPmbbBxAukDnlO7DarDW0b-kEIHa8SQ" />
-        </a>
-        <a href="https://github.com/mrsoi2302">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/GitHub_Invertocat_Logo.svg/1200px-GitHub_Invertocat_Logo.svg.png" />
-        </a>
-      </div>
+          <a href="https://www.facebook.com/mrsoi2302">
+            <img src="https://www.facebook.com/images/fb_icon_325x325.png" />
+          </a>
+          <a href="https://www.instagram.com/mrsoi2003/">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/1200px-Instagram_logo_2022.svg.png" />
+          </a>
+          <a href="https://discord.com/channels/695440979209093181/829724046320599180">
+            <img src="https://play-lh.googleusercontent.com/0oO5sAneb9lJP6l8c6DH4aj6f85qNpplQVHmPmbbBxAukDnlO7DarDW0b-kEIHa8SQ" />
+          </a>
+          <a href="https://github.com/mrsoi2302">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/GitHub_Invertocat_Logo.svg/1200px-GitHub_Invertocat_Logo.svg.png" />
+          </a>
+        </div>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ package com.example.demo.Service;
 
 import com.example.demo.Entities.Customer;
 import com.example.demo.Entities.Payment;
+import com.example.demo.Entities.PaymentGroup;
 import com.example.demo.Entities.PaymentType;
 import com.example.demo.Repositories.CustomerRepo;
 import com.example.demo.Repositories.PaymentRepo;
@@ -21,8 +22,8 @@ public class PaymentService {
     public List<Payment> findAll(String manager){
         return paymentRepo.findAllByMananger(manager);
     }
-    public List<Payment> list(String value, String manager, Date createdDate, PaymentType paymentType, String status, Pageable pageable) {
-        return paymentRepo.list(value,manager,createdDate,paymentType,status,pageable);
+    public List<Payment> list(String value, String manager, Date createdDate, PaymentType paymentType, String status, PaymentGroup paymentGroup, Pageable pageable) {
+        return paymentRepo.list(value,manager,createdDate,paymentType,status,paymentGroup,pageable);
     }
 
     public Payment findByCode(String code) {
@@ -55,8 +56,8 @@ public class PaymentService {
         return paymentRepo.countDate(date);
     }
 
-    public Long countList(String value, String manager, Date createdDate, PaymentType paymentType, String status) {
-        return paymentRepo.countList(value,manager,createdDate,paymentType,status);
+    public Long countList(String value, String manager, Date createdDate, PaymentType paymentType, String status,PaymentGroup paymentGroup) {
+        return paymentRepo.countList(value,manager,createdDate,paymentType,status,paymentGroup);
     }
 
     public Payment findByCodeAndManager(String code, String manager) {
