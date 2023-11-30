@@ -55,7 +55,7 @@ function PaymentTable(props) {
   const [openModal, setOpenModal] = useState(false);
   const [createType, setCreateType] = useState("");
   const [openBillModal, setOpenBillModal] = useState(false);
-  const [groups,setGroups]=useState([])
+  const [groups, setGroups] = useState([]);
   let columns = [
     {
       title: "Mã phiếu chi",
@@ -172,9 +172,11 @@ function PaymentTable(props) {
       headers: {
         Authorization: props.token,
       },
-    }).then((res) => {
-      setEmployeeList(res.data);
-    }).catch(err=>{});
+    })
+      .then((res) => {
+        setEmployeeList(res.data);
+      })
+      .catch((err) => {});
   }, [value, limit, page, inputFile, index, sort]);
   const handleButton = () => {
     axios({
@@ -333,25 +335,21 @@ function PaymentTable(props) {
             onClear={(e) => {
               setDataRequest({
                 ...dataRequest,
-                paymentGroup:null
+                paymentGroup: null,
               });
             }}
             onSelect={(e) => {
               let arr = e.split("-");
               setDataRequest({
                 ...dataRequest,
-                paymentGroup:{
-                  id:arr[0]
-                }
+                paymentGroup: {
+                  id: arr[0],
+                },
               });
             }}
           >
             {groups.map((i) => {
-              return (
-                <Option value={i.id + "-" + i.name}>
-                  {i.name}
-                </Option>
-              );
+              return <Option value={i.id + "-" + i.name}>{i.name}</Option>;
             })}
           </Select>
         </Space>
@@ -362,7 +360,6 @@ function PaymentTable(props) {
       label: <Button onClick={handleSubmit}>Lọc</Button>,
       key: "5",
     },
-    
   ];
   if (data.data.length > 0) {
     columns = [
@@ -386,7 +383,7 @@ function PaymentTable(props) {
         render: (_, record) => (
           <Space size="middle">
             {record.customer === null ? (
-              <p>Không xác định</p>
+              <p>{record.customer_name}</p>
             ) : (
               <a
                 onClick={(e) =>
@@ -499,7 +496,6 @@ function PaymentTable(props) {
                 setOpenBillModal={setOpenBillModal}
                 code="PMG"
                 groups={groups}
-
               />
               <RowSelectionTableForBill
                 groups={groups}

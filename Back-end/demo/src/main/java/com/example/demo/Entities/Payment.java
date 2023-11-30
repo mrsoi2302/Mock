@@ -22,6 +22,7 @@ public class Payment {
     private String manager;
     private String manager_code;
     private String status;
+    private String customer_name;
     @Column(nullable = false,unique = true)
     private String code;
     @NotNull

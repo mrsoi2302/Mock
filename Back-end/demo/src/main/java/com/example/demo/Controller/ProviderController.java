@@ -118,7 +118,19 @@ public class ProviderController {
         if(providerService.findByCodeAndManager(code,manager)==null) throw new CustomException("Không tồn tại",HttpStatus.NOT_FOUND);
         return providerService.findByCodeAndManager(code,manager);
     }
-    @PutMapping ("/admin")
+    @PostMapping("/information")
+    public Value<Provider> information2(@RequestParam String code,HttpServletRequest request){
+        String manager=null;
+        String token = request.getHeader("Authorization").substring(7);
+        String username=tokenProvider.extractUsername(token);
+        Employee t=employeeService.findByUsername(username);
+        if(t.getRole().equals("STAFF")){
+            manager=t.getUsername();
+        }
+        if(providerService.findByCodeAndManager(code,manager)==null) throw new CustomException("Không tồn tại",HttpStatus.NOT_FOUND);
+        return new Value<>(providerService.findByCodeAndManager(code,manager),t.getRole());
+    }
+    @PutMapping ("/staff")
     void update(@RequestBody Provider provider,HttpServletRequest request){
         if(!provider.getContact().matches("^\\d+$")) throw new CustomException("SĐT không hợp lệ",HttpStatus.BAD_REQUEST);
         if(!provider.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) throw new CustomException("Email không hợp lệ", HttpStatus.BAD_REQUEST);

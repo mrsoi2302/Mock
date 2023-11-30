@@ -93,6 +93,19 @@ public class CustomerController {
             if(customerService.findByCode(code)==null) throw new CustomException("Không tồn tại", HttpStatus.NOT_FOUND);
         return customerService.findByCode(code);
     }
+    @PostMapping("/information")
+    public Value<Customer> information2(@RequestParam String code,HttpServletRequest request){
+        String manager=null;
+        String token = request.getHeader("Authorization").substring(7);
+        String username=tokenProvider.extractUsername(token);
+        Employee t=employeeService.findByUsername(username);
+        if(t.getRole().equals("STAFF")){
+            manager=t.getUsername();
+            if(customerService.findByCodeAndManager(code,manager)==null) throw new CustomException("Không tồn tại", HttpStatus.NOT_FOUND);
+        }
+        if(customerService.findByCode(code)==null) throw new CustomException("Không tồn tại", HttpStatus.NOT_FOUND);
+        return new Value<>(customerService.findByCode(code),t.getRole());
+    }
     @PostMapping("staff/create-one")
     public void create(@RequestBody Customer customer, HttpServletRequest request){
         if(!customer.getContact().matches("^\\d+$")) throw new CustomException("SĐT không hợp lệ",HttpStatus.BAD_REQUEST);
@@ -135,7 +148,7 @@ public class CustomerController {
             historyRepository.save(t.getCode(),t.getName(),"đã tạo ra khách hàng "+i.getCode());
         }
     }
-    @PutMapping("/admin")
+    @PutMapping("/staff")
     public void update(@RequestBody Customer customer,HttpServletRequest request){
         if(!customer.getContact().matches("^\\d+$")) throw new CustomException("SĐT không hợp lệ",HttpStatus.BAD_REQUEST);
         if(!customer.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) throw new CustomException("Email không hợp lệ", HttpStatus.BAD_REQUEST);

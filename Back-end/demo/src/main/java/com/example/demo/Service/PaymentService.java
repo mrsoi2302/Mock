@@ -33,6 +33,8 @@ public class PaymentService {
 
     public void update(Payment payment) {
         Payment p=findByCode(payment.getCode());
+        Customer customer=customerRepo.findByCode(payment.getCustomer().getCode());
+        p.setCustomer_name(customer.getName()+" "+customer.getCode());
         p.setPayment(payment);
         paymentRepo.save(p);
     }

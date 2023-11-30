@@ -433,7 +433,7 @@ function ProviderTable(props) {
         d.contact,
         d.email,
         d.total,
-        d.provider_type.content,
+        d.provider_type === null ? "Không xác định" : d.provider_type.content,
         d.manager,
         d.status,
       ]);

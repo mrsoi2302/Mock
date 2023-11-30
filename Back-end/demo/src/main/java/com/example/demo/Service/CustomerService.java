@@ -49,6 +49,7 @@ public class CustomerService {
 
     public void update(Customer customer) {
         Customer t=findByCode(customer.getCode());
+
         t.setCustomer(customer);
         customerRepo.save(t);
     }

@@ -81,6 +81,18 @@ public class ReceiptController {
         if(receiptService.findByCodeAndManager(code,manager)==null) throw new CustomException("Không tồn tại", HttpStatus.NOT_FOUND);
         return receiptService.findByCodeAndManager(code,manager);
     }
+    @PostMapping("information")
+    Value<Receipt> information2(@RequestParam String code,HttpServletRequest request){
+        String manager=null;
+        String token = request.getHeader("Authorization").substring(7);
+        String username=tokenProvider.extractUsername(token);
+        Employee t=employeeService.findByUsername(username);
+        if(t.getRole().equals("STAFF")){
+            manager=t.getUsername();
+        }
+        if(receiptService.findByCodeAndManager(code,manager)==null) throw new CustomException("Không tồn tại", HttpStatus.NOT_FOUND);
+        return new Value<>(receiptService.findByCodeAndManager(code,manager),t.getRole());
+    }
     @GetMapping("receipt-list")
     List<Receipt> receipts(String code){
         Provider p=providerService.findByCode(code);
@@ -104,6 +116,7 @@ public class ReceiptController {
         String username=tokenProvider.extractUsername(token);
         Employee t=employeeService.findByUsername(username);
         receipt.setPayment_type(paymentTypeService.findByName(receipt.getPayment_type().getName()));
+        receipt.setProvider_name(receipt.getProvider().getName()+"-"+receipt.getProvider().getCode());
         receipt.setCreated_date(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)));
         receipt.setCreated_date1(new Timestamp(System.currentTimeMillis()));
         receipt.setManager_code(t.getCode());
@@ -111,7 +124,7 @@ public class ReceiptController {
         receiptService.save(receipt);
         historyRepository.save(t.getCode(),t.getName(),"đã tạo ra phiếu chi "+receipt.getCode());
     }
-    @PutMapping ("/admin")
+    @PutMapping ("/staff")
     void update(@RequestBody Receipt receipt, HttpServletRequest request){
         receiptService.update(receipt);
         String token = request.getHeader("Authorization").substring(7);

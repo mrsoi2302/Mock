@@ -23,6 +23,7 @@ public class Receipt {
     private String manager_code;
     private Timestamp created_date;
     private String code;
+    private String provider_name;
     @Column(columnDefinition = "0")
     private long revenue;
     @ManyToOne

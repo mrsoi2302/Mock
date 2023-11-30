@@ -62,12 +62,10 @@ export default function ModifyPayment(props) {
       .then((res) => {
         setEmployee(res.data);
       })
-      .catch((err) => {
-        setError(true);
-      });
+      .catch((err) => {});
     axios({
       url: baseURL + "/payment/information?code=" + code,
-      method: "get",
+      method: "post",
       headers: {
         Authorization: props.token,
       },
@@ -169,265 +167,268 @@ export default function ModifyPayment(props) {
         </ConfigProvider>{" "}
         <Account name={localStorage.getItem("name")} />
       </div>
-      <div
-        className="inside"
-        style={{
-          backgroundColor: "white",
-          display: "block",
-          margin: "3% 5%",
-          textAlign: "left",
-          borderRadius: "10px",
-          padding: "1% 2% 5vh",
-        }}
-      >
-        <h2 style={{ paddingLeft: "10px" }}>Thông tin chung</h2>
-        <hr style={{ borderTop: "1px solid whitesmoke" }} />
+      {data.t !== null && (
+        <div
+          className="inside"
+          style={{
+            backgroundColor: "white",
+            display: "block",
+            margin: "3% 5%",
+            textAlign: "left",
+            borderRadius: "10px",
+            padding: "1% 2% 5vh",
+          }}
+        >
+          <h2 style={{ paddingLeft: "10px" }}>Thông tin chung</h2>
+          <hr style={{ borderTop: "1px solid whitesmoke" }} />
 
-        {data.code != null && (
-          <Form
-            onFinish={handleSubmit}
-            form={form}
-            layout="vertical"
-            style={{
-              maxWidth: "100%",
-              margin: "10px",
-            }}
-          >
-            <Form.Item
-              name="code"
-              initialValue={data.code}
-              label="Mã phiếu chi"
-              rules={[
-                {
-                  message: "Tiền tố PMT không hợp lệ",
-                },
-              ]}
+          {data.t.code != null && (
+            <Form
+              onFinish={handleSubmit}
+              form={form}
+              layout="vertical"
               style={{
-                width: "47%",
+                maxWidth: "100%",
+                margin: "10px",
               }}
             >
-              <Input
-                disabled
-                onChange={(e) => {
-                  setData({
-                    ...data,
-                    code: e.target.value,
-                  });
-                }}
-              />
-            </Form.Item>
-            <Form.Item
-              name="paymentGroup"
-              initialValue={
-                data.paymentGroup === null ? null : data.paymentGroup.name
-              }
-              label="Nhóm phiếu chi"
-              style={{ float: "left", width: "47%" }}
-            >
-              <Select
-                showSearch
-                allowClear
-                onClear={(e) => {
-                  setData({
-                    ...data,
-                    paymentGroup: null,
-                  });
-                }}
-                placeholder="Chọn loại phiếu thu"
-                onSelect={(e) => {
-                  const arr = e.split("-");
-                  setData({
-                    ...data,
-                    paymentGroup: {
-                      id: arr[0],
-                    },
-                  });
-                }}
+              <Form.Item
+                name="code"
+                initialValue={data.t.code}
+                label="Mã phiếu chi"
+                rules={[
+                  {
+                    message: "Tiền tố PMT không hợp lệ",
+                  },
+                ]}
                 style={{
-                  float: "left",
+                  width: "47%",
                 }}
               >
-                {paymentGroup.map((i) => {
-                  if (paymentGroup.length > 0)
-                    return (
-                      <Option value={i.id + "-" + i.code + "-" + i.name}>
-                        {i.name}
-                      </Option>
-                    );
-                })}
-              </Select>
-            </Form.Item>
-            <Form.Item
-              initialValue={
-                data.customer === null
-                  ? null
-                  : data.customer.name + "-" + data.customer.code
-              }
-              name="customer"
-              label="Khách hàng nhận"
-            >
-              <Select
-                showSearch
-                placeholder="Chọn khách hàng"
-                style={{ paddingLeft: "10px" }}
-                onSelect={(e) => {
-                  const arr = e.split("-");
-                  setData({
-                    ...data,
-                    customer: {
-                      id: arr[0],
-                      code: arr[2],
-                    },
-                  });
-                }}
-              >
-                {customer.map((i) => {
-                  if (customer_type.length > 0)
-                    return (
-                      <Option value={i.id + "-" + i.name + "-" + i.code}>
-                        {i.name + "-" + i.code}
-                      </Option>
-                    );
-                })}
-              </Select>
-            </Form.Item>
-            <Form.Item
-              initialValue={
-                data.paymentType === null ? null : data.paymentType.name
-              }
-              name="payment_type"
-              label="Hình thức thanh toán"
-              rules={[
-                {
-                  required: true,
-                  message: "Vùng này không được để trống",
-                },
-              ]}
-              style={{ width: "47%", float: "left" }}
-            >
-              <Select
-                showSearch
-                placeholder="Chọn hình thức thanh toán"
-                onSelect={(e) => {
-                  const arr = e.split("-");
-                  setData({
-                    ...data,
-                    paymentType: {
-                      id: arr[0],
-                      name: arr[1],
-                    },
-                  });
-                }}
-              >
-                {dataOfType.map((i) => {
-                  if (dataOfType.length > 0)
-                    return (
-                      <Option value={i.id + "-" + i.name}>{i.name}</Option>
-                    );
-                })}
-              </Select>
-            </Form.Item>
-
-            <Form.Item
-              name="paid"
-              label="Giá trị"
-              initialValue={data.paid}
-              rules={[
-                {
-                  required: true,
-                  message: "Vùng này không được để trống",
-                },
-              ]}
-            >
-              <InputNumber
-                min={0}
-                formatter={(value) =>
-                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                <Input
+                  disabled
+                  onChange={(e) => {
+                    setData({
+                      ...data,
+                      code: e.target.value,
+                    });
+                  }}
+                />
+              </Form.Item>
+              <Form.Item
+                name="paymentGroup"
+                initialValue={
+                  data.t.paymentGroup === null ? null : data.t.paymentGroup.name
                 }
-                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                style={{
-                  marginLeft: "10px",
-                  width: "98.5%",
-                }}
-                onChange={(e) => {
-                  setData({
-                    ...data,
-                    paid: e,
-                  });
-                }}
-              />
-            </Form.Item>
-            <Form.Item
-              name="status"
-              initialValue={
-                data.status === "paid" ? "Đã thanh toán" : "Chưa thanh toán"
-              }
-              label="Trạng thái"
-              rules={[
-                {
-                  required: true,
-                  message: "Vùng này không được để trống",
-                },
-              ]}
-              style={{ width: "47%", float: "left" }}
-            >
-              <Select
-                placeholder="Chọn trạng thái"
-                onSelect={(e) => {
-                  setData({
-                    ...data,
-                    status: e,
-                  });
-                }}
+                label="Nhóm phiếu chi"
+                style={{ float: "left", width: "47%" }}
               >
-                <Option value="paid">Đã thanh toán</Option>
-                <Option value="unpaid"> Chưa thanh toán</Option>
-              </Select>
-            </Form.Item>
-            <Form.Item
-              initialValue={data.manager_code + "-" + data.manager}
-              name="manager"
-              label="Người quản lý"
-              rules={[
-                {
-                  required: true,
-                  message: "Vùng này không được để trống",
-                },
-              ]}
-            >
-              <Select
-                style={{ paddingLeft: "10px" }}
-                onSelect={(e) => {
-                  const arr = e.split("-");
-                  setData({
-                    ...data,
-                    manager: arr[1],
-                    manager_code: arr[0],
-                  });
-                }}
+                <Select
+                  showSearch
+                  allowClear
+                  onClear={(e) => {
+                    setData({
+                      ...data,
+                      paymentGroup: null,
+                    });
+                  }}
+                  placeholder="Chọn loại phiếu thu"
+                  onSelect={(e) => {
+                    const arr = e.split("-");
+                    setData({
+                      ...data,
+                      paymentGroup: {
+                        id: arr[0],
+                      },
+                    });
+                  }}
+                  style={{
+                    float: "left",
+                  }}
+                >
+                  {paymentGroup.map((i) => {
+                    if (paymentGroup.length > 0)
+                      return (
+                        <Option value={i.id + "-" + i.code + "-" + i.name}>
+                          {i.name}
+                        </Option>
+                      );
+                  })}
+                </Select>
+              </Form.Item>
+              <Form.Item
+                initialValue={
+                  data.t.customer === null
+                    ? null
+                    : data.t.customer.name + "-" + data.t.customer.code
+                }
+                name="customer"
+                label="Khách hàng nhận"
               >
-                {employee.map((e) => {
-                  return (
-                    <Option value={e.code + "-" + e.name}>
-                      {e.code + "-" + e.name}
-                    </Option>
-                  );
-                })}
-              </Select>
-            </Form.Item>
-            <Form.Item>
-              <Button
-                size="large"
-                type="primary"
-                style={{ margin: "10px" }}
-                htmlType="submit"
+                <Select
+                  showSearch
+                  placeholder="Chọn khách hàng"
+                  style={{ paddingLeft: "10px" }}
+                  onSelect={(e) => {
+                    const arr = e.split("-");
+                    setData({
+                      ...data,
+                      customer: {
+                        id: arr[0],
+                        code: arr[2],
+                      },
+                    });
+                  }}
+                >
+                  {customer.map((i) => {
+                    if (customer_type.length > 0)
+                      return (
+                        <Option value={i.id + "-" + i.name + "-" + i.code}>
+                          {i.name + "-" + i.code}
+                        </Option>
+                      );
+                  })}
+                </Select>
+              </Form.Item>
+              <Form.Item
+                initialValue={
+                  data.t.paymentType === null ? null : data.t.paymentType.name
+                }
+                name="payment_type"
+                label="Hình thức thanh toán"
+                rules={[
+                  {
+                    required: true,
+                    message: "Vùng này không được để trống",
+                  },
+                ]}
+                style={{ width: "47%", float: "left" }}
               >
-                Cập nhật
-              </Button>
-            </Form.Item>
-          </Form>
-        )}
-      </div>
+                <Select
+                  showSearch
+                  placeholder="Chọn hình thức thanh toán"
+                  onSelect={(e) => {
+                    const arr = e.split("-");
+                    setData({
+                      ...data,
+                      paymentType: {
+                        id: arr[0],
+                        name: arr[1],
+                      },
+                    });
+                  }}
+                >
+                  {dataOfType.map((i) => {
+                    if (dataOfType.length > 0)
+                      return (
+                        <Option value={i.id + "-" + i.name}>{i.name}</Option>
+                      );
+                  })}
+                </Select>
+              </Form.Item>
+
+              <Form.Item
+                name="paid"
+                label="Giá trị"
+                initialValue={data.t.paid}
+                rules={[
+                  {
+                    required: true,
+                    message: "Vùng này không được để trống",
+                  },
+                ]}
+              >
+                <InputNumber
+                  min={0}
+                  formatter={(value) =>
+                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  }
+                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                  style={{
+                    marginLeft: "10px",
+                    width: "98.5%",
+                  }}
+                  onChange={(e) => {
+                    setData({
+                      ...data,
+                      paid: e,
+                    });
+                  }}
+                />
+              </Form.Item>
+              <Form.Item
+                name="status"
+                initialValue={
+                  data.t.status === "paid" ? "Đã thanh toán" : "Chưa thanh toán"
+                }
+                label="Trạng thái"
+                rules={[
+                  {
+                    required: true,
+                    message: "Vùng này không được để trống",
+                  },
+                ]}
+                style={{ width: "47%", float: "left" }}
+              >
+                <Select
+                  placeholder="Chọn trạng thái"
+                  onSelect={(e) => {
+                    setData({
+                      ...data,
+                      status: e,
+                    });
+                  }}
+                >
+                  <Option value="paid">Đã thanh toán</Option>
+                  <Option value="unpaid"> Chưa thanh toán</Option>
+                </Select>
+              </Form.Item>
+              <Form.Item
+                initialValue={data.t.manager_code + "-" + data.t.manager}
+                name="manager"
+                label="Người quản lý"
+                rules={[
+                  {
+                    required: true,
+                    message: "Vùng này không được để trống",
+                  },
+                ]}
+              >
+                <Select
+                  disabled={data.value !== "ADMIN"}
+                  style={{ paddingLeft: "10px" }}
+                  onSelect={(e) => {
+                    const arr = e.split("-");
+                    setData({
+                      ...data,
+                      manager: arr[1],
+                      manager_code: arr[0],
+                    });
+                  }}
+                >
+                  {employee.map((e) => {
+                    return (
+                      <Option value={e.code + "-" + e.name}>
+                        {e.code + "-" + e.name}
+                      </Option>
+                    );
+                  })}
+                </Select>
+              </Form.Item>
+              <Form.Item>
+                <Button
+                  size="large"
+                  type="primary"
+                  style={{ margin: "10px" }}
+                  htmlType="submit"
+                >
+                  Cập nhật
+                </Button>
+              </Form.Item>
+            </Form>
+          )}
+        </div>
+      )}
     </div>
   );
 }

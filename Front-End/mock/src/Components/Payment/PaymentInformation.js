@@ -166,7 +166,7 @@ export default function PaymentInformation(props) {
               <p>
                 :{" "}
                 {data.data.customer === null ? (
-                  "Không xác định"
+                  data.data.customer_name
                 ) : (
                   <Link to={"/customer/information/" + data.data.customer.code}>
                     {" "}
@@ -184,9 +184,11 @@ export default function PaymentInformation(props) {
               <p>Trạng thái</p>
               <p>
                 :{" "}
-                {data.data.status === "paid"
-                  ? "Đã thanh toán"
-                  : "Chưa thanh toán"}
+                <Tag color={data.data.status === "paid" ? "green" : "red"}>
+                  {data.data.status === "paid"
+                    ? "Đã thanh toán"
+                    : "Chưa thanh toán"}
+                </Tag>
               </p>
             </div>
             <div

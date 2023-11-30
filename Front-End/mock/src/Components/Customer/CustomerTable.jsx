@@ -101,8 +101,7 @@ function CustomerTable(props) {
       .then((res) => {
         setDataOfType(res.data);
       })
-      .catch((err) => {
-      });
+      .catch((err) => {});
     axios({
       url:
         baseURL +
@@ -497,7 +496,7 @@ function CustomerTable(props) {
         d.created_date,
         d.email,
         d.total,
-        d.customer_type.content,
+        d.customer_type === null ? "Không xác định" : d.customer_type.content,
         d.manager,
         d.status,
       ]);

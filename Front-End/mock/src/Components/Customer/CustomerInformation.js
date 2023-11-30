@@ -203,9 +203,11 @@ export default function CustomerInformation(props) {
               <p>Trạng thái</p>
               <p>
                 :{" "}
-                {data.data.status === "active"
-                  ? "Đã kích hoạt"
-                  : "Chưa kích hoạt"}
+                <Tag color={data.data.status === "active" ? "green" : "red"}>
+                  {data.data.status === "active"
+                    ? "Đã kích hoạt"
+                    : "Chưa kích hoạt"}
+                </Tag>
               </p>
               <p>Nhóm khách hàng</p>
               <p>

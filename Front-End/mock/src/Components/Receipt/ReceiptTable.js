@@ -147,9 +147,11 @@ function ReceiptTable(props) {
       headers: {
         Authorization: props.token,
       },
-    }).then((res) => {
-      setEmployeeList(res.data);
-    }).catch(err=>{});
+    })
+      .then((res) => {
+        setEmployeeList(res.data);
+      })
+      .catch((err) => {});
     axios({
       url: baseURL + "/receipt-group/list",
       method: "post",
@@ -378,7 +380,7 @@ function ReceiptTable(props) {
         render: (_, record) => (
           <Space size="middle">
             {record.provider === null ? (
-              <p>Không xác định</p>
+              <p>{record.provider_name}</p>
             ) : (
               <a
                 onClick={(e) =>

@@ -174,7 +174,7 @@ export default function ReceiptInformation(props) {
               <p>
                 :{" "}
                 {data.data.provider === null ? (
-                  "Không xác định"
+                  data.data.provider_name
                 ) : (
                   <Link to={"/provider/information/" + data.data.provider.code}>
                     {" "}
@@ -185,9 +185,11 @@ export default function ReceiptInformation(props) {
               <p>Trạng thái</p>
               <p>
                 :{" "}
-                {data.data.status === "paid"
-                  ? "Đã thanh toán"
-                  : "Chưa thanh toán"}
+                <Tag color={data.data.status === "paid" ? "green" : "red"}>
+                  {data.data.status === "paid"
+                    ? "Đã thanh toán"
+                    : "Chưa thanh toán"}
+                </Tag>
               </p>
             </div>
             <div

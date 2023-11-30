@@ -100,6 +100,18 @@ public class PaymentController {
         if(paymentService.findByCode(code)==null) throw new CustomException("Không tồn tại", HttpStatus.NOT_FOUND);
         return paymentService.findByCodeAndManager(code,manager);
     }
+    @PostMapping("information")
+    Value<Payment> information2(@RequestParam String code,HttpServletRequest request){
+        String manager=null;
+        String token = request.getHeader("Authorization").substring(7);
+        String username=tokenProvider.extractUsername(token);
+        Employee t=employeeService.findByUsername(username);
+        if(t.getRole().equals("STAFF")){
+            manager=t.getUsername();
+        }
+        if(paymentService.findByCode(code)==null) throw new CustomException("Không tồn tại", HttpStatus.NOT_FOUND);
+        return new Value<>(paymentService.findByCodeAndManager(code,manager),t.getRole());
+    }
     @GetMapping("today")
     Long countToday(){
         return paymentService.countToday(new Date(System.currentTimeMillis()));
@@ -116,8 +128,8 @@ public class PaymentController {
         Employee t=employeeService.findByUsername(username);
         String code=payment.getCustomer().getCode();
         Customer customer=customerService.findByCode(code);
-        System.out.println(payment.getPaymentType());
-                payment.setPaymentType(paymentTypeService.findByName(payment.getPaymentType().getName()));
+        payment.setCustomer_name(customer.getName()+"-"+customer.getCode());
+        payment.setPaymentType(paymentTypeService.findByName(payment.getPaymentType().getName()));
         payment.setCustomer(customerService.findByCode(payment.getCustomer().getCode()));
         payment.setCreated_date(new Timestamp(System.currentTimeMillis()+(1000*60*60*7)));
         payment.setCreated_date1(new Timestamp(System.currentTimeMillis()));
@@ -126,7 +138,7 @@ public class PaymentController {
         paymentService.save(payment);
         historyRepository.save(t.getCode(),t.getName(),"đã tạo ra phiếu chi "+payment.getCode());
     }
-    @PutMapping ("/admin")
+    @PutMapping ("/staff")
     void update(@RequestBody Payment payment, HttpServletRequest request){
         paymentService.update(payment);
         String token = request.getHeader("Authorization").substring(7);

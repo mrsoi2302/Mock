@@ -38,6 +38,7 @@ public class Provider {
     private String manager;
     private String manager_code;
     private String email;
+    private boolean state;
     @JsonIgnore
     @OneToMany(mappedBy = "provider",cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},fetch = FetchType.LAZY)
     private Set<Receipt> receipts;
@@ -53,6 +54,7 @@ public class Provider {
         this.status = provider.status;
         this.email=provider.email;
         this.manager=provider.manager;
-        this.manager_code=provider  .manager_code;
+        this.manager_code=provider.manager_code;
+        this.state=provider.isState();
     }
 }

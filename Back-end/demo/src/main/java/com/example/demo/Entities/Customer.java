@@ -46,6 +46,7 @@ public class Customer{
     private int birthday_year;
     private int birthday_month;
     private int birthday_day;
+    private boolean state;
     @Email
     private String email;
     @ManyToOne
@@ -66,6 +67,7 @@ public class Customer{
         this.manager=customer.manager;
         this.manager_code=customer.manager_code;
         this.status=customer.status;
+        this.state=customer.state;
     }
 
 }
