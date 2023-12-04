@@ -10,7 +10,6 @@ import { formatDates } from "./FormatDate";
 import QuantityChart from "./QuantityChart";
 
 export default function Main(props) {
-  console.log(formatDates);
   const [trading, setTrading] = useState({
     data: 0,
     loading: true,
@@ -65,7 +64,6 @@ export default function Main(props) {
               data: ress.data + res.data,
               loading: false,
             });
-            console.log(trading);
           })
 
           .catch((err) => {
@@ -247,8 +245,6 @@ export default function Main(props) {
             {billToday.loading ? <Spin /> : <h3>{billToday.data}</h3>}
           </div>
         </div>
-        <QuantityChart/>
-
         <div className="socialMedia">
           <a href="https://www.facebook.com/mrsoi2302">
             <img src="https://www.facebook.com/images/fb_icon_325x325.png" />
@@ -264,6 +260,8 @@ export default function Main(props) {
           </a>
         </div>
       </div>
+      <QuantityChart/>
+
     </div>
   );
 }

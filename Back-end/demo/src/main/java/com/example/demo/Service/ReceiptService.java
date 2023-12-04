@@ -47,8 +47,10 @@ public class ReceiptService {
 
     public void update(Receipt receipt) {
         Receipt p=findByCode(receipt.getCode());
-        Provider provider=providerRepo.findByCode(receipt.getProvider().getCode());
-        p.setProvider_name(provider.getName()+" "+provider.getCode());
+        if(receipt.getProvider()!=null){
+            Provider provider = providerRepo.findByCode(receipt.getProvider().getCode());
+            p.setProvider_name(provider.getName() + " " + provider.getCode());
+        }
         p.setReceipt(receipt);
         receiptRepo.save(p);
     }
