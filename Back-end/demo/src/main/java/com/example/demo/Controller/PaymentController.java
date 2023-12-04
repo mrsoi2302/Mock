@@ -84,9 +84,9 @@ public class PaymentController {
                 value.getT().getStatus(),
                 value.getT().getPaymentGroup());
     }
-    @GetMapping("/count-trade")
-    Long count(){
-        return paymentService.countAll();
+    @PostMapping("/count-trade")
+    Long count(@RequestBody Value<Date> value){
+        return paymentService.countAll(value.getT());
     }
     @GetMapping("information")
     Payment information(@RequestParam String code,HttpServletRequest request){
@@ -112,9 +112,9 @@ public class PaymentController {
         if(paymentService.findByCode(code)==null) throw new CustomException("Không tồn tại", HttpStatus.NOT_FOUND);
         return new Value<>(paymentService.findByCodeAndManager(code,manager),t.getRole());
     }
-    @GetMapping("today")
-    Long countToday(){
-        return paymentService.countToday(new Date(System.currentTimeMillis()));
+    @PostMapping("today")
+    Long countToday(@RequestBody Date date){
+        return paymentService.countToday(date);
     }
     @PostMapping("/staff/create-one")
     public void create(@RequestBody Payment payment, HttpServletRequest request){
@@ -139,12 +139,12 @@ public class PaymentController {
         historyRepository.save(t.getCode(),t.getName(),"đã tạo ra phiếu chi "+payment.getCode());
     }
     @PutMapping ("/staff")
-    void update(@RequestBody Payment payment, HttpServletRequest request){
-        paymentService.update(payment);
+    void update(@RequestBody Value<Payment> value, HttpServletRequest request){
+        paymentService.update(value.getT());
         String token = request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);
         Employee t=employeeService.findByUsername(username);
-        historyRepository.save(t.getCode(),t.getName(),"đã cập nhật phiếu chi "+payment.getCode());
+        historyRepository.save(t.getCode(),t.getName(),"đã cập nhật phiếu chi "+value.getT().getCode());
     }
     @DeleteMapping("/admin")
     @Transactional

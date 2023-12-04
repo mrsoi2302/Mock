@@ -65,8 +65,8 @@ public class ReceiptService {
         return receiptRepo.findByType(name);
     }
 
-    public Long countAll() {
-        return receiptRepo.countAll();
+    public Long countAll(Date date) {
+        return receiptRepo.countAll(date);
     }
 
     public Long countToday(Date date) {

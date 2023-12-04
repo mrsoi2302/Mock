@@ -64,8 +64,8 @@ public interface ReceiptRepo extends JpaRepository<Receipt,Long> {
     List<Receipt> findByType(String name);
     @Query("select sum(r.revenue) from Receipt r where r.provider=:provider")
     Long countBill(Provider provider);
-    @Query("select sum(r.revenue) from Receipt r")
-    Long countAll();
+    @Query("select sum(r.revenue) from Receipt r where :date is null or cast(r.created_date1 as date)=:date")
+    Long countAll(Date date);
     @Query("select sum(r.revenue) from Receipt r where cast(r.created_date1 as date)=:date")
     Long countDate(Date date);
     @Query("select r from Receipt r where :manager is null or r.manager=:manager")

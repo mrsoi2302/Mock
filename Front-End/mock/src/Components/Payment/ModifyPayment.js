@@ -30,6 +30,7 @@ export default function ModifyPayment(props) {
   const [dataOfType, setDataOfType] = useState([]);
   const [employee, setEmployee] = useState([]);
   const [customer_type, setCusTomer_type] = useState([]);
+  const [role,setRole]=useState("");
   const [customer, setCustomer] = useState([]);
   const [paymentGroup, setPaymentGroup] = useState([]);
   const [form] = Form.useForm();
@@ -71,7 +72,8 @@ export default function ModifyPayment(props) {
       },
     })
       .then((res) => {
-        setData(res.data);
+        setRole(res.data.value)
+        setData(res.data.t);
       })
       .catch((err) => {
         setError(true);
@@ -125,11 +127,13 @@ export default function ModifyPayment(props) {
   const handleSubmit = () => {
     axios({
       method: "put",
-      url: baseURL + "/payment/admin",
+      url: baseURL + "/payment/staff",
       headers: {
         Authorization: props.token,
       },
-      data: data,
+      data:{
+        t:data
+      }
     })
       .then((res) => {
         navigate("/payment-table");
@@ -167,7 +171,7 @@ export default function ModifyPayment(props) {
         </ConfigProvider>{" "}
         <Account name={localStorage.getItem("name")} />
       </div>
-      {data.t !== null && (
+      {data != null && (
         <div
           className="inside"
           style={{
@@ -182,7 +186,7 @@ export default function ModifyPayment(props) {
           <h2 style={{ paddingLeft: "10px" }}>Thông tin chung</h2>
           <hr style={{ borderTop: "1px solid whitesmoke" }} />
 
-          {data.t.code != null && (
+          {data.code != null && (
             <Form
               onFinish={handleSubmit}
               form={form}
@@ -194,7 +198,7 @@ export default function ModifyPayment(props) {
             >
               <Form.Item
                 name="code"
-                initialValue={data.t.code}
+                initialValue={data.code}
                 label="Mã phiếu chi"
                 rules={[
                   {
@@ -218,7 +222,7 @@ export default function ModifyPayment(props) {
               <Form.Item
                 name="paymentGroup"
                 initialValue={
-                  data.t.paymentGroup === null ? null : data.t.paymentGroup.name
+                  data.paymentGroup === null ? null : data.paymentGroup.name
                 }
                 label="Nhóm phiếu chi"
                 style={{ float: "left", width: "47%" }}
@@ -258,9 +262,9 @@ export default function ModifyPayment(props) {
               </Form.Item>
               <Form.Item
                 initialValue={
-                  data.t.customer === null
+                  data.customer === null
                     ? null
-                    : data.t.customer.name + "-" + data.t.customer.code
+                    : data.customer.name + "-" + data.customer.code
                 }
                 name="customer"
                 label="Khách hàng nhận"
@@ -292,7 +296,7 @@ export default function ModifyPayment(props) {
               </Form.Item>
               <Form.Item
                 initialValue={
-                  data.t.paymentType === null ? null : data.t.paymentType.name
+                  data.paymentType === null ? null : data.paymentType.name
                 }
                 name="payment_type"
                 label="Hình thức thanh toán"
@@ -330,7 +334,7 @@ export default function ModifyPayment(props) {
               <Form.Item
                 name="paid"
                 label="Giá trị"
-                initialValue={data.t.paid}
+                initialValue={data.paid}
                 rules={[
                   {
                     required: true,
@@ -359,7 +363,7 @@ export default function ModifyPayment(props) {
               <Form.Item
                 name="status"
                 initialValue={
-                  data.t.status === "paid" ? "Đã thanh toán" : "Chưa thanh toán"
+                  data.status === "paid" ? "Đã thanh toán" : "Chưa thanh toán"
                 }
                 label="Trạng thái"
                 rules={[
@@ -384,7 +388,7 @@ export default function ModifyPayment(props) {
                 </Select>
               </Form.Item>
               <Form.Item
-                initialValue={data.t.manager_code + "-" + data.t.manager}
+                initialValue={data.manager_code + "-" + data.manager}
                 name="manager"
                 label="Người quản lý"
                 rules={[
@@ -395,7 +399,7 @@ export default function ModifyPayment(props) {
                 ]}
               >
                 <Select
-                  disabled={data.value !== "ADMIN"}
+                  disabled={role != "ADMIN"}
                   style={{ paddingLeft: "10px" }}
                   onSelect={(e) => {
                     const arr = e.split("-");

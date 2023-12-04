@@ -98,13 +98,13 @@ public class ReceiptController {
         Provider p=providerService.findByCode(code);
         return receiptService.findByProvider(p);
     }
-    @GetMapping("count-trade")
-    Long count(){
-        return receiptService.countAll();
+    @PostMapping("count-trade")
+    Long count(@RequestBody Value<Date> value){
+        return receiptService.countAll(value.getT());
     }
     @GetMapping("today")
-    Long countToday(){
-        return receiptService.countToday(new Date(System.currentTimeMillis()));
+    Long countToday(@RequestBody Date date){
+        return receiptService.countToday(date);
     }
     @PostMapping("/staff/create-one")
     public void create(@RequestBody Receipt receipt, HttpServletRequest request){
@@ -125,12 +125,12 @@ public class ReceiptController {
         historyRepository.save(t.getCode(),t.getName(),"đã tạo ra phiếu chi "+receipt.getCode());
     }
     @PutMapping ("/staff")
-    void update(@RequestBody Receipt receipt, HttpServletRequest request){
-        receiptService.update(receipt);
+    void update(@RequestBody Value<Receipt> receipt, HttpServletRequest request){
+        receiptService.update(receipt.getT());
         String token = request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);
         Employee t=employeeService.findByUsername(username);
-        historyRepository.save(t.getCode(),t.getName(),"đã cập nhật phiếu chi "+receipt.getCode());
+        historyRepository.save(t.getCode(),t.getName(),"đã cập nhật phiếu chi "+receipt.getT().getCode());
     }
     @DeleteMapping("/admin")
     @Transactional

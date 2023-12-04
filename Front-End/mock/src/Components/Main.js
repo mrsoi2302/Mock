@@ -6,8 +6,11 @@ import { baseURL } from "../Config";
 import ExceptionBox from "./ExceptionBox";
 import { Spin } from "antd";
 import { Token } from "../Token";
+import { formatDates } from "./FormatDate";
+import QuantityChart from "./QuantityChart";
 
 export default function Main(props) {
+  console.log(formatDates);
   const [trading, setTrading] = useState({
     data: 0,
     loading: true,
@@ -29,22 +32,33 @@ export default function Main(props) {
   useEffect(() => {
     props.setOpenKeys("");
     props.setSelectedKeys("");
-    let x = 0,
-      y = 0;
+    var date = new Date(),
+      month = "" + (date.getMonth() + 1),
+      day = "" + date.getDate(),
+      year = date.getFullYear();
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+    var dateString = year + "-" + month + "-" + day;
     axios({
       url: baseURL + "/receipt/count-trade",
-      method: "get",
+      method: "post",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
+      data:{
+        t:dateString
+      }
     })
       .then((ress) => {
         axios({
           url: baseURL + "/payment/count-trade",
-          method: "get",
+          method: "post",
           headers: {
             Authorization: "Bearer " + localStorage.getItem("jwt"),
           },
+          data:{
+            t:dateString
+          }
         })
           .then((res) => {
             setTrading({
@@ -144,13 +158,6 @@ export default function Main(props) {
       .catch((err) => {
         setErr(true);
       });
-    var date = new Date(),
-      month = "" + (date.getMonth() + 1),
-      day = "" + date.getDate(),
-      year = date.getFullYear();
-    if (month.length < 2) month = "0" + month;
-    if (day.length < 2) day = "0" + day;
-    var dateString = year + "-" + month + "-" + day;
     axios({
       url: baseURL + "/payment/count-list",
       method: "post",
@@ -240,6 +247,8 @@ export default function Main(props) {
             {billToday.loading ? <Spin /> : <h3>{billToday.data}</h3>}
           </div>
         </div>
+        <QuantityChart/>
+
         <div className="socialMedia">
           <a href="https://www.facebook.com/mrsoi2302">
             <img src="https://www.facebook.com/images/fb_icon_325x325.png" />

@@ -32,9 +32,11 @@ public class PaymentService {
     }
 
     public void update(Payment payment) {
-        Payment p=findByCode(payment.getCode());
-        Customer customer=customerRepo.findByCode(payment.getCustomer().getCode());
-        p.setCustomer_name(customer.getName()+" "+customer.getCode());
+            Payment p=paymentRepo.findByCode(payment.getCode());
+        if(payment.getCustomer()!=null) {
+            Customer customer = customerRepo.findByCode(payment.getCustomer().getCode());
+            p.setCustomer_name(customer.getName() + " " + customer.getCode());
+        }
         p.setPayment(payment);
         paymentRepo.save(p);
     }
@@ -50,8 +52,8 @@ public class PaymentService {
         return paymentRepo.findByType(name);
     }
 
-    public Long countAll() {
-        return paymentRepo.countAll();
+    public Long countAll(Date date) {
+        return paymentRepo.countAll(date);
     }
 
     public Long countToday(Date date) {

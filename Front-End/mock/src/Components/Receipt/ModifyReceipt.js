@@ -25,6 +25,7 @@ export default function ModifyReceipt(props) {
   const { code } = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState({});
+  const [role,setRole] =useState("");
   const [value, setValue] = useState();
   const [error, setError] = useState(false);
   const [dataOfType, setDataOfType] = useState([]);
@@ -70,7 +71,8 @@ export default function ModifyReceipt(props) {
         Authorization: props.token,
       },
     }).then((res) => {
-      setData(res.data);
+      setData(res.data.t);
+      setRole(res.data.value)
       axios({
         url: baseURL + "/provider/create-receipt",
         method: "post",
@@ -106,11 +108,13 @@ export default function ModifyReceipt(props) {
   const handleSubmit = () => {
     axios({
       method: "put",
-      url: baseURL + "/receipt/admin",
+      url: baseURL + "/receipt/staff",
       headers: {
         Authorization: props.token,
       },
-      data: data,
+      data:{
+        t:data
+      }
     })
       .then((res) => {
         navigate("/receipt-table");
@@ -167,7 +171,7 @@ export default function ModifyReceipt(props) {
         </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
       </div>
-      {data.t != null && (
+      {data != null && (
         <div
           className="inside"
           style={{
@@ -182,7 +186,7 @@ export default function ModifyReceipt(props) {
           <h2 style={{ paddingLeft: "10px" }}>Thông tin chung</h2>
           <hr style={{ borderTop: "1px solid whitesmoke" }} />
 
-          {data.t.code != null && (
+          {data.code != null && (
             <Form
               onFinish={handleSubmit}
               form={form}
@@ -194,7 +198,7 @@ export default function ModifyReceipt(props) {
             >
               <Form.Item
                 name="code"
-                initialValue={data.t.code}
+                initialValue={data.code}
                 label="Mã phiếu thu"
                 rules={[
                   {
@@ -218,7 +222,7 @@ export default function ModifyReceipt(props) {
               <Form.Item
                 name="receiptGroup"
                 initialValue={
-                  data.t.receiptGroup === null ? null : data.t.receiptGroup.name
+                  data.receiptGroup === null ? null : data.receiptGroup.name
                 }
                 label="Loại phiếu chi"
                 style={{ float: "left", width: "47%" }}
@@ -258,9 +262,9 @@ export default function ModifyReceipt(props) {
               </Form.Item>
               <Form.Item
                 initialValue={
-                  data.t.provider === null
+                  data.provider === null
                     ? null
-                    : data.t.provider.name + "-" + data.t.provider.code
+                    : data.provider.name + "-" + data.provider.code
                 }
                 name="provider"
                 label="Nhà cung cập thanh toán"
@@ -290,7 +294,7 @@ export default function ModifyReceipt(props) {
                 </Select>
               </Form.Item>
               <Form.Item
-                initialValue={data.t.payment_type.name}
+                initialValue={data.payment_type.name}
                 name="payment_type"
                 label="Hình thức thanh toán"
                 rules={[
@@ -327,7 +331,7 @@ export default function ModifyReceipt(props) {
               <Form.Item
                 name="revenue"
                 label="Giá trị"
-                initialValue={data.t.revenue}
+                initialValue={data.revenue}
                 rules={[
                   {
                     required: true,
@@ -356,7 +360,7 @@ export default function ModifyReceipt(props) {
               <Form.Item
                 name="status"
                 initialValue={
-                  data.t.status === "paid" ? "Đã thanh toán" : "Chưa thanh toán"
+                  data.status === "paid" ? "Đã thanh toán" : "Chưa thanh toán"
                 }
                 label="Trạng thái"
                 rules={[
@@ -381,7 +385,7 @@ export default function ModifyReceipt(props) {
                 </Select>
               </Form.Item>
               <Form.Item
-                initialValue={data.t.manager_code + "-" + data.t.manager}
+                initialValue={data.manager_code + "-" + data.manager}
                 name="manager"
                 label="Người quản lý"
                 rules={[
@@ -392,7 +396,7 @@ export default function ModifyReceipt(props) {
                 ]}
               >
                 <Select
-                  disabled={data.value !== "ADMIN"}
+                  disabled={role != "ADMIN"}
                   style={{
                     marginLeft: "10px",
                     width: "98.5%",

@@ -47,8 +47,8 @@ public interface PaymentRepo extends JpaRepository<Payment,Long> {
     List<Payment> findByType(String name);
     @Query("select sum(p.paid) from Payment p where p.customer=:customer")
     Long countBill(Customer customer);
-    @Query("select sum(p.paid) from Payment p")
-    Long countAll();
+    @Query("select sum(p.paid) from Payment p where :date is null or cast(p.created_date1 as date)=:date ")
+    Long countAll(Date date);
     @Query("select sum(p.paid) from Payment p where cast(p.created_date1 as date)=:date")
     Long countDate(Date date);
     @Query("select count(p) from Payment p where " +
@@ -83,4 +83,5 @@ public interface PaymentRepo extends JpaRepository<Payment,Long> {
     void deleteByPaymentGroup(PaymentGroup p);
 
     List<Payment> findByPaymentGroup(PaymentGroup p);
+
 }
