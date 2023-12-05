@@ -109,13 +109,13 @@ body{
     grid-template-columns: 50% 50%;
 }
 .socialMedia{
-    position: fixed;
+    position: absolute;
     display: grid;
     grid-template-columns: 25% 25% 25% 25%;
     width: 30vw;
     height: fit-content;
-    margin-top:70vh;
-    left:41vw;
+    margin-top:75vh;
+    margin-left:25vw;
     align-items: center;
 }
 .socialMedia img{

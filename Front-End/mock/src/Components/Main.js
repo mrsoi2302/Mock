@@ -8,6 +8,9 @@ import { Spin } from "antd";
 import { Token } from "../Token";
 import { formatDates } from "./FormatDate";
 import QuantityChart from "./QuantityChart";
+import RevenueChart from "./RevenueChart";
+// import QuantityChart from "./QuantityChart";
+// import RevenueChart from "./RevenueChart";
 
 export default function Main(props) {
   const [trading, setTrading] = useState({
@@ -45,7 +48,7 @@ export default function Main(props) {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
       data:{
-        t:dateString
+        t:null
       }
     })
       .then((ress) => {
@@ -56,7 +59,7 @@ export default function Main(props) {
             Authorization: "Bearer " + localStorage.getItem("jwt"),
           },
           data:{
-            t:dateString
+            t:null
           }
         })
           .then((res) => {
@@ -260,7 +263,14 @@ export default function Main(props) {
           </a>
         </div>
       </div>
-      <QuantityChart/>
+      <div style={{
+        display:"grid",
+        gridTemplateColumns:"repeat(2,50%)"
+      }}>
+        <QuantityChart/>
+        <RevenueChart/>
+      </div>
+      
 
     </div>
   );
