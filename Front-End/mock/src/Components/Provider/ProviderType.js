@@ -62,49 +62,66 @@ export default function ProviderType(props) {
     },
   ];
   useEffect(() => {
-    props.setOpenKeys("provider");
-    props.setSelectedKeys("provider-type");
-    setData({
-      data: [],
-      loading: true,
-    });
-    let temp = [];
-    axios({
-      method: "post",
-      url: baseURL + "/provider-type/list",
-      headers: {
-        Authorization: props.token,
-      },
-      data: {
-        value: value,
-      },
-    }).then((res) => {
-      res.data.map((i) => {
-        axios({
-          url: baseURL + "/provider/count-list",
+    const fetchData = async () => {
+      try {
+        props.setOpenKeys("provider");
+        props.setSelectedKeys("provider-type");
+        setData({
+          data: [],
+          loading: true,
+        });
+
+        const providerTypeList = await axios({
           method: "post",
-          data: {
-            t: {
-              provider_type: i,
-            },
-          },
+          url: baseURL + "/provider-type/list",
           headers: {
             Authorization: props.token,
           },
-        }).then((ress) => {
-          temp.push({
-            code: i.code,
-            content: i.content,
-            quantity: ress.data,
-          });
-          setData({
-            data: temp,
-            loading: false,
-          });
+          data: {
+            value: value,
+          },
         });
-      });
-    });
+
+        const temp = await Promise.all(
+          providerTypeList.data.map(async (i) => {
+            const ress = await axios({
+              url: baseURL + "/provider/count-list",
+              method: "post",
+              data: {
+                t: {
+                  provider_type: i,
+                },
+              },
+              headers: {
+                Authorization: props.token,
+              },
+            });
+
+            return {
+              code: i.code,
+              content: i.content,
+              quantity: ress.data,
+            };
+          })
+        );
+
+        setData({
+          data: temp,
+          loading: false,
+        });
+      } catch (error) {
+        // Handle errors here
+        console.error("Error fetching data:", error);
+        setData({
+          data: [],
+          loading: false,
+        });
+      }
+    };
+
+    fetchData();
   }, [value, loading, index]);
+
   const handleDelete = (e) => {
     axios({
       method: "delete",
@@ -135,6 +152,7 @@ export default function ProviderType(props) {
       .catch((err) => {
         message.error("Tạo thất bại");
       });
+    form.resetFields();
     setOpenModal(!openModal);
   };
   if (data.data.length > 0) {
@@ -197,10 +215,13 @@ export default function ProviderType(props) {
         open={openModal}
         onCancel={(e) => {
           setOpenModal(false);
+          form.resetFields();
         }}
         onOk={createType}
         okButtonProps={{ disabled: create.content.trim().length === 0 }}
         title="Tạo nhóm nhà cung cấp mới"
+        okText="Tạo"
+        cancelText="Quay lại"
       >
         <Form
           onFinish={createType}
@@ -234,6 +255,7 @@ export default function ProviderType(props) {
           </Form.Item>
           <Form.Item
             name="content"
+            initialValue={""}
             label="Tên nhóm"
             rules={[
               {
@@ -280,7 +302,7 @@ export default function ProviderType(props) {
                   type="primary"
                   style={{
                     marginLeft: "10px",
-                    zIndex: 1000,
+                    zIndex: 100,
                   }}
                   onClick={(e) => {
                     setOpenModal(true);
@@ -290,6 +312,18 @@ export default function ProviderType(props) {
                 </Button>
               </div>
               <Table
+                showSorterTooltip={false}
+                locale={{
+                  emptyText: (
+                    <div>
+                      <img
+                        src="https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png?f=webp"
+                        width="10%"
+                      />
+                      <h3>Không có dữ liệu</h3>
+                    </div>
+                  ),
+                }}
                 pagination={true}
                 columns={columns}
                 dataSource={data.data}

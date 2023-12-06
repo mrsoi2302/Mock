@@ -195,7 +195,7 @@ export default function ReceiptInformation(props) {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "20% 20% 20%",
+                gridTemplateColumns: "15% 15% 15%",
               }}
             >
               <Button
@@ -204,7 +204,7 @@ export default function ReceiptInformation(props) {
                 onClick={(e) => {
                   navigate(url);
                 }}
-                style={{ width: "90%", marginLeft: "10%" }}
+                style={{ width: "95%" }}
               >
                 Chỉnh sửa
               </Button>
@@ -213,9 +213,9 @@ export default function ReceiptInformation(props) {
                 fileName="receipt"
               >
                 <Button
-                  type="primary"
+                  type="text"
                   size="large"
-                  style={{ width: "90%", marginLeft: "10%" }}
+                  style={{ border:"1px #1677ff solid",width: "95%", color:"#1677ff"}}
                 >
                   In phiếu thu
                 </Button>
@@ -223,7 +223,7 @@ export default function ReceiptInformation(props) {
               <Button
                 type="link"
                 size="large"
-                style={{ color: "red", width: "90%", marginLeft: "10%" }}
+                style={{ border:"1px red solid", color: "red", width: "95%", }}
                 onClick={(e) => {
                   Modal.confirm({
                     content: "Bạn muốn xóa phiếu thu " + code + " ?",

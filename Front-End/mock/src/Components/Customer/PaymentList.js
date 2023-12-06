@@ -6,7 +6,7 @@ export default function PaymentList(props) {
   const navigate = useNavigate();
   const columns = [
     {
-      title: "Mã phiếu chi",
+      title: "Mã phiếu thu",
       dataIndex: "code",
       key: "code",
       render: (_, record) => (

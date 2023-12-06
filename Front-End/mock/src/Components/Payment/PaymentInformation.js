@@ -199,35 +199,35 @@ export default function PaymentInformation(props) {
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "20% 20% 20%",
+                  gridTemplateColumns: "15% 15% 15%",
                 }}
               >
-                <PDFDownloadLink
-                  document={<PDF data={data.data} />}
-                  fileName="receipt"
-                >
-                  <Button
-                    type="primary"
-                    size="large"
-                    style={{ width: "90%", marginLeft: "10%" }}
-                  >
-                    In
-                  </Button>
-                </PDFDownloadLink>
                 <Button
                   type="primary"
                   size="large"
                   onClick={(e) => {
                     navigate(url);
                   }}
-                  style={{ width: "90%", marginLeft: "10%" }}
+                  style={{ width: "95%", }}
                 >
                   Chỉnh sửa
                 </Button>
+                <PDFDownloadLink
+                  document={<PDF data={data.data} />}
+                  fileName="receipt"
+                >
+                  <Button
+                    type="text"
+                    size="large"
+                    style={{ border:"1px #1677ff solid",width: "95%", color:"#1677ff"}}
+                  >
+                    In
+                  </Button>
+                </PDFDownloadLink>
                 <Button
                   type="link"
                   size="large"
-                  style={{ color: "red", width: "90%", marginLeft: "10%" }}
+                  style={{ border:"1px red solid",color: "red", width: "95%", }}
                   onClick={(e) => {
                     Modal.confirm({
                       content: "Bạn muốn xóa phiếu chi " + code + " ?",

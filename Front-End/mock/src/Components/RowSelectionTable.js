@@ -16,7 +16,7 @@ export default function RowSelectionTable(props) {
       >
         {props.selectedRowKeys.length > 0 ? (
           <Button
-            type="primary"
+            type="text"
             onClick={
               (e) => {
                 Modal.confirm({
@@ -37,7 +37,8 @@ export default function RowSelectionTable(props) {
               //props.delete
             }
             style={{
-              backgroundColor: "red",
+              border:"1px red solid",
+              color:"red"
             }}
           >
             Xóa
@@ -48,7 +49,10 @@ export default function RowSelectionTable(props) {
             onClick={(e) => {
               props.setInputFile(true);
             }}
-            style={{}}
+            style={{
+              border:"1px #1677ff solid",
+
+            }}
           >
             Nhập danh sách
           </Button>
@@ -61,10 +65,11 @@ export default function RowSelectionTable(props) {
               type="link"
               onClick={props.handlePrint}
               style={{
+                border:"1px #1677ff solid",
                 marginLeft: "5px",
               }}
             >
-              In danh sách
+              Xuất file Excel
             </Button>
           ) : (
             <div></div>
@@ -91,6 +96,15 @@ export default function RowSelectionTable(props) {
         </Button>
       </div>
       <Table
+        showSorterTooltip={false}
+        locale={
+          {
+            emptyText:<div>
+              <img src="https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png?f=webp" width="10%"/>
+              <h3>Không có dữ liệu</h3>
+            </div>
+          }
+        }
         rowSelection={props.handleSelection}
         pagination={false}
         columns={props.columns}

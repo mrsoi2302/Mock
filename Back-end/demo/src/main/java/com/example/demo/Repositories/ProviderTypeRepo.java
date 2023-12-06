@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface ProviderTypeRepo extends JpaRepository<ProviderType,Long> {
-    @Query("SELECT p from ProviderType p where :value is null or p.content like concat('%',:value,'%')")
+    @Query("SELECT p from ProviderType p where :value is null or p.content like concat('%',:value,'%') order by p.id desc ")
     List<ProviderType> list(String value);
 
     ProviderType findByContentOrCode(String content, String code);

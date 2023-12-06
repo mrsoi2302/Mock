@@ -112,9 +112,9 @@ export default function CustomerInformation(props) {
             size="large"
             style={{ height: "fit-content" }}
           >
-            <h2>
+            <h3>
               <CaretLeftOutlined /> Danh sách khách hàng
-            </h2>
+            </h3>
           </Button>
         </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
@@ -231,10 +231,13 @@ export default function CustomerInformation(props) {
                 Chỉnh sửa
               </Button>
               <Button
-                type="link"
+                type="text"
                 size="large"
                 onClick={handleDelete}
-                style={{ color: "red" }}
+                style={{
+                  marginLeft:"10px",
+                  border:"1px red solid",
+                  color: "red" }}
               >
                 Xóa
               </Button>

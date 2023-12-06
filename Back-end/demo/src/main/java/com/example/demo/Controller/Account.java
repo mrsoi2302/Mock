@@ -21,9 +21,9 @@ public class Account {
     private final EmployeeService employeeService;
     private final TokenProvider tokenProvider;
     @PostMapping("login")
-    public String login(@RequestBody Employee employee){
+    public Value<String> login(@RequestBody Employee employee){
         if(employeeService.login(employee.getUsername(), String.valueOf(employee.getPassword().hashCode()))==null) throw new CustomException("Sai thông tin", HttpStatus.NOT_FOUND);
-        return tokenProvider.tokenGenerator(employee.getUsername());
+        return new Value<>(tokenProvider.tokenGenerator(employee.getUsername()),employeeService.findByUsername(employee.getUsername()).getRole());
     }
     @PostMapping("/change-password")
     public void changePassword(@RequestBody Value<String> value, HttpServletRequest request){

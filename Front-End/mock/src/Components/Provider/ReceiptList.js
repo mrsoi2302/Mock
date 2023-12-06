@@ -6,7 +6,7 @@ export default function ReceiptList(props) {
   const navigate = useNavigate();
   const columns = [
     {
-      title: "Mã thu phiếu",
+      title: "Mã phiếu chi",
       dataIndex: "code",
       key: "code",
       render: (_, record) => (

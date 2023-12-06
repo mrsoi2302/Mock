@@ -15,6 +15,7 @@ export default function ModifyProvider(props) {
   const [data, setData] = useState({});
   const navigate = useNavigate();
   const [error, setError] = useState(false);
+  const [role,setRole]=useState("")
   const [form] = Form.useForm();
   const [dataOfType, setDataOfType] = useState([]);
   const [dataOfEmployee, setDataOfEmployee] = useState([]);
@@ -30,7 +31,7 @@ export default function ModifyProvider(props) {
       },
     })
       .then((res) => {
-        setData(res.data);
+        setData(res.data.t);
       })
       .catch((err) => {
         setError(true);
@@ -65,7 +66,7 @@ export default function ModifyProvider(props) {
   }, [value]);
   const handleSubmit = () => {
     axios({
-      url: baseURL + "/provider/admin",
+      url: baseURL + "/provider/staff",
       method: "put",
       headers: {
         Authorization: props.token,
@@ -120,7 +121,7 @@ export default function ModifyProvider(props) {
         </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
       </div>
-      {data.t != null && (
+      {data != null && (
         <div
           className="inside"
           style={{
@@ -135,7 +136,7 @@ export default function ModifyProvider(props) {
           <h2 style={{ paddingLeft: "10px" }}>Thông tin chung</h2>
           <hr style={{ borderTop: "1px solid whitesmoke" }} />
 
-          {data.t.code != null && (
+          {data.code != null && (
             <Form
               onFinish={handleSubmit}
               form={form}
@@ -147,7 +148,7 @@ export default function ModifyProvider(props) {
             >
               <Form.Item
                 name="name"
-                initialValue={data.t.name}
+                initialValue={data.name}
                 label="Tên nhà cung cấp"
                 rules={[
                   {
@@ -167,7 +168,7 @@ export default function ModifyProvider(props) {
               <Form.Item
                 name="code"
                 label="Mã nhà cung cấp"
-                initialValue={data.t.code}
+                initialValue={data.code}
                 rules={[
                   {
                     message: "Tiền tố PRV không hợp lệ",
@@ -190,9 +191,9 @@ export default function ModifyProvider(props) {
               </Form.Item>
               <Form.Item
                 initialValue={
-                  data.t.provider_type === null
+                  data.provider_type === null
                     ? null
-                    : data.t.provider_type.content
+                    : data.provider_type.content
                 }
                 name="provider_type"
                 label="Nhóm khách hàng"
@@ -222,7 +223,7 @@ export default function ModifyProvider(props) {
                 </Select>
               </Form.Item>
               <Form.Item
-                initialValue={data.t.email}
+                initialValue={data.email}
                 name="email"
                 label="Email"
                 rules={[
@@ -243,7 +244,7 @@ export default function ModifyProvider(props) {
                 />
               </Form.Item>
               <Form.Item
-                initialValue={data.t.contact}
+                initialValue={data.contact}
                 name="contact"
                 label="Số điện thoại"
                 rules={[
@@ -268,7 +269,7 @@ export default function ModifyProvider(props) {
                 />
               </Form.Item>
               <Form.Item
-                initialValue={data.t.status}
+                initialValue={data.status}
                 name="status"
                 label="Trạng thái"
                 rules={[
@@ -298,7 +299,7 @@ export default function ModifyProvider(props) {
               <Form.Item
                 name="manager"
                 label="Người quản lý"
-                initialValue={data.t.manager}
+                initialValue={data.manager}
                 rules={[
                   {
                     required: true,
@@ -308,7 +309,7 @@ export default function ModifyProvider(props) {
               >
                 <Select
                   showSearch
-                  disabled={data.value !== "ADMIN"}
+                  disabled={!document.cookie.includes("ADMIN")}
                   onSelect={(e) => {
                     const arr = e.split("-");
                     setData({

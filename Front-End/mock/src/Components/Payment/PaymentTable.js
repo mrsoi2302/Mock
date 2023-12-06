@@ -29,6 +29,7 @@ import { isDisabled } from "@testing-library/user-event/dist/utils";
 import RowSelectionTableForBill from "../RowSelectionTableForBill";
 import BillTypeModal from "../BillTypeModal";
 import { Token } from "../../Token";
+import ChangeStatus from "../ChangeStatus";
 function PaymentTable(props) {
   document.title = "Danh sách phiếu chi";
   localStorage.setItem("open", "cash");
@@ -420,10 +421,30 @@ function PaymentTable(props) {
         title: "Trạng thái",
         dataIndex: "status",
         key: "status",
+        width:"15vw",
         render: (_, record) => (
-          <Tag color={record.status === "paid" ? "green" : "red"}>
-            {record.status === "paid" ? "Đã thanh toán" : "Chưa thanh toán"}
-          </Tag>
+          <div>
+            {record.status === "paid" ? 
+            <Tag style={{marginLeft:"15px"}} color="green" key={record}>
+                  Đã thanh toán
+                </Tag>
+             : 
+            <ChangeStatus
+                name=<Tag color="red" key={record}>
+                  Chưa thanh toán
+                </Tag>
+                data={{t:
+                  {
+                    ...record,
+                  status:"paid"
+                  }
+                }}
+                index={index}
+                setIndex={setIndex}
+                url={"payment/staff"}
+                state="paid"
+              />}
+          </div>
         ),
       },
     ];
@@ -474,6 +495,8 @@ function PaymentTable(props) {
                   setOpenModal(false);
                 }}
                 onOk={CreatePaymentType}
+                okText="Tạo"
+                cancelText="Quay lại"
                 okButtonProps={{
                   disabled: createType.length === 0,
                 }}

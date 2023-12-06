@@ -59,53 +59,66 @@ export default function CustomerType(props) {
     },
   ];
   useEffect(() => {
-    props.setOpenKeys("customer")
-    props.setSelectedKeys("customer-type")
-    let temp = [];
-    axios({
-      method: "post",
-      url: baseURL + "/customer-type/list",
-      headers: {
-        Authorization: props.token,
-      },
-      data: {
-        value: value,
-      },
-    })
-      .then((res) => {
-        res.data.map((i) => {
-          axios({
-            url: baseURL + "/customer/count-list",
-            method: "post",
-            data: {
-              t: {
-                customer_type: i,
+    const fetchData = async () => {
+      try {
+        props.setOpenKeys("customer");
+        props.setSelectedKeys("customer-type");
+        setData({
+          data: [],
+          loading: true,
+        });
+  
+        const customerTypeList = await axios({
+          method: "post",
+          url: baseURL + "/customer-type/list",
+          headers: {
+            Authorization: props.token,
+          },
+          data: {
+            value: value,
+          },
+        });
+  
+        const temp = await Promise.all(
+          customerTypeList.data.map(async (i) => {
+            const ress = await axios({
+              url: baseURL + "/customer/count-list",
+              method: "post",
+              data: {
+                t: {
+                  customer_type: i,
+                },
               },
-            },
-            headers: {
-              Authorization: props.token,
-            },
-          }).then((ress) => {
-            temp.push({
+              headers: {
+                Authorization: props.token,
+              },
+            });
+  
+            return {
               code: i.code,
               content: i.content,
               quantity: ress.data,
-            },)
-            setData({
-              data:temp,
-              loading:"false"
-            })
-          });
-        });
+            };
+          })
+        );
+  
         setData({
           data: temp,
           loading: false,
         });
-      })
-      .catch((err) => {
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setData({
+          data: [],
+          loading: false,
+        });
         setErr(true);
-      });
+      }
+    };
+  
+    fetchData();
   }, [value, loading, index]);
+  
   const handleDelete = (e) => {
     axios({
       method: "delete",
@@ -137,6 +150,7 @@ export default function CustomerType(props) {
         message.error("Tạo thất bại");
       });
     setOpenModal(!openModal);
+    form.resetFields();
   };
   if (data.data.length > 0) {
     columns = [
@@ -190,15 +204,18 @@ export default function CustomerType(props) {
   return (
     <div className="content">
       <div className="taskbar">
-        <h2>Danh sách nhân viên</h2>
+        <h3>Danh sách nhóm khách hàng</h3>
         <Account name={localStorage.getItem("name")} />
       </div>
       <Modal
         open={openModal}
         onCancel={(e) => {
           setOpenModal(false);
+          form.resetFields();
         }}
         onOk={createType}
+        okText="Tạo"
+        cancelText="Quay lại"
         okButtonProps={{ disabled:create.content.trim().length===0}}
         title="Tạo nhóm khách hàng mới"
       >
@@ -279,7 +296,7 @@ export default function CustomerType(props) {
                   type="primary"
                   style={{
                     marginLeft:"10px",
-                    zIndex: 1000,
+                    zIndex: 100,
                   }}
                   onClick={(e) => {
                     setOpenModal(true);

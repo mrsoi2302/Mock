@@ -17,25 +17,26 @@ export default function Login(props) {
       navigate("/main");
     }
   });
-  const handleSubmit = () => {
-    axios({
-      method: "post",
-      url: baseURL + "/login",
-      data: {
-        username: username,
-        password: password,
-      },
-    })
-      .then((res) => {
-        props.setToken("Bearer " + res.data);
-        localStorage.setItem("jwt", res.data);
-        localStorage.setItem("username", username);
-        navigate("/main");
-      })
-      .catch((err) => {
-        console.log(err);
-        setFailed(true);
+  const handleSubmit = async () => {
+    try {
+      const res = await axios({
+        method: "post",
+        url: baseURL + "/login",
+        data: {
+          username: username,
+          password: password,
+        },
       });
+  
+      document.cookie = 'role=' + res.data.value;
+      props.setToken("Bearer " + res.data.t);
+      localStorage.setItem("jwt", res.data.t);
+      localStorage.setItem("username", username);
+      navigate("/main");
+    } catch (error) {
+      console.error("Error during login:", error);
+      setFailed(true);
+    }
   };
   const keyDown = (e) => {
     if (e.key === "Enter") handleSubmit();

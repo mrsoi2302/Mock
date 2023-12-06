@@ -205,10 +205,13 @@ export default function ProviderInformation(props) {
                 Chỉnh sửa
               </Button>
               <Button
+                type="text"
                 size="large"
-                type="link"
                 onClick={handleDelete}
-                style={{ color: "red" }}
+                style={{
+                  marginLeft:"10px",
+                  border:"1px red solid",
+                  color: "red" }}
               >
                 Xóa
               </Button>

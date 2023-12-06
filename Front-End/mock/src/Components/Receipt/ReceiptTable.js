@@ -24,6 +24,7 @@ import { Token } from "../../Token";
 import { Option } from "antd/es/mentions";
 import RowSelectionTableForBill from "../RowSelectionTableForBill";
 import BillTypeModal from "../BillTypeModal";
+import ChangeStatus from "../ChangeStatus";
 function ReceiptTable(props) {
   document.title = "Danh sách phiếu thu";
   localStorage.setItem("open", "cash");
@@ -417,10 +418,30 @@ function ReceiptTable(props) {
         title: "Trạng thái",
         dataIndex: "status",
         key: "status",
+        width:"15vw",
         render: (_, record) => (
-          <Tag color={record.status === "paid" ? "green" : "red"}>
-            {record.status === "paid" ? "Đã thanh toán" : "Chưa thanh toán"}
-          </Tag>
+          <div>
+            {record.status === "paid" ? 
+            <Tag style={{marginLeft:"15px"}} color="green" key={record}>
+                  Đã thanh toán
+                </Tag>
+             : 
+            <ChangeStatus
+                name=<Tag color="red" key={record}>
+                  Chưa thanh toán
+                </Tag>
+                data={{t:
+                  {
+                    ...record,
+                  status:"paid"
+                  }
+                }}
+                index={index}
+                setIndex={setIndex}
+                url={"receipt/staff"}
+                state="paid"
+              />}
+          </div>
         ),
       },
     ];
@@ -470,6 +491,8 @@ function ReceiptTable(props) {
                   setOpenModal(false);
                 }}
                 onOk={CreatePaymentType}
+                okText="Tạo"
+                cancelText="Quay lại"
                 okButtonProps={{
                   disabled: createType.length === 0,
                 }}

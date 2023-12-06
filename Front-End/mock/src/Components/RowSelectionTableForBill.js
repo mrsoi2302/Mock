@@ -75,6 +75,15 @@ export default function RowSelectionTableForBill(props) {
         </Button>
       </div>
       <Table
+        showSorterTooltip={false}
+        locale={
+          {
+            emptyText:<div>
+              <img src="https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png?f=webp" width="10%"/>
+              <h3>Không có dữ liệu</h3>
+            </div>
+          }
+        }
         rowSelection={props.handleSelection}
         pagination={false}
         columns={props.columns}

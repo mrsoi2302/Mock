@@ -26,6 +26,7 @@ import SearchInput from "../SearchInput";
 import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import { Option } from "antd/es/mentions";
+import ChangeStatus from "../ChangeStatus";
 function ProviderTable(props) {
   document.title = "Danh sách nhà cung cấp";
   localStorage.setItem("open", "provider");
@@ -394,16 +395,24 @@ function ProviderTable(props) {
         title: "Trang thái",
         dataIndex: "status",
         key: "status",
+        width:"15vw",
         render: (_, tag) => (
           <>
             {tag.status === "active" ? (
-              <Tag color="green" key={tag}>
+              <Tag style={{marginLeft:"15px"}} color="green" key={tag}>
                 Đã kích hoạt
               </Tag>
             ) : (
-              <Tag color="red" key={tag}>
-                Chưa kích hoạt
-              </Tag>
+              <ChangeStatus
+                name=<Tag color="red" key={tag}>
+                  Chưa kích hoạt
+                </Tag>
+                data={tag}
+                index={index}
+                setIndex={setIndex}
+                url={"provider/staff"}
+                state="active"
+              />
             )}
           </>
         ),
@@ -488,6 +497,7 @@ function ProviderTable(props) {
             setFailed(0);
             setInputFile(false);
           }}
+          cancelText="Quay lại"
         >
           <p>
             Số nhà cung cấp đã thêm thành công:

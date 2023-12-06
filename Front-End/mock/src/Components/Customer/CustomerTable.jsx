@@ -9,6 +9,7 @@ import {
   Space,
   Spin,
   Tag,
+  Tooltip,
   message,
 } from "antd";
 import * as XLSX from "xlsx";
@@ -23,6 +24,7 @@ import ImportFile from "../ImportFile";
 import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import { Option } from "antd/es/mentions";
+import ChangeStatus from "../ChangeStatus";
 function CustomerTable(props) {
   document.title = "Danh sách khách hàng";
   const [file, setFile] = useState();
@@ -451,16 +453,24 @@ function CustomerTable(props) {
         title: "Trang thái",
         dataIndex: "status",
         key: "status",
+        width:"15vw",
         render: (_, tag) => (
           <>
             {tag.status === "active" ? (
-              <Tag color="green" key={tag}>
+              <Tag style={{marginLeft:"15px"}} color="green" key={tag}>
                 Đã kích hoạt
               </Tag>
             ) : (
-              <Tag color="red" key={tag}>
-                Chưa kích hoạt
-              </Tag>
+              <ChangeStatus
+                name=<Tag color="red" key={tag}>
+                  Chưa kích hoạt
+                </Tag>
+                data={tag}
+                index={index}
+                setIndex={setIndex}
+                url={"provider/staff"}
+                state="active"
+              />
             )}
           </>
         ),
@@ -513,7 +523,7 @@ function CustomerTable(props) {
   return (
     <div className="content">
       <div className="taskbar">
-        <h2>Danh sách khách hàng</h2>
+        <h3>Danh sách khách hàng</h3>
         <Account name={localStorage.getItem("name")} />
       </div>
       {/* <SearchInput
@@ -539,6 +549,7 @@ function CustomerTable(props) {
             setTypeCreated(0);
             setFailed(0);
           }}
+        cancelText="Quay lại"
         >
           <p>
             Số khách hàng đã thêm thành công:{" "}

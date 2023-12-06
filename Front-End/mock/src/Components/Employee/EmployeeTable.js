@@ -1,4 +1,4 @@
-import { Button, Form, Select, Space, Spin, Tag } from "antd";
+import { Button, Form, Modal, Select, Space, Spin, Tag } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -92,7 +92,6 @@ export default function EmployeeTable(props) {
         });
       })
       .catch((err) => {
-        setErr(true);
       });
     axios({
       method: "post",
@@ -111,8 +110,25 @@ export default function EmployeeTable(props) {
         setCount(res.data);
       })
       .catch((err) => {
-        setErr(true);
       });
+      if(!document.cookie.includes("ADMIN")){
+        Modal.warning(
+          {
+            title:"Có vẻ bạn không đủ thẩm quyền để truy cập trang này",
+            onOk:(e=>{
+              navigate("/main")
+              Modal.destroyAll()}),
+            onCancel:(e=>{
+              navigate("/main")
+              Modal.destroyAll()
+            }),
+            
+          }
+        )
+      }
+      return (()=>{
+        Modal.destroyAll()
+      })
   }, [role, value, page, limit, loading, inputFile, index]);
   const handleButton = (e) => {
     setLoading(true);

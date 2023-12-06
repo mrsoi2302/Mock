@@ -21,7 +21,9 @@ import { useNavigate } from "react-router-dom";
 export default function CreateCustomer(props) {
   document.title = "Tạo khách hàng mới";
   const navigate = useNavigate();
-  const [data, setData] = useState({});
+  const [data, setData] = useState({
+    status:"active"
+  });
   const [value, setValue] = useState();
   const [error, setError] = useState(false);
   const [dataOfType, setDataOfType] = useState([]);
@@ -96,9 +98,9 @@ export default function CreateCustomer(props) {
             size="large"
             style={{ height: "fit-content" }}
           >
-            <h2>
+            <h3>
               <CaretLeftOutlined /> Danh sách khách hàng
-            </h2>
+            </h3>
           </Button>
         </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
@@ -241,8 +243,15 @@ export default function CreateCustomer(props) {
                 });
               }}
               style={{ paddingLeft: "10px" }}
+              
             >
-              {dataOfType.map((i) => {
+              {dataOfType.length===0 ? 
+              <div style={{textAlign:"center"}}>
+              <img src="https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png?f=webp" width="10%"/>
+              <p>Không có dữ liệu</p>
+            </div>
+              :
+              dataOfType.map((i) => {
                 if (dataOfType.length > 0)
                   return <Option value={i.id}>{i.content}</Option>;
               })}
@@ -295,6 +304,7 @@ export default function CreateCustomer(props) {
           <Form.Item
             name="status"
             label="Trạng thái"
+            initialValue={"Đã kích hoạt"}
             rules={[
               {
                 required: true,
@@ -303,7 +313,6 @@ export default function CreateCustomer(props) {
             ]}
           >
             <Select
-              placeholder="Chọn trạng thái"
               onSearch={(e) => {
                 setValue(e);
               }}

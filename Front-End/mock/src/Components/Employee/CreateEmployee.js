@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../style.css";
 import Account from "../Account";
 import { useNavigate } from "react-router-dom";
-import { Alert, Button, ConfigProvider, Form, Input, Select } from "antd";
+import { Alert, Button, ConfigProvider, Form, Input, Modal, Select } from "antd";
 import { Option } from "antd/es/mentions";
 import axios from "axios";
 import { baseURL } from "../../Config";
@@ -19,9 +19,28 @@ export default function CreateEmployee(props) {
   const navigate = useNavigate();
   const [error, setError] = useState(false);
   const [form] = Form.useForm();
+  
   useEffect(() => {
     props.setOpenKeys("employee");
     props.setSelectedKeys("create-employee");
+    if(!document.cookie.includes("ADMIN")){
+      Modal.warning(
+        {
+          title:"Có vẻ bạn không đủ thẩm quyền để truy cập trang này",
+          onOk:(e=>{
+            navigate("/main")
+            Modal.destroyAll()}),
+          onCancel:(e=>{
+            navigate("/main")
+            Modal.destroyAll()
+          }),
+          
+        }
+      )
+    }
+    return (()=>{
+      Modal.destroyAll()
+    })
   }, []);
   const handleSubmit = (e) => {
     form.validateFields();

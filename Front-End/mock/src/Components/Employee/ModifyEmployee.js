@@ -5,6 +5,7 @@ import {
   ConfigProvider,
   Form,
   Input,
+  Modal,
   Select,
   Space,
   Spin,
@@ -49,8 +50,25 @@ export default function ModifyEmployee(props) {
         });
       })
       .catch((err) => {
-        setErr(true);
       });
+      if(!document.cookie.includes("ADMIN")){
+        Modal.warning(
+          {
+            title:"Có vẻ bạn không đủ thẩm quyền để truy cập trang này",
+            onOk:(e=>{
+              navigate("/main")
+              Modal.destroyAll()}),
+            onCancel:(e=>{
+              navigate("/main")
+              Modal.destroyAll()
+            }),
+            
+          }
+        )
+      }
+      return (()=>{
+        Modal.destroyAll()
+      })
   }, []);
 
   const handleSubmit = (e) => {
