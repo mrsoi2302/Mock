@@ -5,6 +5,7 @@ import { Button, Input } from "antd";
 import { useNavigate } from "react-router-dom";
 import { baseURL } from "../Config";
 export default function Login(props) {
+  document.title="Đăng nhập";
   const navigate = useNavigate();
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
