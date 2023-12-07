@@ -19,13 +19,13 @@ const QuantityChart = () => {
                 for (const date of t) {
                     const paymentResponse = await axios.post(
                         baseURL + "/payment/count-list",
-                        { value: null, t: { created_date: date } },
+                        { value: null, t: { created_date: date,status:"dung" } },
                         { headers: { Authorization: "Bearer " + localStorage.getItem("jwt") } }
                     );
 
                     const receiptResponse = await axios.post(
                         baseURL + "/receipt/count-list",
-                        { value: null, t: { created_date: date } },
+                        { value: null, t: { created_date: date,status:"dung"  } },
                         { headers: { Authorization: "Bearer " + localStorage.getItem("jwt") } }
                     );
 
@@ -64,7 +64,7 @@ const QuantityChart = () => {
     const options = {
         scales: {
             y: {
-                beginAtZero: false,
+                beginAtZero: true,
                 ticks: {
                     stepSize: 1, // Độ chia nhỏ nhất
                 },

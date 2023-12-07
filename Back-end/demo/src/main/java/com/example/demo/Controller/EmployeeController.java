@@ -41,6 +41,7 @@ public class EmployeeController {
     @PostMapping("/admin/create-one")
     public void create(@RequestBody Employee employee, HttpServletRequest request){
         if(employee.getCode().matches("^EPL.*")) throw new CustomException("Tiền tố EPL không hợp lệ", HttpStatus.BAD_REQUEST);
+        if (employeeService.findByUsername(employee.getUsername())!=null) throw new CustomException("NV đã tồn tại",HttpStatus.BAD_REQUEST);
         if(employeeService.findByCode(employee.getCode())!=null&&employeeService.findByUsername(employee.getUsername())!=null) throw new CustomException("NV đã tồn tại",HttpStatus.BAD_REQUEST);
         else if (employee.getCode().trim().isEmpty()||employee.getCode()==null){
             employee.setCode("EPL"+sequenceRepository.generate());
@@ -84,6 +85,7 @@ public class EmployeeController {
     @PutMapping("/admin")
     @Transactional
     public void update(@RequestBody Employee employee,HttpServletRequest request){
+        if (!employeeService.findByUsername(employee.getUsername()).equals(employeeService.findByCodes(employee.getCode()))) if (employeeService.findByUsername(employee.getUsername())!=null) throw new CustomException("NV đã tồn tại",HttpStatus.BAD_REQUEST);
         employeeService.update(employee);
         String token = request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);

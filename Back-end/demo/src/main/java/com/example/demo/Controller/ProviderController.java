@@ -108,6 +108,7 @@ public class ProviderController {
     }
     @GetMapping("/information")
     public Provider information(@RequestParam String code,HttpServletRequest request){
+        if(providerService.findByCode(code)==null) throw new CustomException("Không tồn tại",HttpStatus.NOT_FOUND);
         String manager=null;
         String token = request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);

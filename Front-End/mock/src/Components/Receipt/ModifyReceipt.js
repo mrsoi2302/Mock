@@ -6,6 +6,7 @@ import {
   Form,
   Input,
   InputNumber,
+  Modal,
   Select,
   message,
 } from "antd";
@@ -21,11 +22,11 @@ import ExceptionBox from "../ExceptionBox";
 import { CaretLeftOutlined } from "@ant-design/icons";
 
 export default function ModifyReceipt(props) {
-  document.title = "Chỉnh sửa phiếu thu";
+  document.title = "Chỉnh sửa phiếu chi";
   const { code } = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState({});
-  const [role,setRole] =useState("");
+  const [role, setRole] = useState("");
   const [value, setValue] = useState();
   const [error, setError] = useState(false);
   const [dataOfType, setDataOfType] = useState([]);
@@ -51,7 +52,7 @@ export default function ModifyReceipt(props) {
         setReceiptGroup(res.data);
       })
       .catch((err) => {
-        message.error("Có lỗi khi lấy dữ liệu nhóm phiếu thu");
+        message.error("Có lỗi khi lấy dữ liệu nhóm phiếu chi");
       });
     axios({
       url: baseURL + "/employee/admin/list",
@@ -72,7 +73,7 @@ export default function ModifyReceipt(props) {
       },
     }).then((res) => {
       setData(res.data.t);
-      setRole(res.data.value)
+      setRole(res.data.value);
       axios({
         url: baseURL + "/provider/create-receipt",
         method: "post",
@@ -87,6 +88,24 @@ export default function ModifyReceipt(props) {
         .catch((err) => {
           message.error("Có lỗi khi lấy dữ liệu từ khách hàng");
         });
+    }).catch(err=>{
+      if(err.response.status===406)
+          Modal.error({
+            title:"Phiên đăng nhập hết hạn",
+            onOk:()=>{
+              localStorage.clear()
+              document.cookie=""
+              navigate("")
+              Modal.destroyAll()
+            },
+            onCancel:()=>{
+              localStorage.clear()
+              document.cookie=""
+              navigate("")
+              Modal.destroyAll()
+            },
+            cancelText:"Quay lại"
+          })
     });
     axios({
       url: baseURL + "/payment-type/list",
@@ -112,12 +131,12 @@ export default function ModifyReceipt(props) {
       headers: {
         Authorization: props.token,
       },
-      data:{
-        t:data
-      }
+      data: {
+        t: data,
+      },
     })
       .then((res) => {
-        navigate("/receipt-table");
+        navigate("/receipt/information/"+code);
       })
       .catch((err) => {
         message.error("Cập nhật thất bại");
@@ -164,9 +183,9 @@ export default function ModifyReceipt(props) {
             size="large"
             style={{ height: "fit-content" }}
           >
-            <h2>
-              <CaretLeftOutlined /> Thông tin phiếu thu
-            </h2>
+            <h3>
+              <CaretLeftOutlined /> Thông tin phiếu chi
+            </h3>
           </Button>
         </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
@@ -199,7 +218,7 @@ export default function ModifyReceipt(props) {
               <Form.Item
                 name="code"
                 initialValue={data.code}
-                label="Mã phiếu thu"
+                label="Mã phiếu chi"
                 rules={[
                   {
                     message: "Tiền tố RCV không hợp lệ",
@@ -228,6 +247,15 @@ export default function ModifyReceipt(props) {
                 style={{ float: "left", width: "47%" }}
               >
                 <Select
+                  notFoundContent={
+                    <div style={{ textAlign: "center" }}>
+                      <img
+                        src="https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png?f=webp"
+                        width="10%"
+                      />
+                      <p>Không có dữ liệu</p>
+                    </div>
+                  }
                   showSearch
                   allowClear
                   onClear={(e) => {
@@ -267,11 +295,16 @@ export default function ModifyReceipt(props) {
                     : data.provider.name + "-" + data.provider.code
                 }
                 name="provider"
-                label="Nhà cung cập thanh toán"
+                label="Nhà cung cấp giao dịch"
               >
                 <Select
                   showSearch
-                  placeholder="Chọn nhà cung cấp"
+                  notFoundContent={
+              <div style={{textAlign:"center"}}>
+                <img src="https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png?f=webp" width="10%"/>
+                <p>Không có dữ liệu</p>
+              </div>}
+                  placeholder="Chọn khách hàng"
                   style={{ paddingLeft: "10px" }}
                   onSelect={(e) => {
                     const arr = e.split("-");
@@ -307,6 +340,11 @@ export default function ModifyReceipt(props) {
               >
                 <Select
                   showSearch
+                  notFoundContent={
+              <div style={{textAlign:"center"}}>
+                <img src="https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png?f=webp" width="10%"/>
+                <p>Không có dữ liệu</p>
+              </div>}
                   placeholder="Chọn hình thức thanh toán"
                   onSelect={(e) => {
                     const arr = e.split("-");
@@ -388,6 +426,11 @@ export default function ModifyReceipt(props) {
                 initialValue={data.manager_code + "-" + data.manager}
                 name="manager"
                 label="Người quản lý"
+                notFoundContent={
+              <div style={{textAlign:"center"}}>
+                <img src="https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png?f=webp" width="10%"/>
+                <p>Không có dữ liệu</p>
+              </div>}
                 rules={[
                   {
                     required: true,

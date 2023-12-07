@@ -56,11 +56,11 @@ public interface PaymentRepo extends JpaRepository<Payment,Long> {
             "and" +
             "(:date is null or cast(p.created_date1 as date)=:date)" +
             "and " +
-            "(:manager is null or p.manager=:manager)" +
+            "((:manager is null or :status='dung') or p.manager=:manager)" +
             "and" +
             "(:type is null or p.paymentType=:type)" +
             "and " +
-            "(:status is null or p.status=:status)" +
+            "(:status is null or :status='dung' or p.status=:status)" +
             "and" +
             "(:group is null or p.paymentGroup=:group)")
     Long countList(@Param("value") String value,

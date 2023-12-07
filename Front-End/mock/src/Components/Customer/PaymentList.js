@@ -51,6 +51,14 @@ export default function PaymentList(props) {
   return (
     <Table
       columns={columns}
+      locale={
+          {
+            emptyText:<div>
+              <img src="https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png?f=webp" width="10%"/>
+              <h3>Không có dữ liệu</h3>
+            </div>
+          }
+        }
       style={{
         margin: "20px auto 10%",
         width: "82.5%",

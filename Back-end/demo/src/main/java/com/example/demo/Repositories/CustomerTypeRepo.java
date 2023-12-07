@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface CustomerTypeRepo extends JpaRepository<CustomerType,Long> {
-    @Query("select c from CustomerType c where :value is null or c.code=:value or c.content=:value")
+    @Query("select c from CustomerType c where :value is null or c.code=:value or c.content=:value order by c.id desc ")
     List<CustomerType> list(String value);
 
     CustomerType findByContentOrCode(String content, String code);

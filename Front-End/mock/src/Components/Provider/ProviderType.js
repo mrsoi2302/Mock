@@ -7,6 +7,7 @@ import "../style.css";
 import Account from "../Account";
 import ExceptionBox from "../ExceptionBox";
 import Search from "antd/es/input/Search";
+import { useNavigate } from "react-router-dom";
 
 export default function ProviderType(props) {
   document.title = "Nhóm nhà cung cấp";
@@ -26,6 +27,7 @@ export default function ProviderType(props) {
   const [index, setIndex] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [warningModal, setWarningModal] = useState(false);
+  const navigate=useNavigate()
   let columns = [
     {
       title: "Mã nhóm",
@@ -112,6 +114,23 @@ export default function ProviderType(props) {
       } catch (error) {
         // Handle errors here
         console.error("Error fetching data:", error);
+        if(err.response.status===406)
+          Modal.error({
+            title:"Phiên đăng nhập hết hạn",
+            onOk:()=>{
+              localStorage.clear()
+              document.cookie=""
+              navigate("")
+              Modal.destroyAll()
+            },
+            onCancel:()=>{
+              localStorage.clear()
+              document.cookie=""
+              navigate("")
+              Modal.destroyAll()
+            },
+            cancelText:"Quay lại"
+          })
         setData({
           data: [],
           loading: false,
@@ -140,7 +159,7 @@ export default function ProviderType(props) {
   const createType = (e) => {
     axios({
       method: "post",
-      url: baseURL + "/provider-type/admin/create",
+      url: baseURL + "/provider-type/staff/create",
       headers: {
         Authorization: props.token,
       },
@@ -150,7 +169,8 @@ export default function ProviderType(props) {
         setIndex(!index);
       })
       .catch((err) => {
-        message.error("Tạo thất bại");
+        if(err.response.status===400) message.error("Nhóm khách hàng "+create.content+" đã tồn tại")
+        else message.error("Tạo thất bại");
       });
     form.resetFields();
     setOpenModal(!openModal);
@@ -233,6 +253,26 @@ export default function ProviderType(props) {
           }}
         >
           <Form.Item
+            name="content"
+            initialValue={""}
+            label="Tên nhóm"
+            rules={[
+              {
+                message:"Vùng này không được để trống",
+                required: true,
+              },
+            ]}
+          >
+            <Input
+              onChange={(e) => {
+                setCreate({
+                  ...create,
+                  content: e.target.value,
+                });
+              }}
+            />
+          </Form.Item>
+          <Form.Item
             name="code"
             label="Mã nhóm"
             rules={[
@@ -249,25 +289,6 @@ export default function ProviderType(props) {
                     ...create,
                     code: e.target.value,
                   });
-                });
-              }}
-            />
-          </Form.Item>
-          <Form.Item
-            name="content"
-            initialValue={""}
-            label="Tên nhóm"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Input
-              onChange={(e) => {
-                setCreate({
-                  ...create,
-                  content: e.target.value,
                 });
               }}
             />

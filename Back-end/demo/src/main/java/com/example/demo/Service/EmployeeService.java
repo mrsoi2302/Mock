@@ -35,6 +35,9 @@ public class EmployeeService {
     public EmployeeDTO findByCode(String code) {
         return employeeRepo.findByCodeDTO(code);
     }
+    public Employee findByCodes(String code) {
+        return employeeRepo.findByCode(code);
+    }
     public void update(Employee employee) {
         Employee temp=employeeRepo.findByCode(employee.getCode());
         temp.setEmployee(employee);

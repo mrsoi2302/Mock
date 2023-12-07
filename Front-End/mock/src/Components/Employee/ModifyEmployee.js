@@ -9,6 +9,7 @@ import {
   Select,
   Space,
   Spin,
+  message,
 } from "antd";
 import React, { useEffect, useState } from "react";
 import "../style.css";
@@ -50,6 +51,34 @@ export default function ModifyEmployee(props) {
         });
       })
       .catch((err) => {
+        if(err.response.status===404) Modal.error({
+          title:"Không tìm thấy",
+          onOk:()=>{
+            navigate("/employee-table")
+            Modal.destroyAll()
+          },
+          onCancel:()=>{
+            navigate("/employee-table")
+            Modal.destroyAll()
+          }
+        })
+        else if(err.response.status===406)
+        Modal.error({
+          title:"Phiên đăng nhập hết hạn",
+          onOk:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("")
+            Modal.destroyAll()
+          },
+          onCancel:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("")
+            Modal.destroyAll()
+          },
+          cancelText:"Quay lại"
+        })
       });
       if(!document.cookie.includes("ADMIN")){
         Modal.warning(
@@ -71,20 +100,22 @@ export default function ModifyEmployee(props) {
       })
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = () => {
     axios({
       method: "put",
       url: baseURL + "/employee/admin",
       headers: {
         Authorization: props.token,
       },
-      data: e,
+      data: data.data,
     })
       .then((res) => {
         navigate("/employee/information/" + code);
       })
-      .catch((error) => {
-        setErr(true);
+      .catch((err) => {
+        console.log(err);
+        if(err.response.status===400) message.error("Tên đăng nhập đã tồn tại")
+        else message.error("Có lỗi xảy ra")
       });
   };
   return (
@@ -124,9 +155,9 @@ export default function ModifyEmployee(props) {
             size="large"
             style={{ height: "fit-content" }}
           >
-            <h2>
+            <h3>
               <CaretLeftOutlined /> Thông tin nhân viên
-            </h2>
+            </h3>
           </Button>
         </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
@@ -150,7 +181,6 @@ export default function ModifyEmployee(props) {
 
           <Form
             form={form}
-            onFinish={handleSubmit}
             layout="vertical"
             style={{
               maxWidth: "100%",
@@ -267,7 +297,6 @@ export default function ModifyEmployee(props) {
               <Button
                 size="large"
                 type="primary"
-                htmlType="submit"
                 style={{ margin: "10px" }}
                 onClick={handleSubmit}
               >

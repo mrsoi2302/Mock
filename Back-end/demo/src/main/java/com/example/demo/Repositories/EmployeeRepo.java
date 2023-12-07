@@ -23,9 +23,7 @@ public interface EmployeeRepo extends JpaRepository<Employee,Long> {
             "or" +
             "(e.name like concat('%',:value,'%') ))" +
             "and" +
-            "(:role is null or e.role=:role)" +
-            "and" +
-            "(e.role!='ADMIN')")
+            "(:role is null or e.role=:role)")
     List<EmployeeDTO> list(@Param("value") String value,
                         @Param("role") String role,
                         Pageable pageable);
@@ -35,14 +33,12 @@ public interface EmployeeRepo extends JpaRepository<Employee,Long> {
             "or" +
             "(e.name like concat('%',:value,'%') ))" +
             "and" +
-            "(:role is null or e.role=:role)" +
-            "and" +
-            "(e.role!='ADMIN')")
+            "(:role is null or e.role=:role)")
     Long countList(@Param("value") String value,
                    @Param("role") String role);
-    @Query("select e from Employee e where e.code=:code and e.role!='ADMIN'")
+    @Query("select e from Employee e where e.code=:code")
     Employee findByCode(String code);
-    @Query("select e from Employee e where e.code=:code and e.role!='ADMIN'")
+    @Query("select e from Employee e where e.code=:code")
     EmployeeDTO findByCodeDTO(String code);
 
     void deleteByCode(String code);

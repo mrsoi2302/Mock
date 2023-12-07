@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../style.css";
 import Account from "../Account";
 import { useNavigate, useParams } from "react-router-dom";
-import { Alert, Button, ConfigProvider, Form, Input, Select } from "antd";
+import { Alert, Button, ConfigProvider, Form, Input, Modal, Select } from "antd";
 import { Option } from "antd/es/mentions";
 import axios from "axios";
 import { baseURL } from "../../Config";
@@ -15,7 +15,7 @@ export default function ModifyProvider(props) {
   const [data, setData] = useState({});
   const navigate = useNavigate();
   const [error, setError] = useState(false);
-  const [role,setRole]=useState("")
+  const [role, setRole] = useState("");
   const [form] = Form.useForm();
   const [dataOfType, setDataOfType] = useState([]);
   const [dataOfEmployee, setDataOfEmployee] = useState([]);
@@ -74,10 +74,37 @@ export default function ModifyProvider(props) {
       data: data,
     })
       .then((res) => {
-        navigate("/provider-table");
+        navigate("/provider/information/" + code);
       })
       .catch((err) => {
-        setError(true);
+        if(err.response.status===404) Modal.error({
+          title:"Không tìm thấy",
+          onOk:()=>{
+            navigate("/provider-table")
+            Modal.destroyAll()
+          },
+          onCancel:()=>{
+            navigate("/provider-table")
+            Modal.destroyAll()
+          }
+        })
+        else if(err.response.status===406)
+        Modal.error({
+          title:"Phiên đăng nhập hết hạn",
+          onOk:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("")
+            Modal.destroyAll()
+          },
+          onCancel:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("")
+            Modal.destroyAll()
+          },
+          cancelText:"Quay lại"
+        })
       });
   };
   return (
@@ -114,9 +141,9 @@ export default function ModifyProvider(props) {
             size="large"
             style={{ height: "fit-content" }}
           >
-            <h2>
+            <h3>
               <CaretLeftOutlined /> Thông tin nhà cung cấp
-            </h2>
+            </h3>
           </Button>
         </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
@@ -199,6 +226,15 @@ export default function ModifyProvider(props) {
                 label="Nhóm khách hàng"
               >
                 <Select
+                  notFoundContent={
+                    <div style={{ textAlign: "center" }}>
+                      <img
+                        src="https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png?f=webp"
+                        width="10%"
+                      />
+                      <p>Không có dữ liệu</p>
+                    </div>
+                  }
                   showSearch
                   allowClear
                   placeholder="Chọn nhóm khách hàng"

@@ -49,6 +49,14 @@ export default function ReceiptList(props) {
   ];
   return (
     <Table
+      locale={
+          {
+            emptyText:<div>
+              <img src="https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png?f=webp" width="10%"/>
+              <h3>Không có dữ liệu</h3>
+            </div>
+          }
+        }
       columns={columns}
       style={{
         margin: "0% 5%",

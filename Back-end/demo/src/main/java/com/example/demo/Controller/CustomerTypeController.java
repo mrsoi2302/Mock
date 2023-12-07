@@ -34,7 +34,7 @@ public class CustomerTypeController {
     public List<CustomerType> list(@RequestBody Value<String> value){
         return customerTypeService.list(value.getValue());
     }
-    @PostMapping("/admin/create")
+    @PostMapping("/staff/create")
     public void create(@RequestBody @Valid CustomerType customerType, HttpServletRequest request){
         if(customerTypeService.findByContentOrCode(customerType.getContent(),customerType.getCode())!=null) throw new CustomException("Nhóm KH đã tồn tại", HttpStatus.BAD_REQUEST);
         if(customerType.getCode()==null||customerType.getCode().trim().isEmpty()){

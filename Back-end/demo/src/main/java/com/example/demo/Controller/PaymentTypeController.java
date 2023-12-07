@@ -33,7 +33,7 @@ public class PaymentTypeController {
     public List<PaymentType> list(@RequestBody Value<String> value){
         return paymentTypeService.list(value.getValue());
     }
-    @PostMapping("/admin/create")
+    @PostMapping("/staff/create")
     public void create(@RequestBody PaymentType paymentType, HttpServletRequest request){
         if(paymentTypeService.findByName(paymentType.getName())!=null)
             throw new CustomException("Nhóm NCC đã tồn tại", HttpStatus.BAD_REQUEST);

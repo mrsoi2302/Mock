@@ -1,4 +1,4 @@
-import { Alert, Button, Card, ConfigProvider, Space, Spin, Tag } from "antd";
+import { Alert, Button, Card, ConfigProvider, Modal, Space, Spin, Tag, message } from "antd";
 import React, { useEffect, useState } from "react";
 import "../style.css";
 import Account from "../Account";
@@ -9,6 +9,7 @@ import { baseURL } from "../../Config";
 import { Token } from "../../Token";
 import ExceptionBox from "../ExceptionBox";
 import PaymentList from "./PaymentList";
+import ChangeStatus from "../ChangeStatus";
 export default function CustomerInformation(props) {
   document.title = "Thông tin nhân viên";
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ export default function CustomerInformation(props) {
     loading: true,
   });
   const [err, setErr] = useState(false);
-
+  const [index, setIndex] = useState(false);
   const handleDelete = () => {
     axios({
       url: baseURL + "/customer/admin",
@@ -74,26 +75,40 @@ export default function CustomerInformation(props) {
         });
       })
       .catch((err) => {
-        setErr(true);
+        if(err.response.status===404) Modal.error({
+          title:"Không tìm thấy",
+          onOk:()=>{
+            navigate("/customer-table")
+            Modal.destroyAll()
+          },
+          onCancel:()=>{
+            navigate("/customer-table")
+            Modal.destroyAll()
+          }
+        })
+        else if(err.response.status===406)
+        Modal.error({
+          title:"Phiên đăng nhập hết hạn",
+          onOk:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("")
+            Modal.destroyAll()
+          },
+          onCancel:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("")
+            Modal.destroyAll()
+          },
+          cancelText:"Quay lại"
+        })
       });
-  }, []);
+  }, [index]);
   const url = "/customer/modify/" + code;
   return (
     <div className="content">
       <div className="taskbar">
-        {err && (
-          <Alert
-            message="Tạo thất bại"
-            showIcon
-            description="Chỉ quản trị viên mới có thể tạo được nhân viên mới"
-            type="error"
-            style={{
-              position: "absolute",
-              margin: "20%",
-            }}
-            closable
-          />
-        )}
         <ConfigProvider
           theme={{
             components: {
@@ -202,12 +217,32 @@ export default function CustomerInformation(props) {
               </p>
               <p>Trạng thái</p>
               <p>
-                :{" "}
-                <Tag color={data.data.status === "active" ? "green" : "red"}>
-                  {data.data.status === "active"
-                    ? "Đã kích hoạt"
-                    : "Chưa kích hoạt"}
-                </Tag>
+                {data.data.status === "active" ? (
+                  <div>
+                    :{" "}
+                    <Tag
+                      style={{ marginLeft: "15px" }}
+                      color="green"
+                      key={data.data}
+                    >
+                      Đã kích hoạt
+                    </Tag>
+                  </div>
+                ) : (
+                  <div style={{ marginTop: "-10px" }}>
+                    :{" "}
+                    <ChangeStatus
+                      name=<Tag color="red" key={data.data}>
+                        Chưa kích hoạt
+                      </Tag>
+                      data={data.data}
+                      index={index}
+                      setIndex={setIndex}
+                      url={"customer/staff"}
+                      state="active"
+                    />
+                  </div>
+                )}
               </p>
               <p>Nhóm khách hàng</p>
               <p>
@@ -235,9 +270,10 @@ export default function CustomerInformation(props) {
                 size="large"
                 onClick={handleDelete}
                 style={{
-                  marginLeft:"10px",
-                  border:"1px red solid",
-                  color: "red" }}
+                  marginLeft: "10px",
+                  border: "1px red solid",
+                  color: "red",
+                }}
               >
                 Xóa
               </Button>

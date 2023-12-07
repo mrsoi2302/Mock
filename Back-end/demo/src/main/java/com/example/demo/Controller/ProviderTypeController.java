@@ -33,7 +33,7 @@ public class ProviderTypeController {
     public List<ProviderType> list(@RequestBody(required = false) Value<String> value){
         return providerTypeService.list(value.getValue());
     }
-        @PostMapping("/admin/create")
+    @PostMapping("/staff/create")
     public void create(@RequestBody @Valid ProviderType providerType, HttpServletRequest request){
         if(providerType.getCode()==null){
             providerType.setCode("PRT"+sequenceRepository.generate());

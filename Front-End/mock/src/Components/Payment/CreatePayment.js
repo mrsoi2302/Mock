@@ -6,6 +6,7 @@ import {
   Form,
   Input,
   InputNumber,
+  Modal,
   Select,
   message,
 } from "antd";
@@ -19,7 +20,7 @@ import { Token } from "../../Token";
 import { useNavigate } from "react-router-dom";
 import { CaretLeftOutlined } from "@ant-design/icons";
 export default function CreatePayment(props) {
-  document.title = "Tạo phiếu chi mới";
+  document.title = "Tạo phiếu thu mới";
   const navigate = useNavigate();
   const [data, setData] = useState({});
   const [value, setValue] = useState("");
@@ -75,7 +76,7 @@ export default function CreatePayment(props) {
         setPaymentGroup(res.data);
       })
       .catch((err) => {
-        message.error("Có lỗi khi lấy dữ liệu nhóm phiếu chi");
+        message.error("Có lỗi khi lấy dữ liệu nhóm phiếu thu");
       });
   }, [value]);
   const handleSubmit = () => {
@@ -91,7 +92,24 @@ export default function CreatePayment(props) {
         navigate("/payment-table");
       })
       .catch((err) => {
-        message.error("Tạo thất bại");
+        if(err.response.status===406)
+          Modal.error({
+            title:"Phiên đăng nhập hết hạn",
+            onOk:()=>{
+              localStorage.clear()
+              document.cookie=""
+              navigate("")
+              Modal.destroyAll()
+            },
+            onCancel:()=>{
+              localStorage.clear()
+              document.cookie=""
+              navigate("")
+              Modal.destroyAll()
+            },
+            cancelText:"Quay lại"
+          })
+        else message.error("Tạo thất bại");
       });
   };
   const handleType = (e) => {
@@ -146,9 +164,9 @@ export default function CreatePayment(props) {
             size="large"
             style={{ height: "fit-content" }}
           >
-            <h2>
-              <CaretLeftOutlined /> Danh sách phiếu chi
-            </h2>
+            <h3>
+              <CaretLeftOutlined /> Danh sách phiếu thu
+            </h3>
           </Button>
         </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
@@ -177,7 +195,7 @@ export default function CreatePayment(props) {
         >
           <Form.Item
             name="code"
-            label="Mã phiếu chi"
+            label="Mã phiếu thu"
             rules={[
               {
                 pattern: "^(?!PMT).*",
@@ -200,7 +218,12 @@ export default function CreatePayment(props) {
           </Form.Item>
           <Form.Item
             name="customer"
-            label="Khách hàng nhận"
+            notFoundContent={
+              <div style={{textAlign:"center"}}>
+                <img src="https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png?f=webp" width="10%"/>
+                <p>Không có dữ liệu</p>
+              </div>}
+            label="Khách hàng thanh toán"
             rules={[
               {
                 required: true,
@@ -211,6 +234,11 @@ export default function CreatePayment(props) {
             <Select
               showSearch
               placeholder="Chọn khách hàng"
+              notFoundContent={
+              <div style={{textAlign:"center"}}>
+                <img src="https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png?f=webp" width="10%"/>
+                <p>Không có dữ liệu</p>
+              </div>}
               style={{ paddingLeft: "10px" }}
               onSelect={(e) => {
                 const arr = e.split("-");
@@ -234,7 +262,7 @@ export default function CreatePayment(props) {
           </Form.Item>
           <Form.Item
             name="paymentGroup"
-            label="Loại phiếu chi"
+            label="Loại phiếu thu"
             rules={[
               {
                 required: true,
@@ -245,6 +273,11 @@ export default function CreatePayment(props) {
           >
             <Select
               showSearch
+              notFoundContent={
+              <div style={{textAlign:"center"}}>
+                <img src="https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png?f=webp" width="10%"/>
+                <p>Không có dữ liệu</p>
+              </div>}
               placeholder="Chọn loại phiếu thu"
               onSelect={(e) => {
                 const arr = e.split("-");
@@ -305,6 +338,11 @@ export default function CreatePayment(props) {
             style={{ width: "47%", float: "left" }}
           >
             <Select
+            notFoundContent={
+              <div style={{textAlign:"center"}}>
+                <img src="https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png?f=webp" width="10%"/>
+                <p>Không có dữ liệu</p>
+              </div>}
               showSearch
               placeholder="Chọn hình thức thanh toán"
               onSelect={(e) => {

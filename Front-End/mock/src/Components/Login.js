@@ -27,7 +27,7 @@ export default function Login(props) {
           password: password,
         },
       });
-  
+      document.cookie = "role" + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
       document.cookie = 'role=' + res.data.value;
       props.setToken("Bearer " + res.data.t);
       localStorage.setItem("jwt", res.data.t);

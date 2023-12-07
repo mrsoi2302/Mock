@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../style.css";
 import Account from "../Account";
 import { useNavigate } from "react-router-dom";
-import { Alert, Button, ConfigProvider, Form, Input, Modal, Select } from "antd";
+import { Alert, Button, ConfigProvider, Form, Input, Modal, Select, message } from "antd";
 import { Option } from "antd/es/mentions";
 import axios from "axios";
 import { baseURL } from "../../Config";
@@ -56,7 +56,24 @@ export default function CreateEmployee(props) {
         navigate("/employee-table");
       })
       .catch((err) => {
-        setError(true);
+        if(err.response.status===400) message.error("Tên đăng nhập đã tồn tại")
+        if(err.response.status===406)
+        Modal.error({
+          title:"Phiên đăng nhập hết hạn",
+          onOk:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("")
+            Modal.destroyAll()
+          },
+          onCancel:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("")
+            Modal.destroyAll()
+          },
+          cancelText:"Quay lại"
+        })
       });
   };
   return (
@@ -93,9 +110,9 @@ export default function CreateEmployee(props) {
             size="large"
             style={{ height: "fit-content" }}
           >
-            <h2>
+            <h3>
               <CaretLeftOutlined /> Danh sách nhân viên
-            </h2>
+            </h3>
           </Button>
         </ConfigProvider>
         <Account name={localStorage.getItem("name")} />

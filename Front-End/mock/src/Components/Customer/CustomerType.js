@@ -7,6 +7,7 @@ import "../style.css";
 import Account from "../Account";
 import ExceptionBox from "../ExceptionBox";
 import Search from "antd/es/input/Search";
+import { useNavigate } from "react-router-dom";
 
 export default function CustomerType(props) {
   document.title = "Nhóm khách hàng";
@@ -17,6 +18,7 @@ export default function CustomerType(props) {
     data: [],
     loading: true,
   });
+  const navigate=useNavigate()
   const [form] = Form.useForm();
   const [value, setValue] = useState();
   const [err, setErr] = useState(false);
@@ -67,7 +69,7 @@ export default function CustomerType(props) {
           data: [],
           loading: true,
         });
-  
+
         const customerTypeList = await axios({
           method: "post",
           url: baseURL + "/customer-type/list",
@@ -78,7 +80,7 @@ export default function CustomerType(props) {
             value: value,
           },
         });
-  
+
         const temp = await Promise.all(
           customerTypeList.data.map(async (i) => {
             const ress = await axios({
@@ -93,7 +95,7 @@ export default function CustomerType(props) {
                 Authorization: props.token,
               },
             });
-  
+
             return {
               code: i.code,
               content: i.content,
@@ -101,7 +103,7 @@ export default function CustomerType(props) {
             };
           })
         );
-  
+
         setData({
           data: temp,
           loading: false,
@@ -115,10 +117,10 @@ export default function CustomerType(props) {
         setErr(true);
       }
     };
-  
+
     fetchData();
   }, [value, loading, index]);
-  
+
   const handleDelete = (e) => {
     axios({
       method: "delete",
@@ -137,7 +139,7 @@ export default function CustomerType(props) {
   const createType = (e) => {
     axios({
       method: "post",
-      url: baseURL + "/customer-type/admin/create",
+      url: baseURL + "/customer-type/staff/create",
       headers: {
         Authorization: props.token,
       },
@@ -147,7 +149,25 @@ export default function CustomerType(props) {
         setIndex(!index);
       })
       .catch((err) => {
-        message.error("Tạo thất bại");
+        if(err.response.status===406)
+          Modal.error({
+            title:"Phiên đăng nhập hết hạn",
+            onOk:()=>{
+              localStorage.clear()
+              document.cookie=""
+              navigate("")
+              Modal.destroyAll()
+            },
+            onCancel:()=>{
+              localStorage.clear()
+              document.cookie=""
+              navigate("")
+              Modal.destroyAll()
+            },
+            cancelText:"Quay lại"
+          })
+        if(err.response.status===400) message.error("Nhóm khách hàng "+create.content+" đã tồn tại")
+        else message.error("Tạo thất bại");
       });
     setOpenModal(!openModal);
     form.resetFields();
@@ -178,20 +198,16 @@ export default function CustomerType(props) {
           <Space size="middle">
             <Button
               type="link"
-              style={
-                {
-                  color:"red"
-                }
-              }
+              style={{
+                color: "red",
+              }}
               onClick={(e) => {
-                Modal.confirm(
-                  {
-                    title:"Bạn muốn xóa nhóm khách hàng "+record.code+" ?",
-                    onOk(){
-                      handleDelete(record)
-                    }
-                  }
-                )
+                Modal.confirm({
+                  title: "Bạn muốn xóa nhóm khách hàng " + record.code + " ?",
+                  onOk() {
+                    handleDelete(record);
+                  },
+                });
               }}
             >
               Xóa
@@ -216,7 +232,7 @@ export default function CustomerType(props) {
         onOk={createType}
         okText="Tạo"
         cancelText="Quay lại"
-        okButtonProps={{ disabled:create.content.trim().length===0}}
+        okButtonProps={{ disabled: create.content.trim().length === 0 }}
         title="Tạo nhóm khách hàng mới"
       >
         <Form
@@ -228,6 +244,25 @@ export default function CustomerType(props) {
             margin: "10px",
           }}
         >
+          <Form.Item
+            name="content"
+            label="Tên nhóm"
+            rules={[
+              {
+                required: true,
+                message:"Vùng này không được để trống"
+              },
+            ]}
+          >
+            <Input
+              onChange={(e) => {
+                setCreate({
+                  ...create,
+                  content: e.target.value,
+                });
+              }}
+            />
+          </Form.Item>
           <Form.Item
             name="code"
             label="Mã nhóm"
@@ -245,24 +280,6 @@ export default function CustomerType(props) {
                     ...create,
                     code: e.target.value,
                   });
-                });
-              }}
-            />
-          </Form.Item>
-          <Form.Item
-            name="content"
-            label="Tên nhóm"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Input
-              onChange={(e) => {
-                setCreate({
-                  ...create,
-                  content: e.target.value,
                 });
               }}
             />
@@ -295,7 +312,7 @@ export default function CustomerType(props) {
                 <Button
                   type="primary"
                   style={{
-                    marginLeft:"10px",
+                    marginLeft: "10px",
                     zIndex: 100,
                   }}
                   onClick={(e) => {
@@ -306,6 +323,17 @@ export default function CustomerType(props) {
                 </Button>
               </div>
               <Table
+                locale={{
+                  emptyText: (
+                    <div>
+                      <img
+                        src="https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png?f=webp"
+                        width="10%"
+                      />
+                      <h3>Không có dữ liệu</h3>
+                    </div>
+                  ),
+                }}
                 pagination={true}
                 columns={columns}
                 dataSource={data.data}

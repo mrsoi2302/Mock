@@ -41,7 +41,7 @@ export default function RowSelectionTable(props) {
               color:"red"
             }}
           >
-            Xóa
+            <strong>Xóa</strong>
           </Button>
         ) : props.setInputFile != undefined ? (
           <Button

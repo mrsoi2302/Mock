@@ -5,6 +5,7 @@ import {
   Form,
   Input,
   InputNumber,
+  Modal,
   Select,
   message,
 } from "antd";
@@ -19,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { CaretLeftOutlined } from "@ant-design/icons";
 
 export default function CreateReceipt(props) {
-  document.title = "Tạo phiếu thu mới";
+  document.title = "Tạo phiếu chi mới";
 
   const navigate = useNavigate();
   const [data, setData] = useState({});
@@ -76,7 +77,7 @@ export default function CreateReceipt(props) {
         setReceiptGroup(res.data);
       })
       .catch((err) => {
-        message.error("Có lỗi khi lấy dữ liệu nhóm phiếu thu");
+        message.error("Có lỗi khi lấy dữ liệu nhóm phiếu chi");
       });
   }, [value]);
   const handleSubmit = () => {
@@ -92,7 +93,24 @@ export default function CreateReceipt(props) {
         navigate("/receipt-table");
       })
       .catch((err) => {
-        message.error("Tạo thất bại");
+        if(err.response.status===406)
+          Modal.error({
+            title:"Phiên đăng nhập hết hạn",
+            onOk:()=>{
+              localStorage.clear()
+              document.cookie=""
+              navigate("")
+              Modal.destroyAll()
+            },
+            onCancel:()=>{
+              localStorage.clear()
+              document.cookie=""
+              navigate("")
+              Modal.destroyAll()
+            },
+            cancelText:"Quay lại"
+          })
+        else message.error("Tạo thất bại");
       });
   };
 
@@ -130,9 +148,9 @@ export default function CreateReceipt(props) {
             size="large"
             style={{ height: "fit-content" }}
           >
-            <h2>
-              <CaretLeftOutlined /> Danh sách phiếu thu
-            </h2>
+            <h3>
+              <CaretLeftOutlined /> Danh sách phiếu chi
+            </h3>
           </Button>
         </ConfigProvider>{" "}
         <Account name={localStorage.getItem("name")} />
@@ -161,7 +179,7 @@ export default function CreateReceipt(props) {
         >
           <Form.Item
             name="code"
-            label="Mã phiếu thu"
+            label="Mã phiếu chi"
             rules={[
               {
                 pattern: "^(?!PMT).*",
@@ -184,7 +202,7 @@ export default function CreateReceipt(props) {
           </Form.Item>
           <Form.Item
             name="provider"
-            label="Nhà cung cấp thanh toán"
+            label="Nhà cung cấp giao dịch"
             rules={[
               {
                 message: "Vùng này không được để trống",
@@ -193,6 +211,11 @@ export default function CreateReceipt(props) {
             ]}
           >
             <Select
+              notFoundContent={
+              <div style={{textAlign:"center"}}>
+                <img src="https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png?f=webp" width="10%"/>
+                <p>Không có dữ liệu</p>
+              </div>}
               showSearch
               onChange={(e) => {
                 const arr = e.split("-");
@@ -219,16 +242,21 @@ export default function CreateReceipt(props) {
           </Form.Item>
           <Form.Item
             name="receiptGroup"
-            label="Loại phiếu thu"
+            label="Loại phiếu chi"
             style={{ float: "left", width: "47%" }}
           >
             <Select
+              notFoundContent={
+              <div style={{textAlign:"center"}}>
+                <img src="https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png?f=webp" width="10%"/>
+                <p>Không có dữ liệu</p>
+              </div>}
               showSearch
               allowClear
               onClear={(e) => {
                 setData({ ...data, receiptGroup: null });
               }}
-              placeholder="Chọn loại phiếu thu"
+              placeholder="Chọn loại phiếu chi"
               onSelect={(e) => {
                 const arr = e.split("-");
                 setData({
@@ -277,6 +305,11 @@ export default function CreateReceipt(props) {
             </Select>
           </Form.Item>
           <Form.Item
+            notFoundContent={
+              <div style={{textAlign:"center"}}>
+                <img src="https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png?f=webp" width="10%"/>
+                <p>Không có dữ liệu</p>
+              </div>}
             name="payment_type"
             label="Hình thức thanh toán"
             rules={[

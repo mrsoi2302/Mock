@@ -6,6 +6,7 @@ import {
   Form,
   Input,
   InputNumber,
+  Modal,
   Select,
   message,
 } from "antd";
@@ -21,7 +22,7 @@ import ExceptionBox from "../ExceptionBox";
 import { CaretLeftOutlined } from "@ant-design/icons";
 
 export default function ModifyPayment(props) {
-  document.title = "Chỉnh sửa phiếu chi";
+  document.title = "Chỉnh sửa phiếu thu";
   const { code } = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState({});
@@ -51,7 +52,7 @@ export default function ModifyPayment(props) {
         setPaymentGroup(res.data);
       })
       .catch((err) => {
-        message.error("Có lỗi khi lấy dữ liệu nhóm phiếu chi");
+        message.error("Có lỗi khi lấy dữ liệu nhóm phiếu thu");
       });
     axios({
       url: baseURL + "/employee/admin/list",
@@ -76,7 +77,34 @@ export default function ModifyPayment(props) {
         setData(res.data.t);
       })
       .catch((err) => {
-        setError(true);
+        if(err.response.status===404) Modal.error({
+          title:"Không tìm thấy",
+          onOk:()=>{
+            navigate("/payment-table")
+            Modal.destroyAll()
+          },
+          onCancel:()=>{
+            navigate("/payment-table")
+            Modal.destroyAll()
+          }
+        })
+        else if(err.response.status===406)
+        Modal.error({
+          title:"Phiên đăng nhập hết hạn",
+          onOk:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("")
+            Modal.destroyAll()
+          },
+          onCancel:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("")
+            Modal.destroyAll()
+          },
+          cancelText:"Quay lại"
+        })
       });
     axios({
       url: baseURL + "/customer/create-payment",
@@ -136,7 +164,7 @@ export default function ModifyPayment(props) {
       }
     })
       .then((res) => {
-        navigate("/payment-table");
+        navigate("/payment/information/"+code);
       })
       .catch((err) => {
         message.error("Cập nhật thất bại");
@@ -164,9 +192,9 @@ export default function ModifyPayment(props) {
             size="large"
             style={{ height: "fit-content" }}
           >
-            <h2>
-              <CaretLeftOutlined /> Thông tin phiếu chi
-            </h2>
+            <h3>
+              <CaretLeftOutlined /> Thông tin phiếu thu
+            </h3>
           </Button>
         </ConfigProvider>{" "}
         <Account name={localStorage.getItem("name")} />
@@ -199,7 +227,7 @@ export default function ModifyPayment(props) {
               <Form.Item
                 name="code"
                 initialValue={data.code}
-                label="Mã phiếu chi"
+                label="Mã phiếu thu"
                 rules={[
                   {
                     message: "Tiền tố PMT không hợp lệ",
@@ -224,7 +252,7 @@ export default function ModifyPayment(props) {
                 initialValue={
                   data.paymentGroup === null ? null : data.paymentGroup.name
                 }
-                label="Nhóm phiếu chi"
+                label="Nhóm phiếu thu"
                 style={{ float: "left", width: "47%" }}
               >
                 <Select
@@ -267,7 +295,7 @@ export default function ModifyPayment(props) {
                     : data.customer.name + "-" + data.customer.code
                 }
                 name="customer"
-                label="Khách hàng nhận"
+                label="Khách hàng thanh toán"
               >
                 <Select
                   showSearch

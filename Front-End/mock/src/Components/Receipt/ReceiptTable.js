@@ -26,7 +26,7 @@ import RowSelectionTableForBill from "../RowSelectionTableForBill";
 import BillTypeModal from "../BillTypeModal";
 import ChangeStatus from "../ChangeStatus";
 function ReceiptTable(props) {
-  document.title = "Danh sách phiếu thu";
+  document.title = "Danh sách phiếu chi";
   localStorage.setItem("open", "cash");
   localStorage.setItem("selected", "receipt-list");
   const navigate = useNavigate();
@@ -54,14 +54,14 @@ function ReceiptTable(props) {
   const [groups, setGroups] = useState([]);
   let columns = [
     {
-      title: "Mã phiếu thu",
+      title: "Mã phiếu chi",
       dataIndex: "code",
       key: "code",
 
       width: "15%",
     },
     {
-      title: "Khách hàng thanh toán",
+      title: "Nhà cung cấp giao dịch",
       dataIndex: "provider-name",
       key: "provider-name",
     },
@@ -123,7 +123,24 @@ function ReceiptTable(props) {
         });
       })
       .catch((err) => {
-        setErr(true);
+        if(err.response.status===406)
+          Modal.error({
+            title:"Phiên đăng nhập hết hạn",
+            onOk:()=>{
+              localStorage.clear()
+              document.cookie=""
+              navigate("")
+              Modal.destroyAll()
+            },
+            onCancel:()=>{
+              localStorage.clear()
+              document.cookie=""
+              navigate("")
+              Modal.destroyAll()
+            },
+            cancelText:"Quay lại"
+          })
+        else setErr(true);
       });
     axios({
       method: "post",
@@ -324,7 +341,7 @@ function ReceiptTable(props) {
     {
       label: (
         <Space direction="vertical">
-          <label>Nhóm phiếu thu</label>
+          <label>Nhóm phiếu chi</label>
           <Select
             placeholder="Chọn nhóm"
             style={{ marginTop: "10px", width: "15vw" }}
@@ -362,7 +379,7 @@ function ReceiptTable(props) {
   if (data.data.length > 0) {
     columns = [
       {
-        title: "Mã phiếu thu",
+        title: "Mã phiếu chi",
         dataIndex: "code",
         key: "code",
         render: (_, record) => (
@@ -375,7 +392,7 @@ function ReceiptTable(props) {
         width: "15%",
       },
       {
-        title: "Nhà cung cấp thanh toán",
+        title: "Nhà cung cấp giao dịch",
         dataIndex: "provider-name",
         key: "provider-name",
         render: (_, record) => (
@@ -451,7 +468,7 @@ function ReceiptTable(props) {
   };
   const CreatePaymentType = (e) => {
     axios({
-      url: baseURL + "/payment-type/admin/create",
+      url: baseURL + "/payment-type/staff/create",
       method: "post",
       headers: {
         Authorization: props.token,
@@ -474,7 +491,7 @@ function ReceiptTable(props) {
   return (
     <div className="content">
       <div className="taskbar">
-        <h2>Danh sách phiếu thu</h2>
+        <h3>Danh sách phiếu chi</h3>
         <Account name={localStorage.getItem("name")} />
       </div>
       {err ? (
@@ -508,7 +525,7 @@ function ReceiptTable(props) {
               {/* <Button type="primary" style={{marginRight:"10px"}} onClick={e=>setOpenModal(true)}>Thêm hình thức thanh toán</Button> */}
               <BillTypeModal
                 openBillModal={openBillModal}
-                title="Các loại phiếu thu"
+                title="Các loại phiếu chi"
                 name="receipt"
                 setOpenBillModal={setOpenBillModal}
                 index={index}
@@ -526,7 +543,7 @@ function ReceiptTable(props) {
                 openFilter={open}
                 setOpenFilter={setOpen}
                 url="/create-receipt"
-                name="phiếu thu"
+                name="phiếu chi"
                 selectedRowKeys={selectedRowKeys}
                 handleSelection={handleSelection}
                 columns={columns}

@@ -1,4 +1,4 @@
-import { Alert, Button, Card, ConfigProvider, Space, Spin, Tag } from "antd";
+import { Alert, Button, Card, ConfigProvider, Modal, Space, Spin, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import "../style.css";
 import Account from "../Account";
@@ -9,12 +9,14 @@ import { Token } from "../../Token";
 import ExceptionBox from "../ExceptionBox";
 import ReceiptList from "./ReceiptList";
 import { CaretLeftOutlined } from "@ant-design/icons";
+import ChangeStatus from "../ChangeStatus";
 
 export default function ProviderInformation(props) {
   document.title = "Thông tin nhân viên";
   const navigate = useNavigate();
   const { code } = useParams();
   const [receipts, setReceipts] = useState([]);
+  const[index,setIndex]=useState(false)
   const [data, setData] = useState({
     data: {},
     loading: true,
@@ -63,26 +65,41 @@ export default function ProviderInformation(props) {
         });
       })
       .catch((err) => {
-        setErr(true);
+        if(err.response.status===404) Modal.error({
+          title:"Không tìm thấy",
+          onOk:()=>{
+            navigate("/provider-table")
+            Modal.destroyAll()
+          },
+          onCancel:()=>{
+            navigate("/provider-table")
+            Modal.destroyAll()
+          }
+        })
+        else if(err.response.status===406)
+        Modal.error({
+          title:"Phiên đăng nhập hết hạn",
+          onOk:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("")
+            Modal.destroyAll()
+          },
+          onCancel:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("")
+            Modal.destroyAll()
+          },
+          cancelText:"Quay lại"
+        })
       });
-  }, []);
+  }, [index]);
   const url = "/provider/modify/" + code;
   return (
     <div className="content">
       <div className="taskbar">
-        {err && (
-          <Alert
-            message="Tạo thất bại"
-            showIcon
-            description="Chỉ quản trị viên mới có thể tạo được nhân viên mới"
-            type="error"
-            style={{
-              position: "absolute",
-              margin: "20%",
-            }}
-            closable
-          />
-        )}
+        
         <ConfigProvider
           theme={{
             components: {
@@ -101,9 +118,9 @@ export default function ProviderInformation(props) {
             size="large"
             style={{ height: "fit-content" }}
           >
-            <h2>
+            <h3>
               <CaretLeftOutlined /> Danh sách nhà cung cấp
-            </h2>
+            </h3>
           </Button>
         </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
@@ -180,12 +197,32 @@ export default function ProviderInformation(props) {
               </p>
               <p>Trạng thái</p>
               <p>
-                :{" "}
-                <Tag color={data.data.status === "active" ? "green" : "red"}>
-                  {data.data.status === "active"
-                    ? "Đã kích hoạt"
-                    : "Chưa kích hoạt"}
-                </Tag>
+              {data.data.status === "active" ? (
+                  <div>
+                    :{" "}
+                    <Tag
+                      style={{ marginLeft: "15px" }}
+                      color="green"
+                      key={data.data}
+                    >
+                      Đã kích hoạt
+                    </Tag>
+                  </div>
+                ) : (
+                  <div style={{ marginTop: "-10px" }}>
+                    :{" "}
+                    <ChangeStatus
+                      name=<Tag color="red" key={data.data}>
+                        Chưa kích hoạt
+                      </Tag>
+                      data={data.data}
+                      index={index}
+                      setIndex={setIndex}
+                      url={"provider/staff"}
+                      state="active"
+                    />
+                  </div>
+                )}
               </p>
             </div>
             <br />

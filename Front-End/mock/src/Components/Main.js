@@ -4,15 +4,17 @@ import Account from "./Account";
 import axios from "axios";
 import { baseURL } from "../Config";
 import ExceptionBox from "./ExceptionBox";
-import { Spin } from "antd";
+import { Modal, Spin } from "antd";
 import { Token } from "../Token";
 import { formatDates } from "./FormatDate";
 import QuantityChart from "./QuantityChart";
 import RevenueChart from "./RevenueChart";
+import { useNavigate } from "react-router-dom";
 // import QuantityChart from "./QuantityChart";
 // import RevenueChart from "./RevenueChart";
 
 export default function Main(props) {
+  const navigate=useNavigate()
   const [trading, setTrading] = useState({
     data: 0,
     loading: true,
@@ -47,9 +49,9 @@ export default function Main(props) {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
-      data:{
-        t:null
-      }
+      data: {
+        t: null,
+      },
     })
       .then((ress) => {
         axios({
@@ -58,9 +60,9 @@ export default function Main(props) {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("jwt"),
           },
-          data:{
-            t:null
-          }
+          data: {
+            t: null,
+          },
         })
           .then((res) => {
             setTrading({
@@ -193,7 +195,24 @@ export default function Main(props) {
             });
           })
           .catch((err) => {
-            setErr(true);
+            if (err.response.status === 406)
+              Modal.error({
+                title: "Phiên đăng nhập hết hạn",
+                onOk: () => {
+                  localStorage.clear();
+                  document.cookie = "";
+                  navigate("");
+                  Modal.destroyAll();
+                },
+                onCancel: () => {
+                  localStorage.clear();
+                  document.cookie = "";
+                  navigate("");
+                  Modal.destroyAll();
+                },
+                cancelText: "Quay lại",
+              });
+            else setErr(true);
           });
       })
       .catch((err) => {
@@ -218,7 +237,7 @@ export default function Main(props) {
       >
         <div className="grid">
           <img src="https://i.pinimg.com/originals/af/87/58/af875899c939bc45c1e41827173a6444.png" />
-          <div style={{ color: "rgba(255,184,228,255)" }}>
+          <div style={{ color: "rgb(226, 58, 100)" }}>
             <p>Tổng giao dịch</p>
             {trading.loading ? (
               <Spin />
@@ -229,7 +248,7 @@ export default function Main(props) {
         </div>
         <div className="grid">
           <img src="https://i.pinimg.com/474x/46/fb/fa/46fbfa422ddfacdce7733ede8e8ccb8a.jpg" />
-          <div style={{ color: "rgba(214,202,250,255)" }}>
+          <div style={{ color: "rgb(61, 58, 247)" }}>
             <p>Chưa kích hoạt</p>
             {unactive.loading ? <Spin /> : <h3>{unactive.data}</h3>}
           </div>
@@ -248,7 +267,7 @@ export default function Main(props) {
             {billToday.loading ? <Spin /> : <h3>{billToday.data}</h3>}
           </div>
         </div>
-        <div className="socialMedia">
+        {/* <div className="socialMedia">
           <a href="https://www.facebook.com/mrsoi2302">
             <img src="https://www.facebook.com/images/fb_icon_325x325.png" />
           </a>
@@ -261,17 +280,17 @@ export default function Main(props) {
           <a href="https://github.com/mrsoi2302">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/GitHub_Invertocat_Logo.svg/1200px-GitHub_Invertocat_Logo.svg.png" />
           </a>
-        </div>
+        </div> */}
       </div>
-      <div style={{
-        display:"grid",
-        gridTemplateColumns:"repeat(2,50%)"
-      }}>
-        <QuantityChart/>
-        <RevenueChart/>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2,50%)",
+        }}
+      >
+        <QuantityChart />
+        <RevenueChart />
       </div>
-      
-
     </div>
   );
 }

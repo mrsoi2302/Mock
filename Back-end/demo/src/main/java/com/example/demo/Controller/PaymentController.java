@@ -90,6 +90,7 @@ public class PaymentController {
     }
     @GetMapping("information")
     Payment information(@RequestParam String code,HttpServletRequest request){
+        if(paymentService.findByCode(code)==null) throw new CustomException("Không tồn tại", HttpStatus.NOT_FOUND);
         String manager=null;
         String token = request.getHeader("Authorization").substring(7);
         String username=tokenProvider.extractUsername(token);

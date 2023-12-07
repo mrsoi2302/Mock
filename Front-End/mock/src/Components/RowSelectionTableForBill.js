@@ -16,21 +16,32 @@ export default function RowSelectionTableForBill(props) {
       >
         {props.selectedRowKeys.length > 0 ? (
           <Button
-            type="primary"
-            onClick={(e) => {
-              Modal.confirm({
-                title:
-                  "Bạn muốn xóa " + props.quantity + " " + props.name + " ?",
-                onOk() {
-                  props.delete();
-                },
-              });
-            }}
+            type="text"
+            onClick={
+              (e) => {
+                Modal.confirm({
+                  title: "Xác nhận xoá",
+                  content:
+                    "Bạn có chắc chắn muốn xoá " +
+                    props.quantity +
+                    " " +
+                    props.name +
+                    " không ?",
+                  onOk() {
+                    props.delete();
+                  },
+
+                  cancelText: "Hủy bỏ",
+                });
+              }
+              //props.delete
+            }
             style={{
-              backgroundColor: "red",
+              border:"1px red solid",
+              color:"red"
             }}
           >
-            Xóa
+            <strong>Xóa</strong>
           </Button>
         ) : (
           <Button

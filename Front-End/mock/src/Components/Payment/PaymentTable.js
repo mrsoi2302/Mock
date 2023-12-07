@@ -31,7 +31,7 @@ import BillTypeModal from "../BillTypeModal";
 import { Token } from "../../Token";
 import ChangeStatus from "../ChangeStatus";
 function PaymentTable(props) {
-  document.title = "Danh sách phiếu chi";
+  document.title = "Danh sách phiếu thu";
   localStorage.setItem("open", "cash");
   localStorage.setItem("selected", "payment-list");
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ function PaymentTable(props) {
   const [groups, setGroups] = useState([]);
   let columns = [
     {
-      title: "Mã phiếu chi",
+      title: "Mã phiếu thu",
       dataIndex: "code",
       key: "code",
 
@@ -148,7 +148,23 @@ function PaymentTable(props) {
         });
       })
       .catch((err) => {
-        setErr(true);
+        if(err.response.status===406)
+          Modal.error({
+            title:"Phiên đăng nhập hết hạn",
+            onOk:()=>{
+              localStorage.clear()
+              document.cookie=""
+              navigate("")
+              Modal.destroyAll()
+            },
+            onCancel:()=>{
+              localStorage.clear()
+              document.cookie=""
+              navigate("")
+              Modal.destroyAll()
+            },
+            cancelText:"Quay lại"
+          })
       });
     axios({
       method: "post",
@@ -328,7 +344,7 @@ function PaymentTable(props) {
     {
       label: (
         <Space direction="vertical">
-          <label>Loại phiếu chi</label>
+          <label>Loại phiếu thu</label>
           <Select
             placeholder="Chọn loại"
             style={{ marginTop: "10px", width: "15vw" }}
@@ -365,7 +381,7 @@ function PaymentTable(props) {
   if (data.data.length > 0) {
     columns = [
       {
-        title: "Mã phiếu chi",
+        title: "Mã phiếu thu",
         dataIndex: "code",
         key: "code",
         render: (_, record) => (
@@ -454,7 +470,7 @@ function PaymentTable(props) {
   };
   const CreatePaymentType = (e) => {
     axios({
-      url: baseURL + "/payment-type/admin/create",
+      url: baseURL + "/payment-type/staff/create",
       method: "post",
       headers: {
         Authorization: props.token,
@@ -467,7 +483,8 @@ function PaymentTable(props) {
         setOpenModal(!openModal);
       })
       .catch((err) => {
-        message.error("Tạo thất bại");
+        if(err.response.status===400) message.error("Hình thức thanh toán "+createType+" đã tồn tại")
+        else message.error("Tạo thất bại");
       });
   };
   const handleSelection = {
@@ -477,7 +494,7 @@ function PaymentTable(props) {
   return (
     <div className="content">
       <div className="taskbar">
-        <h2>Danh sách phiếu chi</h2>
+        <h3>Danh sách phiếu thu</h3>
         <Account name={localStorage.getItem("name")} />
       </div>
       {err ? (
@@ -514,7 +531,7 @@ function PaymentTable(props) {
                 index={index}
                 setIndex={setIndex}
                 openBillModal={openBillModal}
-                title="Các loại phiếu chi"
+                title="Các loại phiếu thu"
                 name="payment"
                 setOpenBillModal={setOpenBillModal}
                 code="PMG"
@@ -530,12 +547,13 @@ function PaymentTable(props) {
                 openFilter={open}
                 setOpenFilter={setOpen}
                 url="/create-payment"
-                name="phiếu chi"
+                name="phiếu thu"
                 selectedRowKeys={selectedRowKeys}
                 handleSelection={handleSelection}
                 columns={columns}
                 data={data.data}
                 onChange={onChangeClick}
+                quantity={selectedRowKeys.length}
               />
             </div>
           )}

@@ -41,13 +41,13 @@ public interface ReceiptRepo extends JpaRepository<Receipt,Long> {
     @Query("select count(r) from Receipt r where " +
             "(:value is null or r.code like concat('%',:value,'%'))" +
             "and" +
-            "(:manager is null or r.manager=:manager)" +
+            "((:manager is null or :status='dung') or r.manager=:manager)" +
             "and" +
             "(:date is null or cast(r.created_date1 as date )=:date )" +
             "and" +
             "(:type is null or r.payment_type=:type)" +
             "and " +
-            "(:status is null or r.status=:status) " +
+            "(:status is null or :status='dung' or r.status=:status) " +
             "and " +
             "(:group is null  or r.receiptGroup=:group)")
     Long countList(@Param("value") String value,

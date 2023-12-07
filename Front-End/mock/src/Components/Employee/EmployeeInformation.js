@@ -52,6 +52,34 @@ export default function EmployeeInformation(props) {
         });
       })
       .catch((err) => {
+        if(err.response.status===404) Modal.error({
+          title:"Không tìm thấy",
+          onOk:()=>{
+            navigate("/employee-table")
+            Modal.destroyAll()
+          },
+          onCancel:()=>{
+            navigate("/employee-table")
+            Modal.destroyAll()
+          }
+        })
+        else if(err.response.status===406)
+        Modal.error({
+          title:"Phiên đăng nhập hết hạn",
+          onOk:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("")
+            Modal.destroyAll()
+          },
+          onCancel:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("")
+            Modal.destroyAll()
+          },
+          cancelText:"Quay lại"
+        })
       });
       if(!document.cookie.includes("ADMIN")){
         Modal.warning(
@@ -107,9 +135,9 @@ export default function EmployeeInformation(props) {
             size="large"
             style={{ height: "fit-content" }}
           >
-            <h2>
+            <h3>
               <CaretLeftOutlined /> Danh sách nhân viên
-            </h2>
+            </h3>
           </Button>
         </ConfigProvider>
         <Account name={localStorage.getItem("name")} />

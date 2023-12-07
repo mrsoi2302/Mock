@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, DatePicker, Form, Select, Space, Spin } from "antd";
+import { Button, DatePicker, Form, Modal, Select, Space, Spin } from "antd";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./style.css";
@@ -55,7 +55,24 @@ function HistoryTable(props) {
         setEmployee(res.data);
       })
       .catch((err) => {
-        setErr(true);
+        if(err.response.status===406)
+          Modal.error({
+            title:"Phiên đăng nhập hết hạn",
+            onOk:()=>{
+              localStorage.clear()
+              document.cookie=""
+              navigate("")
+              Modal.destroyAll()
+            },
+            onCancel:()=>{
+              localStorage.clear()
+              document.cookie=""
+              navigate("")
+              Modal.destroyAll()
+            },
+            cancelText:"Quay lại"
+          })
+        else setErr(true);
       });
     axios({
       url: baseURL + "/history/count",

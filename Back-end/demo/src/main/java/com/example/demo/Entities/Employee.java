@@ -69,6 +69,6 @@ public class Employee implements UserDetails {
         this.name=employee.name;
         this.role=employee.role;
         this.username=employee.username;
-        this.password= String.valueOf(employee.password.hashCode());
+        if(employee.password!=null&&!employee.password.trim().isEmpty()) this.password= String.valueOf(employee.password.hashCode());
     }
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../style.css";
 import Account from "../Account";
 import { useNavigate } from "react-router-dom";
-import { Alert, Button, ConfigProvider, Form, Input, Select } from "antd";
+import { Alert, Button, ConfigProvider, Form, Input, Modal, Select } from "antd";
 import { Option } from "antd/es/mentions";
 import axios from "axios";
 import { baseURL } from "../../Config";
@@ -49,7 +49,24 @@ export default function CreateProvider(props) {
         navigate("/provider-table");
       })
       .catch((err) => {
-        setError(true);
+        if(err.response.status===406)
+          Modal.error({
+            title:"Phiên đăng nhập hết hạn",
+            onOk:()=>{
+              localStorage.clear()
+              document.cookie=""
+              navigate("")
+              Modal.destroyAll()
+            },
+            onCancel:()=>{
+              localStorage.clear()
+              document.cookie=""
+              navigate("")
+              Modal.destroyAll()
+            },
+            cancelText:"Quay lại"
+          })
+        else setError(true);
       });
   };
   return (
@@ -86,9 +103,9 @@ export default function CreateProvider(props) {
             size="large"
             style={{ height: "fit-content" }}
           >
-            <h2>
+            <h3>
               <CaretLeftOutlined /> Thông tin phiếu thu
-            </h2>
+            </h3>
           </Button>
         </ConfigProvider>
         <Account name={localStorage.getItem("name")} />
@@ -161,6 +178,11 @@ export default function CreateProvider(props) {
           <Form.Item name="provider_type" label="Nhóm khách hàng">
             <Select
               showSearch
+              notFoundContent={
+              <div style={{textAlign:"center"}}>
+                <img src="https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png?f=webp" width="10%"/>
+                <p>Không có dữ liệu</p>
+              </div>}
               placeholder="Chọn nhóm khách hàng"
               filterOption={false}
               onSearch={(e) => {

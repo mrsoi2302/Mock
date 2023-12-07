@@ -5,6 +5,7 @@ import {
   DatePicker,
   Form,
   Input,
+  Modal,
   Select,
   message,
 } from "antd";
@@ -61,7 +62,25 @@ export default function CreateCustomer(props) {
         navigate("/customer-table");
       })
       .catch((err) => {
-        message.error("Tạo thất bại");
+        if(err.response.status===406)
+        if(err.response.status===406)
+        Modal.error({
+          title:"Phiên đăng nhập hết hạn",
+          onOk:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("")
+            Modal.destroyAll()
+          },
+          onCancel:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("")
+            Modal.destroyAll()
+          },
+          cancelText:"Quay lại"
+        })
+        else message.error("Tạo thất bại");
       });
   };
   return (
@@ -93,7 +112,7 @@ export default function CreateCustomer(props) {
           <Button
             type="text"
             onClick={(e) => {
-              navigate("/payment-table");
+              navigate("/customer-table");
             }}
             size="large"
             style={{ height: "fit-content" }}
@@ -220,17 +239,16 @@ export default function CreateCustomer(props) {
           <Form.Item
             name="customer_type"
             label="Nhóm khách hàng"
-            rules={[
-              {
-                required: true,
-                message: "Vùng này không được để trống",
-              },
-            ]}
           >
             <Select
               showSearch
               placeholder="Chọn nhóm khách hàng"
               filterOption={false}
+              notFoundContent={
+              <div style={{textAlign:"center"}}>
+                <img src="https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png?f=webp" width="10%"/>
+                <p>Không có dữ liệu</p>
+              </div>}
               onSearch={(e) => {
                 setValue(e);
               }}
@@ -245,13 +263,7 @@ export default function CreateCustomer(props) {
               style={{ paddingLeft: "10px" }}
               
             >
-              {dataOfType.length===0 ? 
-              <div style={{textAlign:"center"}}>
-              <img src="https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png?f=webp" width="10%"/>
-              <p>Không có dữ liệu</p>
-            </div>
-              :
-              dataOfType.map((i) => {
+              {dataOfType.map((i) => {
                 if (dataOfType.length > 0)
                   return <Option value={i.id}>{i.content}</Option>;
               })}

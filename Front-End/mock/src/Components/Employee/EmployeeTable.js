@@ -92,6 +92,23 @@ export default function EmployeeTable(props) {
         });
       })
       .catch((err) => {
+        if(err.response.status===406)
+          Modal.error({
+            title:"Phiên đăng nhập hết hạn",
+            onOk:()=>{
+              localStorage.clear()
+              document.cookie=""
+              navigate("")
+              Modal.destroyAll()
+            },
+            onCancel:()=>{
+              localStorage.clear()
+              document.cookie=""
+              navigate("")
+              Modal.destroyAll()
+            },
+            cancelText:"Quay lại"
+          })
       });
     axios({
       method: "post",
@@ -129,6 +146,7 @@ export default function EmployeeTable(props) {
       return (()=>{
         Modal.destroyAll()
       })
+      
   }, [role, value, page, limit, loading, inputFile, index]);
   const handleButton = (e) => {
     setLoading(true);
@@ -207,7 +225,12 @@ export default function EmployeeTable(props) {
         key: "role",
         render: (_, tag) => (
           <>
-            {tag.role === "STAFF" ? (
+            {tag.role==="ADMIN" ?
+            <Tag color="blue" key={tag}>
+              Quản trị viên
+            </Tag>
+            :
+            tag.role === "STAFF" ? (
               <Tag color="red" key={tag}>
                 Nhân viên
               </Tag>
@@ -241,7 +264,7 @@ export default function EmployeeTable(props) {
   return (
     <div className="content">
       <div className="taskbar">
-        <h2>Danh sách nhân viên</h2>
+        <h3>Danh sách nhân viên</h3>
         <Account name={localStorage.getItem("name")} />
       </div>
 
