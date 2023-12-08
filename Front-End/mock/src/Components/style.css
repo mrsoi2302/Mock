@@ -133,3 +133,19 @@ a{
 .information p{
     font-size: x-large;
 }
+
+#invoice-container {
+  width: 100%;
+  margin: 0;
+  padding: 10px;
+  display:  block !important;
+}
+  
+.invoice-header{
+  text-align: center;
+} 
+.invoice-footer p {
+  text-align: right;
+  margin-top: 10px;
+}
+  

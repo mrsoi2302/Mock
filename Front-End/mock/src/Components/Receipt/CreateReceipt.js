@@ -23,7 +23,9 @@ export default function CreateReceipt(props) {
   document.title = "Tạo phiếu chi mới";
 
   const navigate = useNavigate();
-  const [data, setData] = useState({});
+  const [data, setData] = useState({
+    status:"unpaid"
+  });
   const [value, setValue] = useState();
   const [error, setError] = useState(false);
   const [dataOfType, setDataOfType] = useState([]);
@@ -282,6 +284,7 @@ export default function CreateReceipt(props) {
           </Form.Item>
           <Form.Item
             name="status"
+            initialValue={"Chưa thanh toán"}
             label="Trạng thái"
             rules={[
               {

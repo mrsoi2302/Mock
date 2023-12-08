@@ -22,7 +22,9 @@ import { CaretLeftOutlined } from "@ant-design/icons";
 export default function CreatePayment(props) {
   document.title = "Tạo phiếu thu mới";
   const navigate = useNavigate();
-  const [data, setData] = useState({});
+  const [data, setData] = useState({
+    status:"unpaid"
+  });
   const [value, setValue] = useState("");
   const [error, setError] = useState(false);
   const [dataOfType, setDataOfType] = useState([]);
@@ -304,6 +306,7 @@ export default function CreatePayment(props) {
           </Form.Item>
           <Form.Item
             name="status"
+            initialValue={"Chưa thanh toán"}
             label="Trạng thái"
             rules={[
               {

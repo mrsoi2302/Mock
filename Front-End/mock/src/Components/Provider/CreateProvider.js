@@ -11,7 +11,9 @@ import { CaretLeftOutlined } from "@ant-design/icons";
 
 export default function CreateProvider(props) {
   document.title = "Tạo nhà cung cấp";
-  const [data, setData] = useState();
+  const [data, setData] = useState(
+    {status:"active"}
+  );
   const navigate = useNavigate();
   const [error, setError] = useState(false);
   const [form] = Form.useForm();
@@ -249,6 +251,7 @@ export default function CreateProvider(props) {
             />
           </Form.Item>
           <Form.Item
+            initialValue={"Đã kích hoạt"}
             name="status"
             label="Trạng thái"
             rules={[
