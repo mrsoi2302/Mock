@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -42,8 +43,7 @@ public class RequestFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             filterChain.doFilter(request, response);
         }catch (ExpiredJwtException e){
-            response.setStatus(HttpStatus.NOT_ACCEPTABLE.value());
-            response.getWriter().write("Token hết hạn"); // Gửi thông báo lỗi trong response body
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
         }
 
     }

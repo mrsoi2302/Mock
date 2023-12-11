@@ -89,23 +89,22 @@ export default function ModifyReceipt(props) {
           message.error("Có lỗi khi lấy dữ liệu từ khách hàng");
         });
     }).catch(err=>{
-      if(err.response.status===406)
-          Modal.error({
-            title:"Phiên đăng nhập hết hạn",
-            onOk:()=>{
-              localStorage.clear()
-              document.cookie=""
-              navigate("")
-              Modal.destroyAll()
-            },
-            onCancel:()=>{
-              localStorage.clear()
-              document.cookie=""
-              navigate("")
-              Modal.destroyAll()
-            },
-            cancelText:"Quay lại"
-          })
+      Modal.error({
+        title:"Phiên đăng nhập hết hạn",
+        onOk:()=>{
+          localStorage.clear()
+          document.cookie=""
+          navigate("")
+          Modal.destroyAll()
+        },
+        onCancel:()=>{
+          localStorage.clear()
+          document.cookie=""
+          navigate("")
+          Modal.destroyAll()
+        },
+        cancelText:"Quay lại"
+      })
     });
     axios({
       url: baseURL + "/payment-type/list",

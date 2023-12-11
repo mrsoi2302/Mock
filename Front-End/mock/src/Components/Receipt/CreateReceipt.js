@@ -96,22 +96,22 @@ export default function CreateReceipt(props) {
       })
       .catch((err) => {
         if(err.response.status===406)
-          Modal.error({
-            title:"Phiên đăng nhập hết hạn",
-            onOk:()=>{
-              localStorage.clear()
-              document.cookie=""
-              navigate("")
-              Modal.destroyAll()
-            },
-            onCancel:()=>{
-              localStorage.clear()
-              document.cookie=""
-              navigate("")
-              Modal.destroyAll()
-            },
-            cancelText:"Quay lại"
-          })
+        Modal.error({
+          title:"Phiên đăng nhập hết hạn",
+          onOk:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("")
+            Modal.destroyAll()
+          },
+          onCancel:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("")
+            Modal.destroyAll()
+          },
+          cancelText:"Quay lại"
+        })
         else message.error("Tạo thất bại");
       });
   };

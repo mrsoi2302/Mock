@@ -114,7 +114,22 @@ export default function CustomerType(props) {
           data: [],
           loading: false,
         });
-        setErr(true);
+        Modal.error({
+          title:"Phiên đăng nhập hết hạn",
+          onOk:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("/")
+            Modal.destroyAll()
+          },
+          onCancel:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("/")
+            Modal.destroyAll()
+          },
+          cancelText:"Quay lại"
+        })
       }
     };
 
@@ -155,13 +170,13 @@ export default function CustomerType(props) {
             onOk:()=>{
               localStorage.clear()
               document.cookie=""
-              navigate("")
+              navigate("/")
               Modal.destroyAll()
             },
             onCancel:()=>{
               localStorage.clear()
               document.cookie=""
-              navigate("")
+              navigate("/")
               Modal.destroyAll()
             },
             cancelText:"Quay lại"

@@ -139,19 +139,18 @@ export default function PaymentInformation(props) {
             Modal.destroyAll()
           }
         })
-        else if(err.response.status===406)
-        Modal.error({
+        else Modal.error({
           title:"Phiên đăng nhập hết hạn",
           onOk:()=>{
             localStorage.clear()
             document.cookie=""
-            navigate("")
+            navigate("/")
             Modal.destroyAll()
           },
           onCancel:()=>{
             localStorage.clear()
             document.cookie=""
-            navigate("")
+            navigate("/")
             Modal.destroyAll()
           },
           cancelText:"Quay lại"

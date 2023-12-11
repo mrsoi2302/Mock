@@ -90,6 +90,7 @@ function ProviderTable(props) {
     props.setOpenKeys("provider");
     props.setSelectedKeys("provider-list");
     let temp = [];
+
     axios({
       method: "post",
       url: baseURL + "/provider-type/list",
@@ -104,7 +105,7 @@ function ProviderTable(props) {
         setDataOfType(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.data);
       });
     axios({
       url:
@@ -143,24 +144,23 @@ function ProviderTable(props) {
         });
       })
       .catch((err) => {
-        if(err.response.status===406)
-          Modal.error({
-            title:"Phiên đăng nhập hết hạn",
-            onOk:()=>{
-              localStorage.clear()
-              document.cookie=""
-              navigate("")
-              Modal.destroyAll()
-            },
-            onCancel:()=>{
-              localStorage.clear()
-              document.cookie=""
-              navigate("")
-              Modal.destroyAll()
-            },
-            cancelText:"Quay lại"
-          })
-        else setErr(true);
+        console.log(err.response);
+        Modal.error({
+          title:"Phiên đăng nhập hết hạn",
+          onOk:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("/")
+            Modal.destroyAll()
+          },
+          onCancel:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("/")
+            Modal.destroyAll()
+          },
+          cancelText:"Quay lại"
+        })
       });
     axios({
       method: "post",
@@ -240,7 +240,7 @@ function ProviderTable(props) {
           dataOfType.map((i) => {
             check.push(i.content);
           });
-          jsonData.map(async (json) => {
+          for(const json{
             if (
               typeof json.provider_type != "undefined" &&
               (json.status === "non-acitve" || json.status === "active")
@@ -295,15 +295,14 @@ function ProviderTable(props) {
                   setFailed(failed + 1);
                   message.error("Tạo thất bại nhà cung cấp " + newObj.name);
                 });
-              return newObj;
             } else message.error("Đối tượng " + json.name + " không hợp lệ");
           });
-          setCheckBox(true);
         } catch (err) {
           message.error("File không hợp lệ");
         }
       };
       reader.readAsArrayBuffer(file.files[0]);
+      setCheckBox(true);
     }
   };
   const onChangeClick = (pagination, filters, sorter, extra) => {
@@ -531,7 +530,7 @@ function ProviderTable(props) {
         </Modal>
       )}
       {err ? (
-        <ExceptionBox url="/main" msg=<h2>Có lỗi xảy ra</h2> />
+        <div></div>
       ) : (
         <div className="inside" style={{ display: "block" }}>
           {data.loading && loading ? (

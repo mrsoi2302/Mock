@@ -77,30 +77,18 @@ export default function ModifyPayment(props) {
         setData(res.data.t);
       })
       .catch((err) => {
-        if(err.response.status===404) Modal.error({
-          title:"Không tìm thấy",
-          onOk:()=>{
-            navigate("/payment-table")
-            Modal.destroyAll()
-          },
-          onCancel:()=>{
-            navigate("/payment-table")
-            Modal.destroyAll()
-          }
-        })
-        else if(err.response.status===406)
         Modal.error({
           title:"Phiên đăng nhập hết hạn",
           onOk:()=>{
             localStorage.clear()
             document.cookie=""
-            navigate("")
+            navigate("/")
             Modal.destroyAll()
           },
           onCancel:()=>{
             localStorage.clear()
             document.cookie=""
-            navigate("")
+            navigate("/")
             Modal.destroyAll()
           },
           cancelText:"Quay lại"

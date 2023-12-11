@@ -113,18 +113,6 @@ export default function ReceiptInformation(props) {
         });
       })
       .catch((err) => {
-        if(err.response.status===404) Modal.error({
-          title:"Không tìm thấy",
-          onOk:()=>{
-            navigate("/receipt-table")
-            Modal.destroyAll()
-          },
-          onCancel:()=>{
-            navigate("/receipt-table")
-            Modal.destroyAll()
-          }
-        })
-        else if(err.response.status===406)
         Modal.error({
           title:"Phiên đăng nhập hết hạn",
           onOk:()=>{

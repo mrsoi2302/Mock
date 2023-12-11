@@ -10,6 +10,21 @@ import { CaretLeftOutlined } from "@ant-design/icons";
 
 import ExceptionBox from "../ExceptionBox";
 export default function EmployeeInformation(props) {
+  if(!document.cookie.includes("ADMIN")){
+    Modal.warning(
+      {
+        title:"Có vẻ bạn không đủ thẩm quyền để truy cập trang này",
+        onOk:(e=>{
+          navigate("/main")
+          Modal.destroyAll()}),
+        onCancel:(e=>{
+          navigate("/main")
+          Modal.destroyAll()
+        }),
+        
+      }
+    )
+  }
   document.title = "Thông tin nhân viên";
   const navigate = useNavigate();
   const { code } = useParams();
@@ -63,39 +78,24 @@ export default function EmployeeInformation(props) {
             Modal.destroyAll()
           }
         })
-        else if(err.response.status===406)
+        else
         Modal.error({
           title:"Phiên đăng nhập hết hạn",
           onOk:()=>{
             localStorage.clear()
             document.cookie=""
-            navigate("")
+            navigate("/")
             Modal.destroyAll()
           },
           onCancel:()=>{
             localStorage.clear()
             document.cookie=""
-            navigate("")
+            navigate("/")
             Modal.destroyAll()
           },
           cancelText:"Quay lại"
         })
       });
-      if(!document.cookie.includes("ADMIN")){
-        Modal.warning(
-          {
-            title:"Có vẻ bạn không đủ thẩm quyền để truy cập trang này",
-            onOk:(e=>{
-              navigate("/main")
-              Modal.destroyAll()}),
-            onCancel:(e=>{
-              navigate("/main")
-              Modal.destroyAll()
-            }),
-            
-          }
-        )
-      }
       return (()=>{
         Modal.destroyAll()
       })
@@ -104,19 +104,6 @@ export default function EmployeeInformation(props) {
   return (
     <div className="content">
       <div className="taskbar">
-        {err && (
-          <Alert
-            message="Truy cập thất bại"
-            showIcon
-            description="Có vẻ bạn không có quyền truy cập"
-            type="error"
-            style={{
-              position: "absolute",
-              margin: "20%",
-            }}
-            closable
-          />
-        )}
         <ConfigProvider
           theme={{
             components: {

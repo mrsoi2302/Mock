@@ -12,8 +12,6 @@ import { Option } from "antd/es/mentions";
 import DefaultTable from "./DefaultTable";
 function HistoryTable(props) {
   document.title = "Lịch sử";
-  localStorage.removeItem("selected");
-  localStorage.removeItem("open");
   const navigate = useNavigate();
   const [data, setData] = useState({
     data: [],
@@ -44,6 +42,8 @@ function HistoryTable(props) {
   ];
   var ename, ecode, edate;
   useEffect(() => {
+    props.setOpen("")
+    props.setSelected("")
     axios({
       method: "get",
       url: baseURL + "/employee/admin/list",
@@ -55,24 +55,22 @@ function HistoryTable(props) {
         setEmployee(res.data);
       })
       .catch((err) => {
-        if(err.response.status===406)
-          Modal.error({
-            title:"Phiên đăng nhập hết hạn",
-            onOk:()=>{
-              localStorage.clear()
-              document.cookie=""
-              navigate("")
-              Modal.destroyAll()
-            },
-            onCancel:()=>{
-              localStorage.clear()
-              document.cookie=""
-              navigate("")
-              Modal.destroyAll()
-            },
-            cancelText:"Quay lại"
-          })
-        else setErr(true);
+        Modal.error({
+          title:"Phiên đăng nhập hết hạn",
+          onOk:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("")
+            Modal.destroyAll()
+          },
+          onCancel:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("")
+            Modal.destroyAll()
+          },
+          cancelText:"Quay lại"
+        })
       });
     axios({
       url: baseURL + "/history/count",

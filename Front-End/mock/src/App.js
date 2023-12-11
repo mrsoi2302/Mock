@@ -62,8 +62,8 @@ function App() {
               element={
                 <HistoryTable
                   openKeys={openKeys}
-                  setOpenKeys={setOpenKeys}
-                  setSelectedKeys={setSelectedKeys}
+                  setOpen={setOpenKeys}
+                  setSelected={setSelectedKeys}
                   selectedKeys={selectedKeys}
                   token={token}
                 />

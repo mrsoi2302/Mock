@@ -50,7 +50,7 @@ export default function ProviderInformation(props) {
       },
     }).then((res) => {
       setReceipts(res.data);
-    });
+    }).catch(err=>{});
     axios({
       url: baseURL + "/provider/information?code=" + code,
       method: "get",
@@ -65,30 +65,18 @@ export default function ProviderInformation(props) {
         });
       })
       .catch((err) => {
-        if(err.response.status===404) Modal.error({
-          title:"Không tìm thấy",
-          onOk:()=>{
-            navigate("/provider-table")
-            Modal.destroyAll()
-          },
-          onCancel:()=>{
-            navigate("/provider-table")
-            Modal.destroyAll()
-          }
-        })
-        else if(err.response.status===406)
         Modal.error({
           title:"Phiên đăng nhập hết hạn",
           onOk:()=>{
             localStorage.clear()
             document.cookie=""
-            navigate("")
+            navigate("/")
             Modal.destroyAll()
           },
           onCancel:()=>{
             localStorage.clear()
             document.cookie=""
-            navigate("")
+            navigate("/")
             Modal.destroyAll()
           },
           cancelText:"Quay lại"

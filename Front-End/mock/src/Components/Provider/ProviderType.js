@@ -114,23 +114,22 @@ export default function ProviderType(props) {
       } catch (error) {
         // Handle errors here
         console.error("Error fetching data:", error);
-        if(err.response.status===406)
-          Modal.error({
-            title:"Phiên đăng nhập hết hạn",
-            onOk:()=>{
-              localStorage.clear()
-              document.cookie=""
-              navigate("")
-              Modal.destroyAll()
-            },
-            onCancel:()=>{
-              localStorage.clear()
-              document.cookie=""
-              navigate("")
-              Modal.destroyAll()
-            },
-            cancelText:"Quay lại"
-          })
+        Modal.error({
+          title:"Phiên đăng nhập hết hạn",
+          onOk:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("")
+            Modal.destroyAll()
+          },
+          onCancel:()=>{
+            localStorage.clear()
+            document.cookie=""
+            navigate("")
+            Modal.destroyAll()
+          },
+          cancelText:"Quay lại"
+        })
         setData({
           data: [],
           loading: false,

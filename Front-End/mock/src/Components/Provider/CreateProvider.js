@@ -51,24 +51,22 @@ export default function CreateProvider(props) {
         navigate("/provider-table");
       })
       .catch((err) => {
-        if(err.response.status===406)
           Modal.error({
             title:"Phiên đăng nhập hết hạn",
             onOk:()=>{
               localStorage.clear()
               document.cookie=""
-              navigate("")
+              navigate("/")
               Modal.destroyAll()
             },
             onCancel:()=>{
               localStorage.clear()
               document.cookie=""
-              navigate("")
+              navigate("/")
               Modal.destroyAll()
             },
             cancelText:"Quay lại"
           })
-        else setError(true);
       });
   };
   return (

@@ -23,6 +23,21 @@ import { Option } from "antd/es/mentions";
 import { CaretLeftOutlined } from "@ant-design/icons";
 
 export default function ModifyEmployee(props) {
+  if(!document.cookie.includes("ADMIN")){
+    Modal.warning(
+      {
+        title:"Có vẻ bạn không đủ thẩm quyền để truy cập trang này",
+        onOk:(e=>{
+          navigate("/main")
+          Modal.destroyAll()}),
+        onCancel:(e=>{
+          navigate("/main")
+          Modal.destroyAll()
+        }),
+        
+      }
+    )
+  }
   document.title = "Chỉnh sửa nhân viên";
   const navigate = useNavigate();
   const [form] = Form.useForm();
@@ -62,39 +77,24 @@ export default function ModifyEmployee(props) {
             Modal.destroyAll()
           }
         })
-        else if(err.response.status===406)
+        else 
         Modal.error({
           title:"Phiên đăng nhập hết hạn",
           onOk:()=>{
             localStorage.clear()
             document.cookie=""
-            navigate("")
+            navigate("/")
             Modal.destroyAll()
           },
           onCancel:()=>{
             localStorage.clear()
             document.cookie=""
-            navigate("")
+            navigate("/")
             Modal.destroyAll()
           },
           cancelText:"Quay lại"
         })
       });
-      if(!document.cookie.includes("ADMIN")){
-        Modal.warning(
-          {
-            title:"Có vẻ bạn không đủ thẩm quyền để truy cập trang này",
-            onOk:(e=>{
-              navigate("/main")
-              Modal.destroyAll()}),
-            onCancel:(e=>{
-              navigate("/main")
-              Modal.destroyAll()
-            }),
-            
-          }
-        )
-      }
       return (()=>{
         Modal.destroyAll()
       })

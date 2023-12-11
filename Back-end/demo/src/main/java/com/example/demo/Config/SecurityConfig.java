@@ -43,7 +43,6 @@ public class SecurityConfig {
         config.addAllowedOrigin("http://localhost:3000"); // Origin được phép truy cập
         config.addAllowedHeader("*"); // Các headers được phép
         config.addAllowedMethod("*"); // Các phương thức HTTP được phép
-
         // Đăng ký cấu hình CORS cho tất cả các URL
         source.registerCorsConfiguration("/**", config);
 

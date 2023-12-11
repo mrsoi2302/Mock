@@ -23,6 +23,21 @@ export default function EmployeeTable(props) {
     loading: true,
   });
   const [count, setCount] = useState(0);
+  if(!document.cookie.includes("ADMIN")){
+    Modal.warning(
+      {
+        title:"Có vẻ bạn không đủ thẩm quyền để truy cập trang này",
+        onOk:(e=>{
+          navigate("/main")
+          Modal.destroyAll()}),
+        onCancel:(e=>{
+          navigate("/main")
+          Modal.destroyAll()
+        }),
+        
+      }
+    )
+  }
   const [inputFile, setInputFile] = useState(false);
   const [role, setRole] = useState();
   const [value, setValue] = useState();
@@ -92,19 +107,18 @@ export default function EmployeeTable(props) {
         });
       })
       .catch((err) => {
-        if(err.response.status===406)
           Modal.error({
             title:"Phiên đăng nhập hết hạn",
             onOk:()=>{
               localStorage.clear()
               document.cookie=""
-              navigate("")
+              navigate("/")
               Modal.destroyAll()
             },
             onCancel:()=>{
               localStorage.clear()
               document.cookie=""
-              navigate("")
+              navigate("/")
               Modal.destroyAll()
             },
             cancelText:"Quay lại"
@@ -128,21 +142,7 @@ export default function EmployeeTable(props) {
       })
       .catch((err) => {
       });
-      if(!document.cookie.includes("ADMIN")){
-        Modal.warning(
-          {
-            title:"Có vẻ bạn không đủ thẩm quyền để truy cập trang này",
-            onOk:(e=>{
-              navigate("/main")
-              Modal.destroyAll()}),
-            onCancel:(e=>{
-              navigate("/main")
-              Modal.destroyAll()
-            }),
-            
-          }
-        )
-      }
+      
       return (()=>{
         Modal.destroyAll()
       })

@@ -195,24 +195,22 @@ export default function Main(props) {
             });
           })
           .catch((err) => {
-            if (err.response.status === 406)
-              Modal.error({
-                title: "Phiên đăng nhập hết hạn",
-                onOk: () => {
-                  localStorage.clear();
-                  document.cookie = "";
-                  navigate("");
-                  Modal.destroyAll();
-                },
-                onCancel: () => {
-                  localStorage.clear();
-                  document.cookie = "";
-                  navigate("");
-                  Modal.destroyAll();
-                },
-                cancelText: "Quay lại",
-              });
-            else setErr(true);
+            Modal.error({
+              title:"Phiên đăng nhập hết hạn",
+              onOk:()=>{
+                localStorage.clear()
+                document.cookie=""
+                navigate("")
+                Modal.destroyAll()
+              },
+              onCancel:()=>{
+                localStorage.clear()
+                document.cookie=""
+                navigate("")
+                Modal.destroyAll()
+              },
+              cancelText:"Quay lại"
+            })
           });
       })
       .catch((err) => {

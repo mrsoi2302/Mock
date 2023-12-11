@@ -57,19 +57,18 @@ export default function CreateEmployee(props) {
       })
       .catch((err) => {
         if(err.response.status===400) message.error("Tên đăng nhập đã tồn tại")
-        if(err.response.status===406)
         Modal.error({
           title:"Phiên đăng nhập hết hạn",
           onOk:()=>{
             localStorage.clear()
             document.cookie=""
-            navigate("")
+            navigate("/")
             Modal.destroyAll()
           },
           onCancel:()=>{
             localStorage.clear()
             document.cookie=""
-            navigate("")
+            navigate("/")
             Modal.destroyAll()
           },
           cancelText:"Quay lại"

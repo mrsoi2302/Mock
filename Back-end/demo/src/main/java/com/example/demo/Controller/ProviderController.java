@@ -23,8 +23,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/provider")
+@CrossOrigin(origins = "http://localhost:3000/**")
 @AllArgsConstructor
-@Transactional
 public class ProviderController {
     private final ProviderService providerService;
     private TokenProvider tokenProvider;
@@ -79,7 +79,7 @@ public class ProviderController {
         provider.setCreated_date(new Date(System.currentTimeMillis()+(1000*60*60*7)));
         provider.setCreated_date1(new Date(System.currentTimeMillis()));
         providerService.save(provider);
-        historyRepository.save(t.getCode(),t.getName(),"đã tạo ra nhà cung cấp "+provider.getCode());
+            historyRepository.save(t.getCode(),t.getName(),"đã tạo ra nhà cung cấp "+provider.getCode());
     }
     @PostMapping("/staff/create-many")
     public void createAll(@RequestBody List<Provider> list, HttpServletRequest request){
