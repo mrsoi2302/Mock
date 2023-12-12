@@ -205,13 +205,12 @@ function CustomerTable(props) {
           });
           jsonData.map(async (json) => {
             if (
-              typeof json.customer_type != "undefined" &&
               (json.status === "non-active" || json.status === "active")
             ) {
               if (!check.includes(String(json.customer_type))) {
                 await axios({
                   method: "post",
-                  url: baseURL + "/customer-type/admin/create",
+                  url: baseURL + "/customer-type/staff/create",
                   headers: {
                     Authorization: props.token,
                   },

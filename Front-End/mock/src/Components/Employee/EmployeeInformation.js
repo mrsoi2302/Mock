@@ -180,7 +180,7 @@ export default function EmployeeInformation(props) {
               <p>Tên đăng nhập</p>
               <p>: {data.data.username}</p>
               <p>Vai trò</p>
-              <p>: {data.data.role === "STAFF" ? "Nhân viên" : "Người dùng"}</p>
+              <p>: {data.data.role === "ADMIN" ? "Quản trị viên" : (data.data.role === "STAFF" ? "Nhân viên" : "Người dùng")}</p>
             </div>
             <div
               style={{

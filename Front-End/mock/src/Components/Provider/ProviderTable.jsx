@@ -240,15 +240,14 @@ function ProviderTable(props) {
           dataOfType.map((i) => {
             check.push(i.content);
           });
-          for(const json{
+          jsonData.map(async (json) => {
             if (
-              typeof json.provider_type != "undefined" &&
-              (json.status === "non-acitve" || json.status === "active")
+              json.status === "non-active" || json.status === "active"
             ) {
               if (!check.includes(String(json.provider_type))) {
                 await axios({
                   method: "post",
-                  url: baseURL + "/provider-type/admin/create",
+                  url: baseURL + "/provider-type/staff/create",
                   headers: {
                     Authorization: props.token,
                   },
@@ -295,9 +294,12 @@ function ProviderTable(props) {
                   setFailed(failed + 1);
                   message.error("Tạo thất bại nhà cung cấp " + newObj.name);
                 });
-            } else message.error("Đối tượng " + json.name + " không hợp lệ");
+            } else{
+              message.error("Đối tượng " + json.name + " không hợp lệ");}
           });
+          setCheckBox(true);
         } catch (err) {
+          
           message.error("File không hợp lệ");
         }
       };
@@ -486,7 +488,7 @@ function ProviderTable(props) {
           msg=<div>
             <p>
               Thực hiện theo bản mẫu{" "}
-              <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vSU4DpL4BIBoTkI7VzYbgHJn8h47KssO4RxiMp0lHczRDXccOdKzAE-OnWpWLXaug2q_gU6ggrzxA-A/pub?output=xlsx">
+              <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQMbkSjf9H36G9fqaLbhCfHaasbDHR17ScTanGJ60vosjZnpsCu8rE1d-mvjSS7v5JzsW3ynYN7Q7p8/pub?output=xlsx">
                 {" "}
                 Tại đây
               </a>

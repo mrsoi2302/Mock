@@ -24,7 +24,7 @@ public class Receipt {
     private Timestamp created_date;
     private String code;
     private String provider_name;
-    @Column(columnDefinition = "0")
+    @NotNull
     private long revenue;
     @ManyToOne
     @JoinColumn(name = "providers_id",referencedColumnName = "id")
