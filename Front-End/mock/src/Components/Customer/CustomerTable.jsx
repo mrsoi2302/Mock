@@ -41,13 +41,13 @@ function CustomerTable(props) {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [list, setList] = useState([]);
   const [sort, setSort] = useState("");
   const [index, setIndex] = useState(false);
   const [dataRequest, setDataRequest] = useState({});
   const [dataOfType, setDataOfType] = useState([]);
-  const [customer_type, setProvider_type] = useState();
+  const [customer_type, setCustomer_type] = useState();
   const [success, setSuccess] = useState(0);
   const [failed, setFailed] = useState(0);
   const [typeCreated, setTypeCreated] = useState(0);
@@ -185,6 +185,59 @@ function CustomerTable(props) {
       })
       .catch((err) => setErr(true));
   };
+  async function processData(jsonData,check) {
+    let x=0;
+    let s=0;
+    let f=0;
+    let t=0;
+    for (const json of jsonData) {
+      x++;
+      if (json.status === "non-active" || json.status === "active") {
+        if (!check.includes(String(json.customer_type))) {
+          try {
+            const response = await axios.post(baseURL + "/customer-type/staff/create", {
+              content: json.customer_type === undefined ? "" : String(json.customer_type).trim(),
+            }, {
+              headers: {
+                Authorization: props.token,
+              },
+            });
+            message.success("Đã tạo thêm nhóm nhà cung cấp " + json.customer_type);
+            t++
+          } catch (error) {
+            message.error("Tạo nhóm thất bại");
+          }
+        }
+  
+        let { customer_type, ...newObj } = json;
+        newObj = {
+          ...newObj,
+          customer_type: {
+            content: json.customer_type === undefined ? "" : String(json.customer_type).trim(),
+          },
+        };
+  
+        try {
+          const response = await axios.post(baseURL + "/customer/staff/create-one", newObj, {
+            headers: {
+              Authorization: props.token,
+            },
+          });
+          s++
+        } catch (error) {
+          f++
+        }
+      } else {
+        message.error("Đối tượng " + json.name + " không hợp lệ");
+      }
+    }
+    if(x===jsonData.length){
+      setCheckBox(true)
+      setSuccess(s)
+      setFailed(f)
+      setTypeCreated(t)
+    }
+  }
   const submitList = async () => {
     if (file && file.files[0]) {
       const reader = new FileReader();
@@ -203,68 +256,7 @@ function CustomerTable(props) {
           dataOfType.map((i) => {
             check.push(i.content);
           });
-          jsonData.map(async (json) => {
-            if (
-              (json.status === "non-active" || json.status === "active")
-            ) {
-              if (!check.includes(String(json.customer_type))) {
-                await axios({
-                  method: "post",
-                  url: baseURL + "/customer-type/staff/create",
-                  headers: {
-                    Authorization: props.token,
-                  },
-                  data: {
-                    content:
-                      typeof json.customer_type === "undefined"
-                        ? null
-                        : String(json.customer_type).trim(),
-                  },
-                })
-                  .then((res) => {
-                    message.success(
-                      "Đã tạo thêm nhóm nhà cung cấp " + json.customer_type
-                    );
-                    setTypeCreated(typeCreated + 1);
-                  })
-                  .catch((err) => {
-                    message.error("Tạo nhóm thất bại");
-                  });
-              }
-              if (json.status !== "non-acitve" && json.status !== "active")
-                throw new Error();
-              let { customer_type, ...newObj } = json;
-              newObj = {
-                ...newObj,
-                customer_type: {
-                  content:
-                    typeof json.customer_type === "undefined"
-                      ? null
-                      : String(json.customer_type).trim(),
-                },
-              };
-              await axios({
-                method: "post",
-                url: baseURL + "/customer/staff/create-one",
-                headers: {
-                  Authorization: props.token,
-                },
-                data: newObj,
-              })
-                .then((res) => {
-                  setSuccess(success + 1);
-                  message.success("Tạo thành công nhà cung cấp " + newObj.name);
-                })
-                .catch((err) => {
-                  setFailed(failed + 1);
-                  message.error("Tạo thất bại nhà cung cấp " + newObj.name);
-                });
-              return newObj;
-            } else {
-              message.error("Đối tượng " + json.name + " không hợp lệ");
-            }
-          });
-          setCheckBox(true);
+          processData(jsonData,check);
         } catch (err) {
           message.error("File không hợp lệ");
         }
@@ -295,6 +287,12 @@ function CustomerTable(props) {
             placeholder="Chọn giới tính"
             style={{ marginTop: "10px", width: "15vw" }}
             allowClear
+            onClear={e=>{
+              setDataRequest({
+                ...dataRequest,
+                gender: null,
+              });
+            }}
             onSelect={(e) => {
               setDataRequest({
                 ...dataRequest,
@@ -373,6 +371,12 @@ function CustomerTable(props) {
                 width: "15vw",
               }}
               allowClear
+              onClear={e=>{
+                setDataRequest({
+                  ...dataRequest,
+                  customer_type: null,
+                });
+              }}
               onSelect={(e) => {
                 setDataRequest({
                   ...dataRequest,

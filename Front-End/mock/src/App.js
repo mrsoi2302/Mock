@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Login from "./Components/Login";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Main from "./Components/Main";
 import Menubar from "./Components/Menubar";
 import CreateEmployee from "./Components/Employee/CreateEmployee";
@@ -42,6 +42,11 @@ function App() {
           token={token}
           setSelectedKeys={setSelectedKeys}
         />
+        {localStorage.getItem("jwt")===null ? <Routes>
+          <Route path="*" element={<Navigate to={"/"} />}/>
+          <Route path="/" element={<Login setToken={setToken} />} />
+        </Routes>
+        :
         <Routes>
           <Route>
             <Route path="/" element={<Login setToken={setToken} />} />
@@ -361,7 +366,7 @@ function App() {
           
           */}
           </Route>
-        </Routes>
+        </Routes>}
       </BrowserRouter>
     </div>
   );

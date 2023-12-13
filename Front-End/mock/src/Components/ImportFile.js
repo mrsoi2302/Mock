@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Input, Modal } from "antd";
 export default function ImportFile(props) {
   const [check, setCheck] = useState(true);
+  const [loading, setLoading] = useState(false);
   return (
     <Modal
       title="Nhập file Excel"
@@ -9,8 +10,11 @@ export default function ImportFile(props) {
       onCancel={(e) => {
         props.setInputFile(false);
       }}
-      okButtonProps={{ disabled: check }}
-      onOk={props.submitList}
+      okButtonProps={{ disabled: check,loading:loading }}
+      onOk={e=>{
+        props.submitList()
+        setLoading(true)
+      }}
     >
       {props.msg}
       <Input

@@ -23,7 +23,7 @@ export default function ProviderType(props) {
   const [form] = Form.useForm();
   const [value, setValue] = useState();
   const [err, setErr] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [index, setIndex] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [warningModal, setWarningModal] = useState(false);

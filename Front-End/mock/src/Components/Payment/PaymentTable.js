@@ -47,7 +47,7 @@ function PaymentTable(props) {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [sort, setSort] = useState("");
   const [index, setIndex] = useState(false);
   const [dataRequest, setDataRequest] = useState({});

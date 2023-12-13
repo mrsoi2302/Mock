@@ -16,7 +16,7 @@ import * as XLSX from "xlsx";
 import axios from "axios";
 import ConfirmBox from "../ConfirmBox";
 import "../style.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Account from "../Account";
 import ExceptionBox from "../ExceptionBox";
 import RowSelectionTable from "../RowSelectionTable";
@@ -47,7 +47,7 @@ function ProviderTable(props) {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [list, setList] = useState([]);
   const [sort, setSort] = useState("");
   const [index, setIndex] = useState(false);
@@ -186,12 +186,10 @@ function ProviderTable(props) {
         setErr(true);
       });
   }, [
-    status,
     created_date,
     value,
     loading,
     inputFile,
-    provider_type,
     index,
     sort,
     page,
@@ -219,9 +217,63 @@ function ProviderTable(props) {
   const handleSubmit = (e) => {
     setCreated_date(edate);
     // console.log(created_date);
-    setStatus(estatus);
     setOpen(false);
+    setIndex(!index)
   };
+
+  async function processData(jsonData,check) {
+    let x=0;
+    let s=0;
+    let f=0;
+    let t=0;
+    for (const json of jsonData) {
+      x++;
+      if (json.status === "non-active" || json.status === "active") {
+        if (!check.includes(String(json.provider_type))) {
+          try {
+            const response = await axios.post(baseURL + "/provider-type/staff/create", {
+              content: json.provider_type === undefined ? "" : String(json.provider_type).trim(),
+            }, {
+              headers: {
+                Authorization: props.token,
+              },
+            });
+            message.success("Đã tạo thêm nhóm nhà cung cấp " + json.provider_type);
+            t++
+          } catch (error) {
+            message.error("Tạo nhóm thất bại");
+          }
+        }
+  
+        let { provider_type, ...newObj } = json;
+        newObj = {
+          ...newObj,
+          provider_type: {
+            content: json.provider_type === undefined ? "" : String(json.provider_type).trim(),
+          },
+        };
+  
+        try {
+          const response = await axios.post(baseURL + "/provider/staff/create-one", newObj, {
+            headers: {
+              Authorization: props.token,
+            },
+          });
+          s++
+        } catch (error) {
+          f++
+        }
+      } else {
+        message.error("Đối tượng " + json.name + " không hợp lệ");
+      }
+    }
+    if(x===jsonData.length){
+      setCheckBox(true)
+      setSuccess(s)
+      setFailed(f)
+      setTypeCreated(t)
+    }
+  }
   const submitList = () => {
     if (file && file.files[0]) {
       const reader = new FileReader();
@@ -240,71 +292,13 @@ function ProviderTable(props) {
           dataOfType.map((i) => {
             check.push(i.content);
           });
-          jsonData.map(async (json) => {
-            if (
-              json.status === "non-active" || json.status === "active"
-            ) {
-              if (!check.includes(String(json.provider_type))) {
-                await axios({
-                  method: "post",
-                  url: baseURL + "/provider-type/staff/create",
-                  headers: {
-                    Authorization: props.token,
-                  },
-                  data: {
-                    content:
-                      json.provider_type === "undefined"
-                        ? ""
-                        : String(json.provider_type).trim(),
-                  },
-                })
-                  .then((res) => {
-                    message.success(
-                      "Đã tạo thêm nhóm nhà cung cấp " + json.provider_type
-                    );
-                    setTypeCreated(typeCreated + 1);
-                  })
-                  .catch((err) => {
-                    message.error("Tạo nhóm thất bại");
-                  });
-              }
-              let { provider_type, ...newObj } = json;
-              newObj = {
-                ...newObj,
-                provider_type: {
-                  content:
-                    json.provider_type === undefined
-                      ? ""
-                      : String(json.provider_type).trim(),
-                },
-              };
-              await axios({
-                method: "post",
-                url: baseURL + "/provider/staff/create-one",
-                headers: {
-                  Authorization: props.token,
-                },
-                data: newObj,
-              })
-                .then((res) => {
-                  setSuccess(success + 1);
-                  message.success("Tạo thành công nhà cung cấp " + newObj.name);
-                })
-                .catch((err) => {
-                  setFailed(failed + 1);
-                  message.error("Tạo thất bại nhà cung cấp " + newObj.name);
-                });
-            } else{
-              message.error("Đối tượng " + json.name + " không hợp lệ");}
-          });
-          setCheckBox(true);
+          processData(jsonData,check);
         } catch (err) {
           
           message.error("File không hợp lệ");
         }
       };
       reader.readAsArrayBuffer(file.files[0]);
-      setCheckBox(true);
     }
   };
   const onChangeClick = (pagination, filters, sorter, extra) => {
@@ -333,6 +327,9 @@ function ProviderTable(props) {
             style={{ width: "15vw" }}
             placeholder="Chọn trạng thái"
             allowClear
+            onClear={(e) => {
+              setStatus(null);
+            }}
             onSelect={(e) => {
               setStatus(e);
             }}
@@ -352,6 +349,9 @@ function ProviderTable(props) {
             style={{ width: "15vw" }}
             placeholder="Chọn nhóm"
             allowClear
+            onClear={(e) => {
+              setProvider_type(null);
+            }}
             onSelect={(e) => {
               setProvider_type(e);
             }}
@@ -485,6 +485,7 @@ function ProviderTable(props) {
           setInputFile={setInputFile}
           setFile={setFile}
           submitList={submitList}
+          loading={success+failed+typeCreated}
           msg=<div>
             <p>
               Thực hiện theo bản mẫu{" "}
@@ -519,15 +520,15 @@ function ProviderTable(props) {
         >
           <p>
             Số nhà cung cấp đã thêm thành công:
-            {success > 0 ? success + 1 : success}
+            {" "+success}
           </p>
           <p>
             Số nhà cung cấp thêm không thành công:
-            {failed > 0 ? failed + 1 : failed}
+            {" "+failed}
           </p>
           <p>
             Số nhóm nhà cung cấp đã bổ sung:
-            {typeCreated > 0 ? typeCreated + 1 : typeCreated}
+            {" "+typeCreated}
           </p>
         </Modal>
       )}

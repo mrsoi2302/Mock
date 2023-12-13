@@ -122,7 +122,7 @@ export default function CustomerInformation(props) {
           <Button
             type="text"
             onClick={(e) => {
-              navigate("/payment-table");
+              navigate("/customer-table");
             }}
             size="large"
             style={{ height: "fit-content" }}
