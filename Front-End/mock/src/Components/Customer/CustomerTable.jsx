@@ -202,10 +202,8 @@ function CustomerTable(props) {
                 Authorization: props.token,
               },
             });
-            message.success("Đã tạo thêm nhóm nhà cung cấp " + json.customer_type);
             t++
           } catch (error) {
-            message.error("Tạo nhóm thất bại");
           }
         }
   
@@ -228,7 +226,6 @@ function CustomerTable(props) {
           f++
         }
       } else {
-        message.error("Đối tượng " + json.name + " không hợp lệ");
       }
     }
     if(x===jsonData.length){
@@ -570,16 +567,13 @@ function CustomerTable(props) {
         cancelText="Quay lại"
         >
           <p>
-            Số khách hàng đã thêm thành công:{" "}
-            {success > 0 ? success + 1 : success}
+            Số khách hàng đã thêm thành công:{" "+success}           
           </p>
           <p>
-            Số khách hàng thêm không thành công:{" "}
-            {failed > 0 ? failed + 1 : failed}
+            Số khách hàng thêm không thành công:{" "+failed}
           </p>
           <p>
-            Số nhóm khách hàng đã bổ sung:{" "}
-            {typeCreated > 0 ? failed + 1 : failed}
+            Số nhóm khách hàng đã bổ sung:{" "+typeCreated}
           </p>
         </Modal>
       )}
