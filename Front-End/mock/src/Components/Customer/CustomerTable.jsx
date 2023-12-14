@@ -192,7 +192,7 @@ function CustomerTable(props) {
     let t=0;
     for (const json of jsonData) {
       x++;
-      if (json.status === "non-active" || json.status === "active") {
+      if ((json.status === "non-active" || json.status === "active")&&(json.gender==="Nam" || json.gender==="Nữ" || json.gender==="Giới tính thứ 3")) {
         if (!check.includes(String(json.customer_type))) {
           try {
             const response = await axios.post(baseURL + "/customer-type/staff/create", {
