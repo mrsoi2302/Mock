@@ -23,21 +23,7 @@ export default function EmployeeTable(props) {
     loading: true,
   });
   const [count, setCount] = useState(0);
-  if(!document.cookie.includes("ADMIN")){
-    Modal.warning(
-      {
-        title:"Có vẻ bạn không đủ thẩm quyền để truy cập trang này",
-        onOk:(e=>{
-          navigate("/main")
-          Modal.destroyAll()}),
-        onCancel:(e=>{
-          navigate("/main")
-          Modal.destroyAll()
-        }),
-        
-      }
-    )
-  }
+  
   const [inputFile, setInputFile] = useState(false);
   const [role, setRole] = useState();
   const [value, setValue] = useState();
@@ -80,6 +66,22 @@ export default function EmployeeTable(props) {
     props.setOpenKeys("employee");
     props.setSelectedKeys("employee-list");
     let temp = [];
+    if(!document.cookie.includes("ADMIN")){
+      Modal.warning(
+        {
+          title:"Có vẻ bạn không đủ thẩm quyền để truy cập trang này",
+          onOk:(e=>{
+            navigate("/main")
+            Modal.destroyAll()}),
+          onCancel:(e=>{
+            navigate("/main")
+            Modal.destroyAll()
+          }),
+          
+        }
+      )
+    }
+    if(document.cookie.includes("ADMIN")) 
     axios({
       method: "post",
       url:
@@ -107,7 +109,7 @@ export default function EmployeeTable(props) {
         });
       })
       .catch((err) => {
-          Modal.error({
+        Modal.error({
             title:"Phiên đăng nhập hết hạn",
             onOk:()=>{
               localStorage.clear()

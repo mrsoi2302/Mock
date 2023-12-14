@@ -57,7 +57,7 @@ export default function CreateEmployee(props) {
       })
       .catch((err) => {
         if(err.response.status===400) message.error("Tên đăng nhập đã tồn tại")
-        Modal.error({
+        else Modal.error({
           title:"Phiên đăng nhập hết hạn",
           onOk:()=>{
             localStorage.clear()

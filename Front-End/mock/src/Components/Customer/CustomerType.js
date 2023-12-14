@@ -18,7 +18,7 @@ export default function CustomerType(props) {
     data: [],
     loading: true,
   });
-  const navigate=useNavigate()
+  const navigate = useNavigate()
   const [form] = Form.useForm();
   const [value, setValue] = useState();
   const [err, setErr] = useState(false);
@@ -115,20 +115,20 @@ export default function CustomerType(props) {
           loading: false,
         });
         Modal.error({
-          title:"Phiên đăng nhập hết hạn",
-          onOk:()=>{
+          title: "Phiên đăng nhập hết hạn",
+          onOk: () => {
             localStorage.clear()
-            document.cookie=""
+            document.cookie = ""
             navigate("/")
             Modal.destroyAll()
           },
-          onCancel:()=>{
+          onCancel: () => {
             localStorage.clear()
-            document.cookie=""
+            document.cookie = ""
             navigate("/")
             Modal.destroyAll()
           },
-          cancelText:"Quay lại"
+          cancelText: "Quay lại"
         })
       }
     };
@@ -164,24 +164,24 @@ export default function CustomerType(props) {
         setIndex(!index);
       })
       .catch((err) => {
-        if(err.response.status===406)
+        if (err.response.status === 406)
           Modal.error({
-            title:"Phiên đăng nhập hết hạn",
-            onOk:()=>{
+            title: "Phiên đăng nhập hết hạn",
+            onOk: () => {
               localStorage.clear()
-              document.cookie=""
+              document.cookie = ""
               navigate("/")
               Modal.destroyAll()
             },
-            onCancel:()=>{
+            onCancel: () => {
               localStorage.clear()
-              document.cookie=""
+              document.cookie = ""
               navigate("/")
               Modal.destroyAll()
             },
-            cancelText:"Quay lại"
+            cancelText: "Quay lại"
           })
-        if(err.response.status===400) message.error("Nhóm khách hàng "+create.content+" đã tồn tại")
+        if (err.response.status === 400) message.error("Nhóm khách hàng " + create.content + " đã tồn tại")
         else message.error("Tạo thất bại");
       });
     setOpenModal(!openModal);
@@ -265,7 +265,7 @@ export default function CustomerType(props) {
             rules={[
               {
                 required: true,
-                message:"Vùng này không được để trống"
+                message: "Vùng này không được để trống"
               },
             ]}
           >
@@ -338,6 +338,7 @@ export default function CustomerType(props) {
                 </Button>
               </div>
               <Table
+                showSorterTooltip={false}
                 locale={{
                   emptyText: (
                     <div>

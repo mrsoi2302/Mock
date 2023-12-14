@@ -503,6 +503,7 @@ function ReceiptTable(props) {
           ) : (
             <div>
               <Modal
+                title="Thêm hình thức thanh toán mới"
                 open={openModal}
                 onCancel={(e) => {
                   setOpenModal(false);

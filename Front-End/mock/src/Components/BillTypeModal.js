@@ -14,6 +14,7 @@ import React, { useEffect, useState } from "react";
 import { baseURL } from "../Config";
 
 export default function BillTypeModal(props) {
+  const [data,setData]=useState([])
   const [value, setValue] = useState("");
   const [createData, setCreateData] = useState({
     name: " ",
@@ -21,6 +22,36 @@ export default function BillTypeModal(props) {
   const [createForm, setCreateForm] = useState(false);
   const [render, setRender] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  useEffect(()=>{
+    async function fetchData(){
+      try {
+        const reponse = await axios(
+          {
+            url:baseURL + "/" + props.name + "-group/list",
+            method: "post",
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("jwt"),
+            },
+            data:{
+              value:value
+            }
+          }
+        )
+        let x=[]
+        reponse.data.map(t=>{
+          x.push({
+            ...t,
+            key:t.code
+          })
+        })
+        setData(x)
+      } catch (error) {
+        setData([])
+        message.error("Có lỗi khi lấy dữ liệu nhóm")
+      }
+    }
+    fetchData()
+  },[value,render])
   const createType = () => {
     axios({
       url: baseURL + "/" + props.name + "-group/staff/create",
@@ -35,6 +66,7 @@ export default function BillTypeModal(props) {
           name: " ",
         });
         setValue("");
+        setRender(!render);
         setCreateForm(false);
         props.setIndex(!props.index);
       })
@@ -170,6 +202,7 @@ export default function BillTypeModal(props) {
             label="Tên"
             rules={[
               {
+                message:"Vùng này không được để trống",
                 required: true,
               },
             ]}
@@ -198,6 +231,8 @@ export default function BillTypeModal(props) {
               type="primary"
               onClick={(e) => {
                 setCreateForm(true);
+                setValue("")
+
               }}
             >
               <PlusCircleOutlined size={"10px"} />
@@ -207,13 +242,14 @@ export default function BillTypeModal(props) {
             rowSelection={handleSelection}
             pagination={false}
             columns={columns}
-            dataSource={props.groups}
-            scroll={{ y: 500 }}
+            dataSource={data}
+            scroll={{ y: 300 }}
             locale={{
               emptyText: (
                 <Button
                   onClick={(e) => {
                     setCreateForm(true);
+                    setValue("")
                   }}
                   type="primary"
                 >
