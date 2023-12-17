@@ -56,20 +56,20 @@ function HistoryTable(props) {
       })
       .catch((err) => {
         Modal.error({
-          title:"Phiên đăng nhập hết hạn",
-          onOk:()=>{
+          title: "Phiên đăng nhập hết hạn",
+          onOk: () => {
             localStorage.clear()
-            document.cookie=""
+            document.cookie = ""
             navigate("")
             Modal.destroyAll()
           },
-          onCancel:()=>{
+          onCancel: () => {
             localStorage.clear()
-            document.cookie=""
+            document.cookie = ""
             navigate("")
             Modal.destroyAll()
           },
-          cancelText:"Quay lại"
+          cancelText: "Quay lại"
         })
       });
     axios({
@@ -168,29 +168,6 @@ function HistoryTable(props) {
         ),
         key: 2,
       },
-      {
-        label: (
-          <Form.Item>
-            <label>Mã nhân viên</label>
-            <Select
-              style={{ maxWidth: "400px" }}
-              allowClear
-              onSelect={(e) => {
-                ecode = e;
-              }}
-            >
-              {employee.map((item) => {
-                return <Option key={item.code}>{item.code}</Option>;
-              })}
-            </Select>
-          </Form.Item>
-        ),
-        key: 3,
-      },
-      {
-        label: <Button onClick={handleSubmit}>Lọc</Button>,
-        key: 4,
-      },
     ];
   }
   if (data.data.length > 0) {
@@ -241,6 +218,7 @@ function HistoryTable(props) {
         <Account name={localStorage.getItem("name")} />
       </div>
       <SearchInput
+        dspl="s"
         filter={items}
         openFilter={open}
         setOpenFilter={setOpen}

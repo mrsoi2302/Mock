@@ -67,7 +67,7 @@ public interface ProviderRepo extends JpaRepository<Provider,Long> {
     void deleteAllByCode(List<String> list);
     @Query("select p from Provider p where p.provider_type=:code")
     List<Provider> findAllByProviderType(ProviderType code);
-    @Query("select p from Provider p where :manager is null or p.manager=:manager")
+    @Query("select p from Provider p where (:manager is null or p.manager=:manager) and p.status='active' ")
     List<Provider> findForReceipt(@Param("manager") String manager);
     @Query("select p from Provider p where (:manager is null or p.manager=:manager) and p.code=:code")
     Provider findByCodeAndManager(@Param("code") String code,@Param("manager") String manager);

@@ -246,6 +246,12 @@ export default function CreateReceipt(props) {
             name="receiptGroup"
             label="Loại phiếu chi"
             style={{ float: "left", width: "47%" }}
+            rules={[
+              {
+                required: true,
+                message: "Vùng này không được để trống",
+              },
+            ]}
           >
             <Select
               notFoundContent={

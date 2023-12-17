@@ -18,6 +18,9 @@ export default function SearchInput(props){
                 items={props.filter}
             />
             <Search
+            style={{
+                display:props.dspl===undefined ? "block":"none"
+            }}
             enterButton
             onChange={e=>{props.setValue(e.target.value)}}/>
         </div>

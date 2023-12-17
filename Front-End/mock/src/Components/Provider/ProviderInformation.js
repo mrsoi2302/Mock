@@ -65,7 +65,20 @@ export default function ProviderInformation(props) {
         });
       })
       .catch((err) => {
-        Modal.error({
+        if(err.response.status===403)
+          Modal.error({
+            title:"Truy cập không hợp lệ",
+            onOk:()=>{
+              navigate(-1)
+              Modal.destroyAll()
+            },
+            onCancel:()=>{
+              navigate(-1)
+              Modal.destroyAll()
+            },
+            cancelText:"Quay lại"
+        })
+        else Modal.error({
           title:"Phiên đăng nhập hết hạn",
           onOk:()=>{
             localStorage.clear()

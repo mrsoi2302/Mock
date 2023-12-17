@@ -69,7 +69,7 @@ public class CustomerService {
         return customerRepo.findForPayment(manager);
     }
 
-    public List<Customer> findByCodeAndManager(String code, String manager) {
+    public Customer findByCodeAndManager(String code, String manager) {
         return customerRepo.findByCodeAndManager(code,manager);
     }
 }

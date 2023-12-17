@@ -187,9 +187,7 @@ function CustomerTable(props) {
   };
   async function processData(jsonData,check) {
     let x=0;
-    let s=0;
-    let f=0;
-    let t=0;
+    setCheckBox(true)
     for (const json of jsonData) {
       x++;
       if ((json.status === "non-active" || json.status === "active")&&(json.gender==="Nam" || json.gender==="Nữ" || json.gender==="Giới tính thứ 3")) {
@@ -202,11 +200,10 @@ function CustomerTable(props) {
                 Authorization: props.token,
               },
             });
-            t++
+            setTypeCreated(prev=>prev+1)
           } catch (error) {
           }
         }
-  
         let { customer_type, ...newObj } = json;
         newObj = {
           ...newObj,
@@ -221,19 +218,14 @@ function CustomerTable(props) {
               Authorization: props.token,
             },
           });
-          s++
+          setSuccess(prev=>prev+1)
         } catch (error) {
-          f++
+          setFailed(prev=>prev+1)
         }
       } else {
       }
     }
-    if(x===jsonData.length){
-      setCheckBox(true)
-      setSuccess(s)
-      setFailed(f)
-      setTypeCreated(t)
-    }
+    
   }
   const submitList = async () => {
     if (file && file.files[0]) {

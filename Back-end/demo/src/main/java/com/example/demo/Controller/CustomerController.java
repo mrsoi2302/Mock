@@ -104,7 +104,7 @@ public class CustomerController {
             if(customerService.findByCodeAndManager(code,manager)==null) throw new CustomException("Không tồn tại", HttpStatus.NOT_FOUND);
         }
         if(customerService.findByCode(code)==null) throw new CustomException("Không tồn tại", HttpStatus.NOT_FOUND);
-        return new Value<>(customerService.findByCode(code),t.getRole());
+        return new Value<>(customerService.findByCodeAndManager(code,manager),t.getRole());
     }
     @PostMapping("staff/create-one")
     public void create(@RequestBody Customer customer, HttpServletRequest request){
@@ -167,7 +167,7 @@ public class CustomerController {
         if(t.getRole().equals("STAFF")){
             manager=t.getUsername();
         }
-        return customerService.findForPayment(  manager);
+        return customerService.findForPayment(manager);
     }
     @DeleteMapping("/admin")
     @Transactional
